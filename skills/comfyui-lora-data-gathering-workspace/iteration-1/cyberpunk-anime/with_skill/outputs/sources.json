@@ -1,0 +1,52 @@
+{
+  "sources": [
+    {
+      "url": "https://akira.ie/",
+      "type": "archive",
+      "description": "Personal collection documenting Akira production cels and artwork with high-res scans",
+      "estimated_usable_images": 50
+    },
+    {
+      "url": "https://www.riekeles.com/",
+      "type": "gallery",
+      "description": "Riekeles Gallery — premium solegraph reproductions of Akira production backgrounds",
+      "estimated_usable_images": 25
+    },
+    {
+      "url": "https://halcyonrealms.com/animation/revisiting-the-art-of-akira-part-i-akira-animation-archives/",
+      "type": "article",
+      "description": "Halcyon Realms Akira animation archives — detailed articles with production art scans",
+      "estimated_usable_images": 40
+    },
+    {
+      "url": "https://halcyonrealms.com/anime/ghost-in-the-shell-background-art-cut-no-683/",
+      "type": "article",
+      "description": "Halcyon Realms Ghost in the Shell background art documentation",
+      "estimated_usable_images": 20
+    },
+    {
+      "url": "https://www.archipanic.com/anime-architecture/",
+      "type": "article",
+      "description": "Anime Architecture exhibition — 100 technical drawings and illustrations from GITS, Akira, Metropolis",
+      "estimated_usable_images": 15
+    },
+    {
+      "url": "https://www.pinterest.com/atsf100/ghost-in-the-shell/",
+      "type": "community",
+      "description": "Pinterest Ghost in the Shell board — 900+ pins, filter for production art and official illustrations",
+      "estimated_usable_images": 40
+    },
+    {
+      "url": "https://www.deviantart.com/tag/cyberpunkanime",
+      "type": "community",
+      "description": "DeviantArt cyberpunk anime tag — fan art and original work in cyberpunk anime style",
+      "estimated_usable_images": 30
+    },
+    {
+      "url": "https://comics.ha.com/c/search-results.zx?N=790+231+2088&Ntt=akira+production",
+      "type": "gallery",
+      "description": "Heritage Auctions Akira production art — high-resolution auction photography",
+      "estimated_usable_images": 20
+    }
+  ]
+}

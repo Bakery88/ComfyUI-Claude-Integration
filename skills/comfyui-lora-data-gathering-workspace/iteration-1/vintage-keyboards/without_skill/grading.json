@@ -1,0 +1,9 @@
+{
+  "expectations": [
+    {"text": "source_diversity", "passed": true, "evidence": "Found 4 distinct types in sources.json: community, wiki, marketplace, gallery"},
+    {"text": "structured_source_list", "passed": true, "evidence": "4 entries, all have url, type, and description fields"},
+    {"text": "training_aligned_plan", "passed": false, "evidence": "Trigger word: vintage_keyboard, resolution: 1024x1024 (correct), target images: 20-30 (within range). However, captioning mode is not explicitly specified as 'object' — plan just says 'trigger word followed by description' without naming the mode"},
+    {"text": "caption_format", "passed": true, "evidence": "Captions follow object format: 'vintage_keyboard, {description}' — correct pattern for object mode"},
+    {"text": "actionable_handoff", "passed": true, "evidence": "dataset-plan.md includes training parameters (Kohya_ss, rank 32, LR 1e-4, epochs 10) as actionable next steps"}
+  ]
+}

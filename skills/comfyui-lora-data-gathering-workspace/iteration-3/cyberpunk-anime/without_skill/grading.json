@@ -1,0 +1,66 @@
+{
+  "eval_name": "cyberpunk-anime",
+  "configuration": "without_skill",
+  "expectations": [
+    {
+      "text": "source_diversity",
+      "passed": true,
+      "evidence": "Research report identifies 4+ source types: video_extraction (Blu-ray frame extraction), art_book (art book scans), image_board (Danbooru/Safebooru), artist_platform (Pixiv), plus fan art. sources.json lists 12 distinct sources across these types."
+    },
+    {
+      "text": "source_tiering",
+      "passed": false,
+      "evidence": "Sources use 'Tier 1/2/3/4' and 'priority' labels (critical/high/medium/low) in the research report and sources.json, but do NOT use the required A/B/C tier labels specifically."
+    },
+    {
+      "text": "structured_source_list",
+      "passed": true,
+      "evidence": "sources.json contains 12 source entries each with url, type, and description fields (e.g., src-001 has type: 'video_extraction', description: 'Frame extraction from the 1995 Mamoru Oshii film...', url: null for physical media)."
+    },
+    {
+      "text": "download_commands",
+      "passed": false,
+      "evidence": "Dataset plan uses generic ffmpeg and gallery-dl commands for downloading. Does NOT reference the specific 'download_images.py' script with --urls-file, --output-dir, --min-resolution flags."
+    },
+    {
+      "text": "curation_guidance",
+      "passed": false,
+      "evidence": "Dataset plan Phase 3 provides detailed keep/reject criteria with checklists, but does NOT mention 'keep.txt' specifically."
+    },
+    {
+      "text": "processing_commands",
+      "passed": false,
+      "evidence": "Dataset plan provides a custom 'resize_for_sdxl.py' script and Real-ESRGAN commands. Does NOT reference the specific 'prepare_dataset.py' script with --target-resolution 1024 and --crop-mode smart flags."
+    },
+    {
+      "text": "captioning_commands",
+      "passed": false,
+      "evidence": "Dataset plan provides a custom 'auto_caption.py' script using Florence-2 directly via transformers library. Does NOT reference the specific 'auto_caption.py' with --trigger-word, --mode style, --captioner flags."
+    },
+    {
+      "text": "caption_hygiene",
+      "passed": false,
+      "evidence": "Multiple sample captions contain the forbidden word 'anime style' (e.g., Caption 1: 'anime style, highly detailed background art'). Nearly every caption includes 'anime style'. Caption 2 mentions 'anime style' as well. The style-describing term 'anime' appears in all 10 sample captions."
+    },
+    {
+      "text": "caption_format",
+      "passed": false,
+      "evidence": "Captions use format 'cpanime, {description}' rather than the required '{trigger} style, {description}' format. E.g., 'cpanime, a vast cyberpunk cityscape at night...' instead of 'cpanime style, a vast cyberpunk cityscape at night...'."
+    },
+    {
+      "text": "dataset_report",
+      "passed": true,
+      "evidence": "Phase 6 in dataset-plan.md includes a full dataset_report.py script that produces a JSON report with total_images, resolution_distribution, aspect_ratios, avg_caption_length, caption_word_count_range, source_distribution, has_trigger_word count, and missing_captions list."
+    },
+    {
+      "text": "training_handoff",
+      "passed": true,
+      "evidence": "Phase 7 in dataset-plan.md provides detailed training handoff including directory structure, recommended kohya-ss training config with TOML and CLI examples, VRAM requirements, regularization image guidance, and post-training validation steps."
+    },
+    {
+      "text": "gap_analysis",
+      "passed": true,
+      "evidence": "Research report includes a Risk Assessment table identifying style dilution, overfitting, resolution issues, and color inconsistency. Dataset plan Phase 3c includes a 'Category Balance Check' with target percentages and instruction to 'go back to the raw frames or supplement from image board sources' if underrepresented. The excluded_sources section in sources.json identifies what NOT to include and why."
+    }
+  ]
+}

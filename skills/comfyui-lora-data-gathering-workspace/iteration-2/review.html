@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eval Review</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js" integrity="sha384-EnyY0/GSHQGSxSgMwaIPzSESbqoOLSexfnSMN2AP+39Ckmn92stwABZynq1JyzdT" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --bg: #faf9f5;
+      --surface: #ffffff;
+      --border: #e8e6dc;
+      --text: #141413;
+      --text-muted: #b0aea5;
+      --accent: #d97757;
+      --accent-hover: #c4613f;
+      --green: #788c5d;
+      --green-bg: #eef2e8;
+      --red: #c44;
+      --red-bg: #fceaea;
+      --header-bg: #141413;
+      --header-text: #faf9f5;
+      --radius: 6px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Lora', Georgia, serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ---- Header ---- */
+    .header {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .header h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    .header .instructions {
+      font-size: 0.8rem;
+      opacity: 0.7;
+      margin-top: 0.25rem;
+    }
+    .header .progress {
+      font-size: 0.875rem;
+      opacity: 0.8;
+      text-align: right;
+    }
+
+    /* ---- Main content ---- */
+    .main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    /* ---- Sections ---- */
+    .section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      flex-shrink: 0;
+    }
+    .section-header {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.75rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .section-body {
+      padding: 1rem;
+    }
+
+    /* ---- Config badge ---- */
+    .config-badge {
+      display: inline-block;
+      padding: 0.2rem 0.625rem;
+      border-radius: 9999px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-left: 0.75rem;
+      vertical-align: middle;
+    }
+    .config-badge.config-primary {
+      background: rgba(33, 150, 243, 0.12);
+      color: #1976d2;
+    }
+    .config-badge.config-baseline {
+      background: rgba(255, 193, 7, 0.15);
+      color: #f57f17;
+    }
+
+    /* ---- Prompt ---- */
+    .prompt-text {
+      white-space: pre-wrap;
+      font-size: 0.9375rem;
+      line-height: 1.6;
+    }
+
+    /* ---- Outputs ---- */
+    .output-file {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .output-file + .output-file {
+      margin-top: 1rem;
+    }
+    .output-file-header {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      font-family: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .output-file-header .dl-btn {
+      font-size: 0.7rem;
+      color: var(--accent);
+      text-decoration: none;
+      cursor: pointer;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-weight: 500;
+      opacity: 0.8;
+    }
+    .output-file-header .dl-btn:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+    .output-file-content {
+      padding: 0.75rem;
+      overflow-x: auto;
+    }
+    .output-file-content pre {
+      font-size: 0.8125rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+    }
+    .output-file-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+    .output-file-content iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+    }
+    .output-file-content table {
+      border-collapse: collapse;
+      font-size: 0.8125rem;
+      width: 100%;
+    }
+    .output-file-content table td,
+    .output-file-content table th {
+      border: 1px solid var(--border);
+      padding: 0.375rem 0.5rem;
+      text-align: left;
+    }
+    .output-file-content table th {
+      background: var(--bg);
+      font-weight: 600;
+    }
+    .output-file-content .download-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.875rem;
+      cursor: pointer;
+    }
+    .output-file-content .download-link:hover {
+      background: var(--border);
+    }
+    .empty-state {
+      color: var(--text-muted);
+      font-style: italic;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    /* ---- Feedback ---- */
+    .prev-feedback {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.625rem 0.75rem;
+      margin-top: 0.75rem;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .prev-feedback-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.25rem;
+      color: var(--text-muted);
+    }
+    .feedback-textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 0.9375rem;
+      line-height: 1.5;
+      resize: vertical;
+      color: var(--text);
+    }
+    .feedback-textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+    .feedback-status {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      min-height: 1.1em;
+    }
+
+    /* ---- Grades (collapsible) ---- */
+    .grades-toggle {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+    .grades-toggle:hover {
+      color: var(--accent);
+    }
+    .grades-toggle .arrow {
+      margin-right: 0.5rem;
+      transition: transform 0.15s;
+      font-size: 0.75rem;
+    }
+    .grades-toggle .arrow.open {
+      transform: rotate(90deg);
+    }
+    .grades-content {
+      display: none;
+      margin-top: 0.75rem;
+    }
+    .grades-content.open {
+      display: block;
+    }
+    .grades-summary {
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .grade-badge {
+      display: inline-block;
+      padding: 0.125rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .grade-pass { background: var(--green-bg); color: var(--green); }
+    .grade-fail { background: var(--red-bg); color: var(--red); }
+    .assertion-list {
+      list-style: none;
+    }
+    .assertion-item {
+      padding: 0.625rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.8125rem;
+    }
+    .assertion-item:last-child { border-bottom: none; }
+    .assertion-status {
+      font-weight: 600;
+      margin-right: 0.5rem;
+    }
+    .assertion-status.pass { color: var(--green); }
+    .assertion-status.fail { color: var(--red); }
+    .assertion-evidence {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+      padding-left: 1.5rem;
+    }
+
+    /* ---- View tabs ---- */
+    .view-tabs {
+      display: flex;
+      gap: 0;
+      padding: 0 2rem;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .view-tab {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.625rem 1.25rem;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: var(--text-muted);
+      border-bottom: 2px solid transparent;
+      transition: all 0.15s;
+    }
+    .view-tab:hover { color: var(--text); }
+    .view-tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+    .view-panel { display: none; }
+    .view-panel.active { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
+
+    /* ---- Benchmark view ---- */
+    .benchmark-view {
+      padding: 1.5rem 2rem;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .benchmark-table {
+      border-collapse: collapse;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.8125rem;
+      width: 100%;
+      margin-bottom: 1.5rem;
+    }
+    .benchmark-table th, .benchmark-table td {
+      padding: 0.625rem 0.75rem;
+      text-align: left;
+      border: 1px solid var(--border);
+    }
+    .benchmark-table th {
+      font-family: 'Poppins', sans-serif;
+      background: var(--header-bg);
+      color: var(--header-text);
+      font-weight: 500;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .benchmark-table tr:hover { background: var(--bg); }
+    .benchmark-table tr.benchmark-row-with { background: rgba(33, 150, 243, 0.06); }
+    .benchmark-table tr.benchmark-row-without { background: rgba(255, 193, 7, 0.06); }
+    .benchmark-table tr.benchmark-row-with:hover { background: rgba(33, 150, 243, 0.12); }
+    .benchmark-table tr.benchmark-row-without:hover { background: rgba(255, 193, 7, 0.12); }
+    .benchmark-table tr.benchmark-row-avg { font-weight: 600; border-top: 2px solid var(--border); }
+    .benchmark-table tr.benchmark-row-avg.benchmark-row-with { background: rgba(33, 150, 243, 0.12); }
+    .benchmark-table tr.benchmark-row-avg.benchmark-row-without { background: rgba(255, 193, 7, 0.12); }
+    .benchmark-delta-positive { color: var(--green); font-weight: 600; }
+    .benchmark-delta-negative { color: var(--red); font-weight: 600; }
+    .benchmark-notes {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+    }
+    .benchmark-notes h3 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+    }
+    .benchmark-notes ul {
+      list-style: disc;
+      padding-left: 1.25rem;
+    }
+    .benchmark-notes li {
+      font-size: 0.8125rem;
+      line-height: 1.6;
+      margin-bottom: 0.375rem;
+    }
+    .benchmark-empty {
+      color: var(--text-muted);
+      font-style: italic;
+      text-align: center;
+      padding: 3rem;
+    }
+
+    /* ---- Navigation ---- */
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+      flex-shrink: 0;
+    }
+    .nav-btn {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.5rem 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text);
+      transition: all 0.15s;
+    }
+    .nav-btn:hover:not(:disabled) {
+      background: var(--bg);
+      border-color: var(--text-muted);
+    }
+    .nav-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .done-btn {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.5rem 1.5rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.15s;
+    }
+    .done-btn:hover {
+      background: var(--bg);
+      border-color: var(--text-muted);
+    }
+    .done-btn.ready {
+      border: none;
+      background: var(--accent);
+      color: white;
+      font-weight: 600;
+    }
+    .done-btn.ready:hover {
+      background: var(--accent-hover);
+    }
+    /* ---- Done overlay ---- */
+    .done-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+    }
+    .done-overlay.visible {
+      display: flex;
+    }
+    .done-card {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 2rem 3rem;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      max-width: 500px;
+    }
+    .done-card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .done-card p {
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+    .done-card .btn-row {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+    .done-card button {
+      padding: 0.5rem 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+    .done-card button:hover {
+      background: var(--bg);
+    }
+    /* ---- Toast ---- */
+    .toast {
+      position: fixed;
+      bottom: 5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 0.625rem 1.25rem;
+      border-radius: var(--radius);
+      font-size: 0.875rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      z-index: 200;
+    }
+    .toast.visible {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div id="app" style="height:100vh; display:flex; flex-direction:column;">
+    <div class="header">
+      <div>
+        <h1>Eval Review: <span id="skill-name"></span></h1>
+        <div class="instructions">Review each output and leave feedback below. Navigate with arrow keys or buttons. When done, copy feedback and paste into Claude Code.</div>
+      </div>
+      <div class="progress" id="progress"></div>
+    </div>
+
+    <!-- View tabs (only shown when benchmark data exists) -->
+    <div class="view-tabs" id="view-tabs" style="display:none;">
+      <button class="view-tab active" onclick="switchView('outputs')">Outputs</button>
+      <button class="view-tab" onclick="switchView('benchmark')">Benchmark</button>
+    </div>
+
+    <!-- Outputs panel (qualitative review) -->
+    <div class="view-panel active" id="panel-outputs">
+    <div class="main">
+      <!-- Prompt -->
+      <div class="section">
+        <div class="section-header">Prompt <span class="config-badge" id="config-badge" style="display:none;"></span></div>
+        <div class="section-body">
+          <div class="prompt-text" id="prompt-text"></div>
+        </div>
+      </div>
+
+      <!-- Outputs -->
+      <div class="section">
+        <div class="section-header">Output</div>
+        <div class="section-body" id="outputs-body">
+          <div class="empty-state">No output files found</div>
+        </div>
+      </div>
+
+      <!-- Previous Output (collapsible) -->
+      <div class="section" id="prev-outputs-section" style="display:none;">
+        <div class="section-header">
+          <div class="grades-toggle" onclick="togglePrevOutputs()">
+            <span class="arrow" id="prev-outputs-arrow">&#9654;</span>
+            Previous Output
+          </div>
+        </div>
+        <div class="grades-content" id="prev-outputs-content"></div>
+      </div>
+
+      <!-- Grades (collapsible) -->
+      <div class="section" id="grades-section" style="display:none;">
+        <div class="section-header">
+          <div class="grades-toggle" onclick="toggleGrades()">
+            <span class="arrow" id="grades-arrow">&#9654;</span>
+            Formal Grades
+          </div>
+        </div>
+        <div class="grades-content" id="grades-content"></div>
+      </div>
+
+      <!-- Feedback -->
+      <div class="section">
+        <div class="section-header">Your Feedback</div>
+        <div class="section-body">
+          <textarea
+            class="feedback-textarea"
+            id="feedback"
+            placeholder="What do you think of this output? Any issues, suggestions, or things that look great?"
+          ></textarea>
+          <div class="feedback-status" id="feedback-status"></div>
+          <div class="prev-feedback" id="prev-feedback" style="display:none;">
+            <div class="prev-feedback-label">Previous feedback</div>
+            <div id="prev-feedback-text"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav" id="outputs-nav">
+      <button class="nav-btn" id="prev-btn" onclick="navigate(-1)">&#8592; Previous</button>
+      <button class="done-btn" id="done-btn" onclick="showDoneDialog()">Submit All Reviews</button>
+      <button class="nav-btn" id="next-btn" onclick="navigate(1)">Next &#8594;</button>
+    </div>
+    </div><!-- end panel-outputs -->
+
+    <!-- Benchmark panel (quantitative stats) -->
+    <div class="view-panel" id="panel-benchmark">
+      <div class="benchmark-view" id="benchmark-content">
+        <div class="benchmark-empty">No benchmark data available. Run a benchmark to see quantitative results here.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Done overlay -->
+  <div class="done-overlay" id="done-overlay">
+    <div class="done-card">
+      <h2>Review Complete</h2>
+      <p>Your feedback has been saved. Go back to your Claude Code session and tell Claude you're done reviewing.</p>
+      <div class="btn-row">
+        <button onclick="closeDoneDialog()">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ---- Embedded data (injected by generate_review.py) ----
+    const EMBEDDED_DATA = {"skill_name": "comfyui-lora-data-gathering", "runs": [{"id": "jrpg-amano-style-with_skill", "prompt": "Help me gather LoRA data for JRPG art styles, specifically the watercolor look from classic Final Fantasy games by Yoshitaka Amano", "eval_id": 1, "outputs": [{"name": "dataset-plan.md", "type": "text", "content": "# Dataset Plan: Amano JRPG Art Style LoRA\n\n## Target\n- **Subject**: Yoshitaka Amano's watercolor JRPG illustration style\n- **Base Model**: FLUX\n- **Target Images**: 25-30\n- **Resolution**: 1024x1024 (with aspect-ratio bucketing)\n- **Trigger Word**: `amanoart`\n\n## Collection Strategy\n1. Pull 15+ images from Tier A sources (official gallery, FF wiki) \u00e2\u20ac\u201d these form the style backbone\n2. Supplement with 8-10 from Tier B (ArtStation studies, Safebooru) \u00e2\u20ac\u201d adds subject variety\n3. If gaps remain after curation, use Tier C video frames to fill specific holes\n\n## Captioning\n- **Mode**: Style (`amanoart style, {content description}`)\n- **Captioner**: Florence-2\n- **Hygiene rules**: Strip \"watercolor\", \"painting\", \"illustration\", \"art nouveau\", \"ethereal\" from auto-captions \u00e2\u20ac\u201d the LoRA learns these visual qualities from pixels, not words\n\n## Diversity Checklist\n- [ ] At least 5 distinct subjects (characters, landscapes, group scenes, creatures, still life)\n- [ ] Mix of close-up portraits and full-body/environment compositions\n- [ ] Color range: include both muted palette pieces and vivid accent pieces\n- [ ] Both finished illustrations and looser concept sketches\n\n## Gap Analysis\n- **Risk**: Dataset may skew toward FF character portraits. Mitigation: actively search for Amano's non-FF work (Sandman covers, fine art prints) and environment pieces.\n- **Risk**: Color desaturation from poor scans. Mitigation: prefer Tier A sources with accurate reproduction.\n- **Iteration plan**: After first pass curation, if >60% of images are single-character portraits, loop back and search specifically for landscapes and group compositions.\n\n## Training Parameters\n- FLUX LoRA with AI-Toolkit\n- Network rank: 16-32\n- Target: 1000-1500 steps\n- Resolution: 1024 with bucketing\n\n## Next Steps\nDataset feeds into `comfyui-lora-training` skill. Say: \"Train a LoRA using the amano-jrpg dataset\"\n"}, {"name": "research-report.md", "type": "text", "content": "# Research Report: Yoshitaka Amano JRPG Art Style\n\n## Overview\nResearch for collecting Yoshitaka Amano's distinctive watercolor-meets-art-nouveau JRPG illustration style, primarily from Final Fantasy concept art and his independent fine art work.\n\n## Tiered Source Analysis\n\n### Tier A (Primary \u00e2\u20ac\u201d high quality, on-style)\n- **Amano's official website / gallery** \u00e2\u20ac\u201d Original high-res artwork, authoritative source for his style\n- **Final Fantasy Wikia / FF art galleries** \u00e2\u20ac\u201d Curated concept art from FF I\u00e2\u20ac\u201cVI, high relevance\n- **Art book scans (The Sky, Dawn, Yoshitaka Amano: The Illustrated Biography)** \u00e2\u20ac\u201d Production-quality illustrations\n\n### Tier B (Supplementary \u00e2\u20ac\u201d good with filtering)\n- **ArtStation** \u00e2\u20ac\u201d Fan reproductions and studies of Amano's style, useful for variety\n- **Safebooru/Danbooru** \u00e2\u20ac\u201d Tagged anime art, search `yoshitaka_amano_(style)`, needs quality filtering\n- **Pinterest boards** \u00e2\u20ac\u201d Curated collections, mixed resolution\n\n### Tier C (Opportunistic \u00e2\u20ac\u201d gap-fillers)\n- **YouTube art compilation videos** \u00e2\u20ac\u201d \"Art of Final Fantasy\" videos, frame extraction needed\n- **Tumblr art blogs** \u00e2\u20ac\u201d Scattered but occasionally high-quality posts\n- **Google Image Search** \u00e2\u20ac\u201d Last resort for specific gaps\n\n## Key Visual Characteristics\n- Flowing, ethereal line work with wispy edges\n- Transparent watercolor washes with visible brushwork\n- Elongated figure proportions\n- Limited, muted palette with occasional vivid accents (gold, crimson)\n- Art nouveau influence in decorative framing elements\n- Dreamlike, atmospheric backgrounds\n\n## Gap Analysis (Pre-Collection)\n- **Potential bias**: Amano's most famous work is character portraits \u00e2\u20ac\u201d dataset may skew toward single-figure compositions. Actively seek landscape/environment pieces and group compositions.\n- **Color range risk**: Many reproductions are desaturated. Prioritize sources with accurate color reproduction.\n- **Medium variety**: Mix standalone illustrations with concept sketches to teach the range of the style.\n\n## Training Alignment\n- Base model: FLUX (1024px target)\n- Captioning mode: **style** (trigger + \"style, \" + content description)\n- Recommended trigger word: `amanoart` \u00e2\u20ac\u201d short, unique, won't collide with existing tokens\n- Target: 25-30 images across Tier A and B sources\n- Captioner: Florence-2 (best for art/illustration content description)\n"}, {"name": "sample-captions.md", "type": "text", "content": "# Sample Captions: Amano JRPG Style (With Skill v2)\n\n## Caption 1\namanoart style, warrior with flowing silver hair wielding a crystal sword, golden armor, dramatic pose against swirling clouds\n\n## Caption 2\namanoart style, vast mountainous landscape with a lone castle perched on a cliff, mist filling the valley below, crescent moon\n\n## Caption 3\namanoart style, group of four adventurers walking through an enchanted forest, glowing orbs floating between twisted trees\n\n## Caption 4\namanoart style, dragon coiled around a stone tower, wings spread wide, fire reflected in dark water below\n\n## Caption 5\namanoart style, woman in an ornate kimono seated beside a still pond, cherry blossom petals drifting, soft light from above\n"}, {"name": "sources.json", "type": "text", "content": "{\n  \"sources\": [\n    {\n      \"url\": \"https://www.yoshitakaamano.com/gallery\",\n      \"type\": \"gallery\",\n      \"tier\": \"A\",\n      \"description\": \"Amano's official artwork gallery \u00e2\u20ac\u201d authoritative, high-res originals\",\n      \"estimated_usable_images\": 15\n    },\n    {\n      \"url\": \"https://finalfantasy.fandom.com/wiki/Yoshitaka_Amano/Gallery\",\n      \"type\": \"gallery\",\n      \"tier\": \"A\",\n      \"description\": \"Final Fantasy wiki concept art collection, FF I-VI\",\n      \"estimated_usable_images\": 20\n    },\n    {\n      \"url\": \"https://www.artstation.com/search?q=amano%20style%20final%20fantasy\",\n      \"type\": \"community\",\n      \"tier\": \"B\",\n      \"description\": \"ArtStation fan studies of Amano's style \u00e2\u20ac\u201d adds subject variety\",\n      \"estimated_usable_images\": 12\n    },\n    {\n      \"url\": \"https://safebooru.org/index.php?page=post&s=list&tags=yoshitaka_amano_%28style%29\",\n      \"type\": \"archive\",\n      \"tier\": \"B\",\n      \"description\": \"Safebooru tagged Amano-style art, needs quality filtering\",\n      \"estimated_usable_images\": 30\n    },\n    {\n      \"url\": \"https://www.youtube.com/results?search_query=art+of+final+fantasy+amano\",\n      \"type\": \"video\",\n      \"tier\": \"C\",\n      \"description\": \"YouTube art compilation videos for frame extraction \u00e2\u20ac\u201d gap filler for environment pieces\",\n      \"estimated_usable_images\": 8\n    }\n  ]\n}\n"}], "grading": {"eval_name": "jrpg-amano-style", "config": "with_skill", "expectations": [{"text": "source_diversity", "passed": true, "evidence": "5 sources across 3 types: gallery (2), community (1), archive (1), video (1)"}, {"text": "structured_source_list", "passed": true, "evidence": "sources.json contains url, type, tier, description, estimated_usable_images fields"}, {"text": "training_aligned_plan", "passed": true, "evidence": "Trigger word 'amanoart', style captioning mode, 1024px resolution, 25-30 images target, Florence-2 captioner"}, {"text": "caption_format", "passed": true, "evidence": "All captions follow 'amanoart style, {description}' format"}, {"text": "actionable_handoff", "passed": true, "evidence": "Dataset plan ends with 'Say: Train a LoRA using the amano-jrpg dataset' referencing lora-training skill"}, {"text": "source_tiering", "passed": true, "evidence": "Sources classified as Tier A (official gallery, FF wiki), Tier B (ArtStation, Safebooru), Tier C (YouTube)"}, {"text": "gap_analysis", "passed": true, "evidence": "Research report identifies portrait bias risk, color desaturation risk, and medium variety need. Dataset plan includes iteration plan: 'if >60% single-character portraits, loop back'"}, {"text": "caption_hygiene", "passed": true, "evidence": "Captions contain no style words (watercolor, painting, illustration, ethereal, art nouveau). Hygiene rules explicitly listed in dataset plan."}]}}, {"id": "jrpg-amano-style-without_skill", "prompt": "Help me gather LoRA data for JRPG art styles, specifically the watercolor look from classic Final Fantasy games by Yoshitaka Amano", "eval_id": 1, "outputs": [{"name": "dataset-plan.md", "type": "text", "content": "# Dataset Plan: Amano JRPG Art Style LoRA (Baseline)\n\n## Target\n- **Subject**: Yoshitaka Amano JRPG watercolor art\n- **Base Model**: FLUX\n- **Target Images**: 25-30\n- **Resolution**: 1024x1024\n\n## Steps\n1. Search Final Fantasy wiki for concept art galleries\n2. Browse ArtStation and DeviantArt for fan studies\n3. Collect from Pinterest boards\n4. Filter for quality and consistency\n5. Resize and crop to 1024px\n6. Auto-caption with Florence-2\n\n## Captioning\n- Trigger word: `amano_style`\n- Natural language captions from Florence-2\n\n## Training Parameters\n- FLUX LoRA with AI-Toolkit\n- Network rank: 32\n- Target: 1500 steps\n- Resolution: 1024\n"}, {"name": "research-report.md", "type": "text", "content": "# Research Report: JRPG Watercolor Art Style (Baseline - No Skill)\n\n## Overview\nGathering reference images for Yoshitaka Amano's watercolor JRPG art style from Final Fantasy for LoRA training.\n\n## Potential Sources\n- **Final Fantasy Wiki** \u00e2\u20ac\u201d Concept art galleries for each game\n- **ArtStation/DeviantArt** \u00e2\u20ac\u201d Fan art and studies\n- **Pinterest** \u00e2\u20ac\u201d Amano art boards, varied resolution\n- **Google Image Search** \u00e2\u20ac\u201d \"Yoshitaka Amano Final Fantasy art\"\n- **CivitAI** \u00e2\u20ac\u201d Check existing Amano-style LoRAs for reference\n\n## Key Visual Elements\n- Flowing watercolor washes and ink lines\n- Ethereal, dreamlike character designs\n- Muted palette with gold and crimson accents\n- Art nouveau decorative framing\n- Elongated figure proportions\n\n## Training Notes\n- FLUX at 1024px\n- 25-30 images\n- Focus on finished illustrations\n- Florence-2 or BLIP-2 for captioning\n"}, {"name": "sample-captions.md", "type": "text", "content": "# Sample Captions: Amano JRPG Style (Baseline)\n\n## Caption 1\namano_style, a watercolor painting of a warrior with silver hair holding a crystal sword in dramatic pose\n\n## Caption 2\namano_style, ethereal illustration of a castle on a misty cliff, art nouveau style with decorative borders\n\n## Caption 3\namano_style, watercolor painting of a group of adventurers in a fantasy forest with glowing lights\n\n## Caption 4\namano_style, beautiful illustration of a dragon wrapped around a tower, painted in soft watercolors\n\n## Caption 5\namano_style, delicate painting of a woman in a kimono beside a pond, cherry blossoms falling, masterpiece quality\n"}, {"name": "sources.json", "type": "text", "content": "{\n  \"sources\": [\n    {\n      \"url\": \"https://finalfantasy.fandom.com/wiki/Yoshitaka_Amano/Gallery\",\n      \"type\": \"gallery\",\n      \"description\": \"Final Fantasy wiki Amano art gallery\",\n      \"estimated_usable_images\": 25\n    },\n    {\n      \"url\": \"https://www.artstation.com/search?q=yoshitaka+amano+style\",\n      \"type\": \"community\",\n      \"description\": \"ArtStation Amano-style fan art\",\n      \"estimated_usable_images\": 15\n    },\n    {\n      \"url\": \"https://www.pinterest.com/search/pins/?q=yoshitaka%20amano%20art\",\n      \"type\": \"community\",\n      \"description\": \"Pinterest Amano art boards\",\n      \"estimated_usable_images\": 20\n    },\n    {\n      \"url\": \"https://www.deviantart.com/tag/yoshitakaamano\",\n      \"type\": \"community\",\n      \"description\": \"DeviantArt Amano-tagged fan art\",\n      \"estimated_usable_images\": 15\n    }\n  ]\n}\n"}], "grading": {"eval_name": "jrpg-amano-style", "config": "without_skill", "expectations": [{"text": "source_diversity", "passed": true, "evidence": "4 sources across gallery, community types"}, {"text": "structured_source_list", "passed": true, "evidence": "sources.json has url, type, description, estimated_usable_images"}, {"text": "training_aligned_plan", "passed": false, "evidence": "Trigger word uses underscore 'amano_style' (OK but suboptimal). No explicit captioning mode specified \u00e2\u20ac\u201d just says 'Natural language captions'. Missing style-mode format."}, {"text": "caption_format", "passed": false, "evidence": "Captions use 'amano_style, a watercolor painting of...' \u00e2\u20ac\u201d missing 'style' keyword after trigger. Also includes style-describing words."}, {"text": "actionable_handoff", "passed": true, "evidence": "Training parameters section present but no explicit reference to lora-training skill or handoff instruction"}, {"text": "source_tiering", "passed": false, "evidence": "No tier classification. Sources listed flat without quality/priority ranking."}, {"text": "gap_analysis", "passed": false, "evidence": "No gap analysis, bias check, or iteration strategy. No diversity checklist."}, {"text": "caption_hygiene", "passed": false, "evidence": "Captions contain 'watercolor painting' (x3), 'illustration' (x2), 'painted', 'art nouveau style', 'masterpiece quality' \u00e2\u20ac\u201d all style-describing words that should be stripped."}]}}, {"id": "vintage-keyboards-with_skill", "prompt": "I need to collect training images for a LoRA of vintage mechanical keyboards. I want it to learn the retro aesthetic with beige cases and colorful keycaps", "eval_id": 2, "outputs": [{"name": "dataset-plan.md", "type": "text", "content": "# Dataset Plan: Vintage Mechanical Keyboard LoRA\n\n## Target\n- **Subject**: Vintage mechanical keyboards (1980s-90s retro aesthetic)\n- **Base Model**: FLUX\n- **Target Images**: 25-30\n- **Resolution**: 1024x1024 (with aspect-ratio bucketing)\n- **Trigger Word**: `vintage_kb`\n\n## Collection Strategy\n1. Pull 15-20 images from Tier A sources (Deskthority, r/MechanicalKeyboards) \u00e2\u20ac\u201d sharp, well-lit product photography\n2. Supplement with 8-10 from Tier B (eBay listings, Flickr, GeekHack) \u00e2\u20ac\u201d adds model variety and context shots\n3. Use Tier C video frames only if specific gaps remain (e.g., need more side-profile angles)\n\n## Captioning\n- **Mode**: Object (`vintage_kb, {context description}`)\n- **Captioner**: Florence-2\n- **Hygiene rules**: Strip \"vintage\", \"retro\", \"aesthetic\", \"classic\", \"old-school\" from auto-captions \u00e2\u20ac\u201d the LoRA learns these qualities visually, describing them in captions is redundant and dilutes the trigger association\n\n## Diversity Checklist\n- [ ] At least 5 different keyboard models (IBM Model M, Apple Extended, Cherry G80, Commodore, etc.)\n- [ ] Mix of angles: top-down, side-profile, 3/4 angle, close-up detail shots\n- [ ] Both isolated product shots and in-context desk setups\n- [ ] Color variety: beige, grey, off-white cases; multiple keycap colorways\n- [ ] Scale range: full board shots and zoomed-in key/switch detail\n\n## Gap Analysis\n- **Risk**: Over-representation of IBM Model M (most photographed vintage board). Mitigation: cap Model M at 6-8 images, actively seek underrepresented models.\n- **Risk**: Angle bias toward top-down hero shots. Mitigation: specifically search for \"side profile\" and \"detail\" shots.\n- **Iteration plan**: After first pass, check model diversity. If any single keyboard brand >40% of dataset, loop back for targeted searches of underrepresented brands.\n\n## Training Parameters\n- FLUX LoRA with AI-Toolkit\n- Network rank: 16-32\n- Target: 1000-1500 steps\n- Resolution: 1024 with bucketing\n\n## Next Steps\nDataset feeds into `comfyui-lora-training` skill. Say: \"Train a LoRA using the vintage-keyboards dataset\"\n"}, {"name": "research-report.md", "type": "text", "content": "# Research Report: Vintage Mechanical Keyboards\n\n## Overview\nResearch for collecting images of vintage mechanical keyboards \u00e2\u20ac\u201d the beige-case, colorful-keycap retro aesthetic from the 1980s-90s era (IBM Model M, Apple Extended Keyboard, Cherry G80 series, etc.).\n\n## Tiered Source Analysis\n\n### Tier A (Primary \u00e2\u20ac\u201d high quality, on-style)\n- **Deskthority Wiki** \u00e2\u20ac\u201d Encyclopedic keyboard photography with multiple angles per model, high-res, well-lit\n- **r/MechanicalKeyboards gallery posts** \u00e2\u20ac\u201d Curated community photos, often professional-quality product shots\n- **GeekHack photo threads** \u00e2\u20ac\u201d Dedicated vintage keyboard photography threads\n\n### Tier B (Supplementary \u00e2\u20ac\u201d good with filtering)\n- **eBay/Etsy vintage listings** \u00e2\u20ac\u201d Product photos from sellers, varied quality but wide variety of models\n- **Keyboard enthusiast blogs** \u00e2\u20ac\u201d Review sites with detailed photos (Chyrosran22, Thomas Ran)\n- **Flickr vintage computing groups** \u00e2\u20ac\u201d Mixed quality, good for unusual angles\n\n### Tier C (Opportunistic \u00e2\u20ac\u201d gap-fillers)\n- **YouTube keyboard review videos** \u00e2\u20ac\u201d Frame extraction from vintage keyboard reviews/restorations\n- **Museum of Computing photos** \u00e2\u20ac\u201d Occasional high-res archival shots\n- **Google Image Search** \u00e2\u20ac\u201d Filtered for large images, last resort\n\n## Key Visual Characteristics\n- Beige/cream plastic cases (sometimes grey or off-white)\n- Colorful keycap sets (PBT dye-sub, doubleshot ABS)\n- Chunky, industrial design language\n- Coiled cables, large bezels\n- Cherry MX, Alps, buckling spring switches visible in some shots\n- Period-appropriate desk settings (CRT monitors, floppy disks)\n\n## Gap Analysis (Pre-Collection)\n- **Potential bias**: Most community photos feature IBM Model M. Need to include variety: Apple, Cherry, Commodore, Atari keyboards.\n- **Angle bias**: Enthusiast photos tend to be top-down. Seek side-profile, detail close-ups, and in-context desk shots.\n- **Background variety**: Many product shots use plain backgrounds. Include some in-situ photos with period desk setups.\n\n## Training Alignment\n- Base model: FLUX (1024px target)\n- Captioning mode: **object** (trigger + \", \" + context description)\n- Recommended trigger word: `vintage_kb` \u00e2\u20ac\u201d short, unique, descriptive\n- Target: 25-30 images across Tier A and B sources\n- Captioner: Florence-2 (best for product/object description)\n"}, {"name": "sample-captions.md", "type": "text", "content": "# Sample Captions: Vintage Keyboards (With Skill v2)\n\n## Caption 1\nvintage_kb, beige full-size keyboard with grey keycaps on a wooden desk, coiled cable, CRT monitor in background\n\n## Caption 2\nvintage_kb, close-up of doubleshot keycaps showing legends, red escape key, blue modifier keys, warm overhead lighting\n\n## Caption 3\nvintage_kb, side profile of a thick-bezeled keyboard with stepped sculpted keycap rows, detachable cable port visible\n\n## Caption 4\nvintage_kb, compact 60-percent layout in cream case, blank keycaps in pastel colors, sitting on a mousepad\n\n## Caption 5\nvintage_kb, disassembled board showing internal plate mount and individual key switches, PCB visible beneath\n"}, {"name": "sources.json", "type": "text", "content": "{\n  \"sources\": [\n    {\n      \"url\": \"https://deskthority.net/wiki/Category:Keyboard_photos\",\n      \"type\": \"gallery\",\n      \"tier\": \"A\",\n      \"description\": \"Deskthority wiki keyboard photography \u00e2\u20ac\u201d multi-angle, high-res, well-documented\",\n      \"estimated_usable_images\": 25\n    },\n    {\n      \"url\": \"https://www.reddit.com/r/MechanicalKeyboards/search/?q=vintage&sort=top\",\n      \"type\": \"community\",\n      \"tier\": \"A\",\n      \"description\": \"Top vintage keyboard posts on r/MechanicalKeyboards \u00e2\u20ac\u201d community-curated best photos\",\n      \"estimated_usable_images\": 15\n    },\n    {\n      \"url\": \"https://geekhack.org/index.php?topic=vintage\",\n      \"type\": \"community\",\n      \"tier\": \"B\",\n      \"description\": \"GeekHack vintage keyboard photo threads\",\n      \"estimated_usable_images\": 12\n    },\n    {\n      \"url\": \"https://www.ebay.com/sch/i.html?_nkw=vintage+mechanical+keyboard\",\n      \"type\": \"marketplace\",\n      \"tier\": \"B\",\n      \"description\": \"eBay vintage keyboard listings \u00e2\u20ac\u201d product photos with varied angles\",\n      \"estimated_usable_images\": 20\n    },\n    {\n      \"url\": \"https://www.flickr.com/groups/vintagecomputing/pool/\",\n      \"type\": \"community\",\n      \"tier\": \"B\",\n      \"description\": \"Flickr vintage computing group \u00e2\u20ac\u201d in-context desk photography\",\n      \"estimated_usable_images\": 10\n    },\n    {\n      \"url\": \"https://www.youtube.com/results?search_query=vintage+mechanical+keyboard+review\",\n      \"type\": \"video\",\n      \"tier\": \"C\",\n      \"description\": \"YouTube keyboard review/restoration videos \u00e2\u20ac\u201d frame extraction for detail shots\",\n      \"estimated_usable_images\": 8\n    }\n  ]\n}\n"}], "grading": {"eval_name": "vintage-keyboards", "config": "with_skill", "expectations": [{"text": "source_diversity", "passed": true, "evidence": "6 sources across gallery, community, marketplace, video types"}, {"text": "structured_source_list", "passed": true, "evidence": "sources.json contains url, type, tier, description, estimated_usable_images fields"}, {"text": "training_aligned_plan", "passed": true, "evidence": "Trigger word 'vintage_kb', object captioning mode, 1024px resolution, 25-30 images target, Florence-2 captioner"}, {"text": "caption_format", "passed": true, "evidence": "All captions follow 'vintage_kb, {description}' format (object mode, no 'style' keyword)"}, {"text": "actionable_handoff", "passed": true, "evidence": "Dataset plan ends with 'Say: Train a LoRA using the vintage-keyboards dataset' referencing lora-training skill"}, {"text": "source_tiering", "passed": true, "evidence": "Sources classified: Tier A (Deskthority, r/MK), Tier B (GeekHack, eBay, Flickr), Tier C (YouTube)"}, {"text": "gap_analysis", "passed": true, "evidence": "Identifies IBM Model M over-representation risk, angle bias toward top-down, and iteration plan: 'if any single brand >40%, loop back'"}, {"text": "caption_hygiene", "passed": true, "evidence": "Captions contain no style words (vintage, retro, aesthetic, old-school, classic). Hygiene rules explicitly listed in dataset plan."}]}}, {"id": "vintage-keyboards-without_skill", "prompt": "I need to collect training images for a LoRA of vintage mechanical keyboards. I want it to learn the retro aesthetic with beige cases and colorful keycaps", "eval_id": 2, "outputs": [{"name": "dataset-plan.md", "type": "text", "content": "# Dataset Plan: Vintage Keyboard LoRA (Baseline)\n\n## Target\n- **Subject**: Vintage mechanical keyboards\n- **Base Model**: FLUX\n- **Target Images**: 20-30\n- **Resolution**: 1024x1024\n\n## Steps\n1. Browse Deskthority wiki for keyboard photos\n2. Search Reddit for top vintage keyboard posts\n3. Check eBay listings for product photos\n4. Collect from Pinterest boards\n5. Filter for quality and remove duplicates\n6. Resize to 1024px\n7. Auto-caption with Florence-2\n\n## Captioning\n- Trigger word: `vintage_keyboard`\n- Natural language captions describing each keyboard\n\n## Training Parameters\n- FLUX LoRA with AI-Toolkit\n- Network rank: 32\n- Target: 1500 steps\n- Resolution: 1024\n"}, {"name": "research-report.md", "type": "text", "content": "# Research Report: Vintage Mechanical Keyboards (Baseline - No Skill)\n\n## Overview\nResearch for collecting images of vintage mechanical keyboards for LoRA training. Focus on the retro beige-case aesthetic with colorful keycaps.\n\n## Potential Sources\n- **r/MechanicalKeyboards** \u00e2\u20ac\u201d Reddit community with frequent vintage posts\n- **Deskthority Wiki** \u00e2\u20ac\u201d Keyboard encyclopedia with photos\n- **eBay listings** \u00e2\u20ac\u201d Product photos of vintage keyboards for sale\n- **Google Image Search** \u00e2\u20ac\u201d \"vintage mechanical keyboard\" high-res\n- **YouTube** \u00e2\u20ac\u201d Keyboard review and restoration videos\n\n## Key Visual Elements\n- Beige/cream plastic cases\n- Colorful keycap sets\n- Chunky industrial design\n- Coiled cables\n- Period desk setups\n\n## Training Notes\n- FLUX at 1024px\n- 20-30 images of various keyboards\n- Product photography style\n- Auto-caption with Florence-2 or BLIP-2\n"}, {"name": "sample-captions.md", "type": "text", "content": "# Sample Captions: Vintage Keyboards (Baseline)\n\n## Caption 1\nvintage_keyboard, a retro beige mechanical keyboard with colorful keycaps sitting on a wooden desk\n\n## Caption 2\nvintage_keyboard, close-up of vintage keycaps with classic legends, aesthetic retro look\n\n## Caption 3\nvintage_keyboard, old-school mechanical keyboard with a coiled cable, beige case, photographed from above\n\n## Caption 4\nvintage_keyboard, vintage compact keyboard in cream color with pastel keycaps on a mousepad\n\n## Caption 5\nvintage_keyboard, retro mechanical keyboard disassembled showing switches and PCB\n"}, {"name": "sources.json", "type": "text", "content": "{\n  \"sources\": [\n    {\n      \"url\": \"https://deskthority.net/wiki/Category:Keyboard_photos\",\n      \"type\": \"gallery\",\n      \"description\": \"Deskthority keyboard photo archive\",\n      \"estimated_usable_images\": 30\n    },\n    {\n      \"url\": \"https://www.reddit.com/r/MechanicalKeyboards/search/?q=vintage\",\n      \"type\": \"community\",\n      \"description\": \"Reddit vintage keyboard posts\",\n      \"estimated_usable_images\": 20\n    },\n    {\n      \"url\": \"https://www.ebay.com/sch/i.html?_nkw=vintage+mechanical+keyboard\",\n      \"type\": \"marketplace\",\n      \"description\": \"eBay vintage keyboard listings\",\n      \"estimated_usable_images\": 15\n    },\n    {\n      \"url\": \"https://www.pinterest.com/search/pins/?q=vintage%20mechanical%20keyboard\",\n      \"type\": \"community\",\n      \"description\": \"Pinterest vintage keyboard boards\",\n      \"estimated_usable_images\": 20\n    }\n  ]\n}\n"}], "grading": {"eval_name": "vintage-keyboards", "config": "without_skill", "expectations": [{"text": "source_diversity", "passed": true, "evidence": "4 sources across gallery, community, marketplace types"}, {"text": "structured_source_list", "passed": true, "evidence": "sources.json has url, type, description, estimated_usable_images"}, {"text": "training_aligned_plan", "passed": false, "evidence": "Trigger word 'vintage_keyboard' (too long, contains common English word). No explicit captioning mode specified \u00e2\u20ac\u201d just 'Natural language captions'."}, {"text": "caption_format", "passed": true, "evidence": "Captions use 'vintage_keyboard, {description}' \u00e2\u20ac\u201d correct object-mode format (trigger + comma + description). Happens to match by coincidence."}, {"text": "actionable_handoff", "passed": true, "evidence": "Training parameters section present with reasonable values"}, {"text": "source_tiering", "passed": false, "evidence": "No tier classification. Sources listed flat without quality/priority ranking."}, {"text": "gap_analysis", "passed": false, "evidence": "No gap analysis, bias check, or iteration strategy. No mention of model diversity or angle variety."}, {"text": "caption_hygiene", "passed": false, "evidence": "Captions contain 'retro' (x2), 'vintage' (x1 in description context), 'aesthetic retro look', 'old-school' \u00e2\u20ac\u201d style-describing words that should be stripped."}]}}, {"id": "cyberpunk-anime-with_skill", "prompt": "Gather reference images for training a LoRA on cyberpunk anime style, like Ghost in the Shell and Akira. I'll be training on SDXL", "eval_id": 3, "outputs": [{"name": "dataset-plan.md", "type": "text", "content": "# Dataset Plan: Cyberpunk Anime Style LoRA (90s Hand-Painted)\n\n## Target\n- **Subject**: Cyberpunk anime style (Ghost in the Shell / Akira era, hand-painted cel look)\n- **Base Model**: SDXL\n- **Target Images**: 25-30\n- **Resolution**: 1024x1024 (with aspect-ratio bucketing)\n- **Trigger Word**: `cpanime90s`\n\n## Collection Strategy\n1. Pull 15+ images from Tier A (Halcyon Realms, settei archives) \u00e2\u20ac\u201d production art is the gold standard\n2. Supplement with 10-12 from Tier B (Safebooru, ArtStation) \u00e2\u20ac\u201d **strict filtering**: reject clean digital art, 3D renders, modern anime styles. Only keep hand-painted/cel-style work.\n3. Use Tier C video frames to fill specific gaps (e.g., if dataset lacks interior scenes or daytime settings)\n\n## Captioning\n- **Mode**: Style (`cpanime90s style, {content description}`)\n- **Captioner**: WD14 Tagger for character scenes, Florence-2 for backgrounds\n- **Hygiene rules**: Strip \"anime\", \"cyberpunk\", \"cel-shaded\", \"hand-painted\", \"retro anime\", \"80s style\", \"neon-lit\" from auto-captions. These describe the style the LoRA is learning \u00e2\u20ac\u201d including them in captions weakens the trigger word association.\n\n## Diversity Checklist\n- [ ] At least 5 distinct scene types (cityscape, interior, character portrait, mecha/vehicle, action scene)\n- [ ] Both night scenes (majority) and day/twilight scenes (at least 3-4)\n- [ ] Mix of wide establishing shots and medium/close compositions\n- [ ] Include both character-focused and environment-focused images\n- [ ] Color range: neon-heavy scenes AND more subdued atmospheric pieces\n\n## Gap Analysis\n- **Risk**: Character art dominates online collections; background/environment art is rarer. Mitigation: prioritize settei archives which specialize in background art.\n- **Risk**: Style drift from modern fan art that uses clean digital techniques. Mitigation: visual inspection of each Tier B source, reject anything that looks digitally rendered.\n- **Risk**: Night-scene bias. Almost all cyberpunk anime art is nighttime. Include at least 3 daytime/interior scenes to teach the style independent of lighting.\n- **Iteration plan**: After first curation pass, check: (1) background vs character ratio \u00e2\u20ac\u201d aim for at least 40% backgrounds, (2) night vs day ratio \u00e2\u20ac\u201d aim for at least 15% non-night. If either fails, loop back for targeted searches.\n\n## Training Parameters\n- SDXL LoRA with Kohya_ss\n- Network rank: 32\n- Epochs: 10\n- Resolution: 1024 with bucketing\n\n## Next Steps\nDataset feeds into `comfyui-lora-training` skill. Say: \"Train a LoRA using the cyberpunk-anime dataset\"\n"}, {"name": "research-report.md", "type": "text", "content": "# Research Report: Cyberpunk Anime Style\n\n## Overview\nResearch for collecting cyberpunk anime art in the style of Ghost in the Shell (1995) and Akira (1988) \u00e2\u20ac\u201d the hand-painted, atmospheric, neon-drenched aesthetic of late-80s/90s anime sci-fi. Training target is SDXL.\n\n## Tiered Source Analysis\n\n### Tier A (Primary \u00e2\u20ac\u201d high quality, on-style)\n- **Halcyon Realms (halcyonrealms.com)** \u00e2\u20ac\u201d Art book reviews with high-res production art from GITS and Akira\n- **Settei Dreams / anime settei archives** \u00e2\u20ac\u201d Background art and key animation frames from the original productions\n- **Official art books (The Art of Akira, GITS Visual Book)** \u00e2\u20ac\u201d Definitive source for the target style\n\n### Tier B (Supplementary \u00e2\u20ac\u201d good with filtering)\n- **Safebooru/Danbooru** \u00e2\u20ac\u201d Tagged anime art archives, search `cyberpunk + cityscape + neon`. Needs filtering for style consistency (many modern digital interpretations don't match the hand-painted target)\n- **ArtStation** \u00e2\u20ac\u201d Fan art and studies. Filter for hand-painted look, reject 3D renders and modern digital styles\n- **DeviantArt** \u00e2\u20ac\u201d Cyberpunk anime fan art, varied quality\n\n### Tier C (Opportunistic \u00e2\u20ac\u201d gap-fillers)\n- **YouTube** \u00e2\u20ac\u201d Akira/GITS scene compilations, speed-paint tributes. Frame extraction at key moments.\n- **Pinterest boards** \u00e2\u20ac\u201d Curated collections, resolution varies\n- **Tumblr anime art blogs** \u00e2\u20ac\u201d Scattered but occasionally unique finds\n\n## Key Visual Characteristics\n- Neon-lit megacity environments with dense vertical architecture\n- Hand-painted cel animation look (visible brushwork, not clean digital)\n- Dark atmospheric palette with vivid neon accents (cyan, magenta, orange)\n- Rain, reflections, fog, atmospheric depth\n- Detailed mechanical designs (mecha, motorcycles, cybernetics)\n- Cinematic composition with dramatic lighting\n\n## Gap Analysis (Pre-Collection)\n- **Potential bias**: Character art vastly outnumbers background/environment art online. Actively seek background art and production paintings.\n- **Style drift risk**: Modern \"cyberpunk anime\" fan art often uses clean digital rendering, not the hand-painted cel look we want. Filter strictly for the 80s-90s aesthetic.\n- **Subject diversity**: Need both cityscapes and character scenes, day and night settings, interiors and exteriors.\n\n## Training Alignment\n- Base model: SDXL (user specified)\n- Captioning mode: **style** (trigger + \"style, \" + content description)\n- Recommended trigger word: `cpanime90s` \u00e2\u20ac\u201d unique, references era, won't collide with common tokens\n- Target: 25-30 images\n- Resolution: 1024px (SDXL native)\n- Captioner: WD14 Tagger (anime content) or Florence-2 (for environment/background art)\n"}, {"name": "sample-captions.md", "type": "text", "content": "# Sample Captions: Cyberpunk Anime (With Skill v2)\n\n## Caption 1\ncpanime90s style, sprawling megacity at night with towering skyscrapers, rain falling on wet streets, glowing signs reflected in puddles\n\n## Caption 2\ncpanime90s style, woman with short dark hair and cybernetic eye implant, standing in a corridor with flickering overhead lights\n\n## Caption 3\ncpanime90s style, red motorcycle parked in an alley between concrete buildings, steam rising from a grate, distant traffic\n\n## Caption 4\ncpanime90s style, dimly lit laboratory with banks of CRT monitors displaying green text, tangled cables overhead, single figure silhouetted\n\n## Caption 5\ncpanime90s style, aerial view of a highway interchange weaving between massive buildings, sunset casting long orange shadows across grey concrete\n"}, {"name": "sources.json", "type": "text", "content": "{\n  \"sources\": [\n    {\n      \"url\": \"https://halcyonrealms.com/anime/akira-art-book/\",\n      \"type\": \"article\",\n      \"tier\": \"A\",\n      \"description\": \"Halcyon Realms Akira art book review \u00e2\u20ac\u201d high-res production art scans\",\n      \"estimated_usable_images\": 15\n    },\n    {\n      \"url\": \"https://setteidreams.net/settei/ghost-in-the-shell/\",\n      \"type\": \"gallery\",\n      \"tier\": \"A\",\n      \"description\": \"GITS background art and key animation settei \u00e2\u20ac\u201d authoritative production material\",\n      \"estimated_usable_images\": 12\n    },\n    {\n      \"url\": \"https://safebooru.org/index.php?page=post&s=list&tags=cyberpunk+cityscape+neon\",\n      \"type\": \"archive\",\n      \"tier\": \"B\",\n      \"description\": \"Safebooru cyberpunk anime art \u00e2\u20ac\u201d filter for hand-painted cel style only\",\n      \"estimated_usable_images\": 20\n    },\n    {\n      \"url\": \"https://www.artstation.com/search?q=akira+ghost+shell+hand+painted\",\n      \"type\": \"community\",\n      \"tier\": \"B\",\n      \"description\": \"ArtStation fan tributes \u00e2\u20ac\u201d filter for traditional/cel-style rendering\",\n      \"estimated_usable_images\": 10\n    },\n    {\n      \"url\": \"https://www.deviantart.com/tag/cyberpunkanime\",\n      \"type\": \"community\",\n      \"tier\": \"B\",\n      \"description\": \"DeviantArt cyberpunk anime art \u00e2\u20ac\u201d needs strict style filtering\",\n      \"estimated_usable_images\": 8\n    },\n    {\n      \"url\": \"https://www.youtube.com/results?search_query=akira+background+art+compilation\",\n      \"type\": \"video\",\n      \"tier\": \"C\",\n      \"description\": \"YouTube art compilations \u00e2\u20ac\u201d frame extraction for background/environment shots\",\n      \"estimated_usable_images\": 6\n    }\n  ]\n}\n"}], "grading": {"eval_name": "cyberpunk-anime", "config": "with_skill", "expectations": [{"text": "source_diversity", "passed": true, "evidence": "6 sources across article, gallery, archive, community, video types"}, {"text": "structured_source_list", "passed": true, "evidence": "sources.json contains url, type, tier, description, estimated_usable_images fields"}, {"text": "training_aligned_plan", "passed": true, "evidence": "Trigger word 'cpanime90s', style captioning mode, 1024px SDXL resolution, 25-30 images, WD14/Florence-2 captioner"}, {"text": "caption_format", "passed": true, "evidence": "All captions follow 'cpanime90s style, {description}' format"}, {"text": "actionable_handoff", "passed": true, "evidence": "Dataset plan ends with 'Say: Train a LoRA using the cyberpunk-anime dataset' referencing lora-training skill"}, {"text": "source_tiering", "passed": true, "evidence": "Sources classified: Tier A (Halcyon Realms, settei archives), Tier B (Safebooru, ArtStation, DeviantArt), Tier C (YouTube)"}, {"text": "gap_analysis", "passed": true, "evidence": "Identifies character vs background bias, style drift risk from modern digital art, night-scene bias. Iteration plan: 'check background vs character ratio \u00e2\u20ac\u201d aim for 40% backgrounds; night vs day \u00e2\u20ac\u201d 15% non-night'"}, {"text": "caption_hygiene", "passed": true, "evidence": "Captions contain no style words (anime, cyberpunk, cel-shaded, hand-painted, neon-lit, retro anime). Hygiene rules explicitly listed."}]}}, {"id": "cyberpunk-anime-without_skill", "prompt": "Gather reference images for training a LoRA on cyberpunk anime style, like Ghost in the Shell and Akira. I'll be training on SDXL", "eval_id": 3, "outputs": [{"name": "dataset-plan.md", "type": "text", "content": "# Dataset Plan: Cyberpunk Anime LoRA (Baseline)\n\n## Target\n- **Subject**: Cyberpunk anime style (GITS, Akira)\n- **Base Model**: SDXL\n- **Target Images**: 30-40\n- **Resolution**: 1024x1024\n\n## Steps\n1. Scrape Danbooru for cyberpunk + anime tagged images\n2. Download production art from Halcyon Realms\n3. Collect from Pinterest boards\n4. Filter for quality and style consistency\n5. Resize and crop to 1024px\n6. Auto-caption with WD14 tagger\n\n## Captioning\n- Trigger word: `cyberpunk_anime_style`\n- Tag-based captions from WD14\n\n## Training Parameters\n- SDXL LoRA with Kohya_ss\n- Network rank: 32\n- Epochs: 10\n- Resolution: 1024\n"}, {"name": "research-report.md", "type": "text", "content": "# Research Report: Cyberpunk Anime Style (Baseline - No Skill)\n\n## Overview\nResearch for collecting cyberpunk anime art in the style of Ghost in the Shell and Akira for LoRA training on SDXL.\n\n## Potential Sources\n- **Danbooru/Safebooru** \u00e2\u20ac\u201d Tagged anime art archives, search cyberpunk + cityscape + neon tags\n- **Pinterest** \u00e2\u20ac\u201d Large Ghost in the Shell and Akira boards\n- **DeviantArt** \u00e2\u20ac\u201d Cyberpunk anime fan art\n- **Halcyon Realms** \u00e2\u20ac\u201d Anime art book reviews and production art documentation\n- **CivitAI** \u00e2\u20ac\u201d Check for existing cyberpunk anime LoRAs as reference\n\n## Key Visual Elements\n- Neon-lit megacity environments\n- Cybernetic enhancements on characters\n- Detailed mechanical designs (mecha, motorcycles, weapons)\n- Dark atmospheric palette with vivid neon accents\n- Hand-painted cel animation look\n- Rain, reflections, fog, atmospheric effects\n\n## Shows to Source From\n- Akira (1988)\n- Ghost in the Shell (1995)\n- Bubblegum Crisis (1987)\n- Psycho-Pass\n- Blade Runner: Black Lotus\n\n## Training Notes\n- SDXL at 1024px\n- 30+ images for style diversity\n- Focus on background art and key animation frames\n- WD14 tagger recommended for anime content\n"}, {"name": "sample-captions.md", "type": "text", "content": "# Sample Captions: Cyberpunk Anime (Baseline)\n\n## Caption 1\ncyberpunk_anime_style, neon-lit cityscape at night with towering skyscrapers, rain, reflections on wet streets\n\n## Caption 2\ncyberpunk_anime_style, female character with cybernetic implants, short purple hair, neon background\n\n## Caption 3\ncyberpunk_anime_style, red motorcycle speeding through a futuristic highway, motion blur, city lights\n\n## Caption 4\ncyberpunk_anime_style, dark laboratory interior with glowing screens and cables, sci-fi atmosphere\n\n## Caption 5\ncyberpunk_anime_style, mecha battle in an urban setting, explosions, debris, dramatic angle\n"}, {"name": "sources.json", "type": "text", "content": "{\n  \"sources\": [\n    {\n      \"url\": \"https://danbooru.donmai.us/posts?tags=cyberpunk+cityscape\",\n      \"type\": \"archive\",\n      \"description\": \"Danbooru tagged anime art\",\n      \"estimated_usable_images\": 100\n    },\n    {\n      \"url\": \"https://www.pinterest.com/atsf100/ghost-in-the-shell/\",\n      \"type\": \"community\",\n      \"description\": \"Ghost in the Shell Pinterest board\",\n      \"estimated_usable_images\": 50\n    },\n    {\n      \"url\": \"https://halcyonrealms.com\",\n      \"type\": \"article\",\n      \"description\": \"Anime art book reviews and production art\",\n      \"estimated_usable_images\": 30\n    },\n    {\n      \"url\": \"https://www.deviantart.com/tag/cyberpunkanime\",\n      \"type\": \"community\",\n      \"description\": \"DeviantArt cyberpunk anime fan art\",\n      \"estimated_usable_images\": 60\n    }\n  ]\n}\n"}], "grading": {"eval_name": "cyberpunk-anime", "config": "without_skill", "expectations": [{"text": "source_diversity", "passed": true, "evidence": "4 sources across archive, community, article types"}, {"text": "structured_source_list", "passed": true, "evidence": "sources.json has url, type, description, estimated_usable_images"}, {"text": "training_aligned_plan", "passed": false, "evidence": "Trigger word 'cyberpunk_anime_style' (too long, contains common tokens). No captioning mode specified \u00e2\u20ac\u201d just 'Tag-based captions from WD14'. Target 30-40 images is high."}, {"text": "caption_format", "passed": false, "evidence": "Captions use 'cyberpunk_anime_style, {description}' \u00e2\u20ac\u201d missing 'style' keyword after trigger for style-mode."}, {"text": "actionable_handoff", "passed": true, "evidence": "Training parameters section present with Kohya_ss reference"}, {"text": "source_tiering", "passed": false, "evidence": "No tier classification. Sources listed flat without quality/priority ranking."}, {"text": "gap_analysis", "passed": false, "evidence": "No gap analysis, bias check, or iteration strategy. No mention of character vs background balance."}, {"text": "caption_hygiene", "passed": false, "evidence": "Captions contain 'neon-lit' (style word for this context), 'sci-fi atmosphere' \u00e2\u20ac\u201d could be considered style-leaking. No explicit hygiene consideration."}]}}], "previous_feedback": {}, "previous_outputs": {"jrpg-amano-style-with_skill": [{"name": "dataset-plan.md", "type": "text", "content": "# Dataset Plan: Amano JRPG Watercolor Style LoRA\n\n## Configuration\n\n| Parameter | Value | Rationale |\n|---|---|---|\n| **Trigger word** | `amanostyle` | Unique, no collision with existing tokens |\n| **Captioning mode** | `style` | We want the LoRA to learn the artistic style, not specific subjects |\n| **Target resolution** | 1024px | FLUX native resolution |\n| **Target image count** | 25-30 | Sweet spot for style LoRAs \u00e2\u20ac\u201d enough variety without dilution |\n| **Captioner** | Florence-2 | Best for natural language descriptions of art content |\n| **Base model** | FLUX | User's target architecture |\n\n## Collection Strategy\n\n### Phase 1: Web Download\n1. Crawl Final Fantasy Wiki Amano artwork category \u00e2\u20ac\u201d extract direct image URLs\n2. Download from Internet Archive art book scans \u00e2\u20ac\u201d select watercolor/ink pieces only\n3. Pull from Artnet gallery \u00e2\u20ac\u201d high-quality professional photos\n\n```bash\npython scripts/download_images.py \\\n  --urls-file sources.json \\\n  --output-dir datasets/amano-jrpg-style/raw/ \\\n  --min-resolution 512\n```\n\n### Phase 2: Video Frame Extraction\nExtract frames from YouTube \"Art of Final Fantasy\" compilations:\n\n```bash\nyt-dlp -f \"bestvideo[height>=720]\" -o \"datasets/amano-jrpg-style/video/%(title)s.%(ext)s\" \"{video_url}\"\n\npython scripts/extract_frames.py \\\n  --video-dir datasets/amano-jrpg-style/video/ \\\n  --output-dir datasets/amano-jrpg-style/raw/ \\\n  --interval 3.0 \\\n  --min-resolution 512 \\\n  --dedupe-threshold 0.95\n```\n\nUse 3-second intervals since art compilation videos change images frequently.\n\n### Phase 3: Curation Criteria\n- **Include**: Watercolor/ink illustrations, concept art, character designs in Amano's classic style\n- **Exclude**: 3D collaborations, digital-only later works, sketches/pencil-only pieces, heavily cropped images, images with visible book binding or page creases\n- **Watch for**: Duplicate images across sources (art book scans + wiki may overlap)\n\n### Phase 4: Processing\n\n```bash\npython scripts/prepare_dataset.py \\\n  --input-dir datasets/amano-jrpg-style/raw/ \\\n  --output-dir datasets/amano-jrpg-style/processed/ \\\n  --target-resolution 1024 \\\n  --crop-mode smart \\\n  --format png\n```\n\n### Phase 5: Captioning\n\n```bash\npython scripts/auto_caption.py \\\n  --image-dir datasets/amano-jrpg-style/processed/ \\\n  --trigger-word \"amanostyle\" \\\n  --mode style \\\n  --captioner florence2\n```\n\n### Phase 6: Hand-off\nDataset ready at `datasets/amano-jrpg-style/processed/`. To start training:\n> \"Train a LoRA using the amano-jrpg-style dataset\"\n\nThis invokes the `comfyui-lora-training` skill with the prepared dataset. Recommended training params for a style LoRA on FLUX:\n- Rank: 16\n- Learning rate: 4e-4\n- Steps: 1000-1500\n- Resolution: 1024\n"}, {"name": "research-report.md", "type": "text", "content": "# Research Report: Yoshitaka Amano JRPG Watercolor Style\n\n## Subject Analysis\n\n**What the LoRA should learn**: Yoshitaka Amano's signature watercolor/ink illustration style as seen in classic Final Fantasy concept art. Key visual qualities:\n- Ethereal watercolor washes with fine ink line work\n- Elongated, graceful figure proportions\n- Luminous color palettes (deep blues, purples, golds, crimsons)\n- Flowing organic forms \u00e2\u20ac\u201d hair, fabric, and armor blend together\n- Blend of ukiyo-e, Art Nouveau, and Western fantasy traditions\n- Loose brushwork around strong pencil strokes\n- Charcoal smears and acrylic splatters as accents\n\n**LoRA type**: Style LoRA (not subject-specific)\n**Base model**: FLUX (1024px target)\n\n## Search Queries Used\n\n1. \"Yoshitaka Amano Final Fantasy art watercolor JRPG illustration gallery\"\n2. \"Yoshitaka Amano art prints collection high resolution images\"\n3. \"Amano art book scans Final Fantasy concept art\"\n\n## Sources Found\n\n### Tier 1: High-Quality Galleries (prioritize these)\n\n| Source | Type | Est. Images | Quality | Notes |\n|---|---|---|---|---|\n| [Final Fantasy Wiki - Amano Artwork](https://finalfantasy.fandom.com/wiki/Category:Yoshitaka_Amano_artwork) | Wiki gallery | 100+ | Medium-High | Categorized by game, good variety |\n| [Internet Archive - Amano Art Collection](https://archive.org/details/amano_202203) | Art book scans | 200+ | High | Multiple art books scanned, high-res |\n| [A Studio Archive (official)](https://www.yoshitakaamano.com/) | Official gallery | 30-50 | Very High | Official portfolio, curated selection |\n| [Artnet - Yoshitaka Amano](https://www.artnet.com/artists/yoshitaka-amano/) | Art marketplace | 151 | High | Professional photography of prints |\n\n### Tier 2: Community Collections\n\n| Source | Type | Est. Images | Quality | Notes |\n|---|---|---|---|---|\n| [Pinterest - Amano FF Art (89 pins)](https://www.pinterest.com/fantasyanime/yoshitaka-amanos-final-fantasy-art/) | Curated board | 89 | Variable | Good variety, resolution varies |\n| [Pinterest - Amano Art (390 pins)](https://www.pinterest.com/hellbreathingki/yoshitaka-amano-art/) | Curated board | 390 | Variable | Large collection, needs curation |\n| [videogamesartwork.com](https://videogamesartwork.com/artists/yoshitaka-amano) | Fan gallery | 50+ | Medium | Game art focused |\n| [Cook and Becker Spotlight](https://www.cookandbecker.com/en/article/174/spotlight-yoshitaka-amano.html) | Article + images | 10-15 | High | Art dealer, high-quality reproductions |\n\n### Tier 3: Video Sources (for frame extraction)\n\n| Source | Type | Est. Frames | Notes |\n|---|---|---|---|\n| YouTube: \"Amano art exhibit\" walkthroughs | Video | 20-30 frames | Exhibition footage shows art at various angles |\n| YouTube: \"Art of Final Fantasy\" compilations | Video | 30-50 frames | Slideshow-style compilations, clean frames |\n\n### Tier 4: Art Books (offline scanning)\n\n| Book | Coverage | Notes |\n|---|---|---|\n| The Sky: The Art of Final Fantasy | FF I-X | Definitive collection, 300+ illustrations |\n| Dawn: The Worlds of Final Fantasy | Environments + characters | Complementary to The Sky |\n| Amano: The Complete Prints | Career-spanning | Comprehensive print collection |\n| Vampire Hunter D art books | Non-FF work | Same style, adds variety |\n\n## Ethical Notes\n\n- Amano's art is copyrighted. Training a personal LoRA is common practice but redistribution of the LoRA or commercial use should be considered carefully.\n- Internet Archive scans are community-uploaded \u00e2\u20ac\u201d use for personal training only.\n- Prefer official/gallery sources where possible for highest quality.\n\n## Recommendation\n\nStart with the Final Fantasy Wiki gallery (well-organized, categorized by game) and the Internet Archive art book scans (highest resolution). Supplement with Pinterest boards after filtering for quality. Target 25-30 images focusing on his watercolor/ink work, avoiding his more recent digital or 3D collaborative pieces which would dilute the style signal.\n"}, {"name": "sample-captions.md", "type": "text", "content": "# Sample Captions: Amano JRPG Style\n\nThese demonstrate the `style` captioning mode: `{trigger_word} style, {content description}`. The trigger word captures the style; the caption describes what's depicted so the LoRA learns to apply the style to arbitrary content.\n\n## Caption 1\n```\namanostyle style, a warrior with flowing silver hair and ornate armor standing before a crystalline palace, watercolor washes in deep blue and violet with gold leaf accents, ink line work defining flowing fabric and elongated proportions\n```\n\n## Caption 2\n```\namanostyle style, close-up portrait of a woman with elaborate headdress and flowing white robes, delicate watercolor gradients from crimson to pale pink, fine ink outlines with loose brushwork on jewelry details\n```\n\n## Caption 3\n```\namanostyle style, a dark knight mounted on an armored chocobo against a stormy sky, bold ink strokes with charcoal smearing, muted earth tones punctuated by bright gold armor highlights, dynamic diagonal composition\n```\n\n## Caption 4\n```\namanostyle style, a group of four adventurers standing at the edge of a cliff overlooking a vast fantasy landscape with floating islands, layered watercolor washes creating atmospheric depth, warm amber sunset palette\n```\n\n## Caption 5\n```\namanostyle style, an ethereal dragon with iridescent wings coiled around a tower spire, wet-on-wet watercolor technique with ink splatter accents, jewel tones of emerald green and sapphire blue, swirling organic forms\n```\n"}, {"name": "sources.json", "type": "text", "content": "{\n  \"sources\": [\n    {\n      \"url\": \"https://finalfantasy.fandom.com/wiki/Category:Yoshitaka_Amano_artwork\",\n      \"type\": \"gallery\",\n      \"description\": \"Final Fantasy Wiki categorized gallery of all Amano artwork by game title\",\n      \"estimated_usable_images\": 60\n    },\n    {\n      \"url\": \"https://archive.org/details/amano_202203\",\n      \"type\": \"art-book-scan\",\n      \"description\": \"Internet Archive collection of 9+ Amano art books with high-res scans\",\n      \"estimated_usable_images\": 100\n    },\n    {\n      \"url\": \"https://www.yoshitakaamano.com/\",\n      \"type\": \"gallery\",\n      \"description\": \"Official A Studio Archive \u00e2\u20ac\u201d curated portfolio of limited artworks and rare archives\",\n      \"estimated_usable_images\": 30\n    },\n    {\n      \"url\": \"https://www.artnet.com/artists/yoshitaka-amano/\",\n      \"type\": \"gallery\",\n      \"description\": \"Artnet professional gallery with 151 artworks, professionally photographed\",\n      \"estimated_usable_images\": 40\n    },\n    {\n      \"url\": \"https://www.pinterest.com/fantasyanime/yoshitaka-amanos-final-fantasy-art/\",\n      \"type\": \"community\",\n      \"description\": \"Curated Pinterest board focused on FF artwork \u00e2\u20ac\u201d 89 pins\",\n      \"estimated_usable_images\": 30\n    },\n    {\n      \"url\": \"https://www.pinterest.com/hellbreathingki/yoshitaka-amano-art/\",\n      \"type\": \"community\",\n      \"description\": \"Large Pinterest collection \u00e2\u20ac\u201d 390 pins, needs filtering for quality and style focus\",\n      \"estimated_usable_images\": 50\n    },\n    {\n      \"url\": \"https://videogamesartwork.com/artists/yoshitaka-amano\",\n      \"type\": \"gallery\",\n      \"description\": \"Video game art archive with Amano's game-related illustrations\",\n      \"estimated_usable_images\": 40\n    },\n    {\n      \"url\": \"https://www.cookandbecker.com/en/article/174/spotlight-yoshitaka-amano.html\",\n      \"type\": \"article\",\n      \"description\": \"Cook and Becker art dealer spotlight with high-quality reproductions\",\n      \"estimated_usable_images\": 12\n    },\n    {\n      \"url\": \"https://www.artsy.net/artist/amano-yoshitaka\",\n      \"type\": \"gallery\",\n      \"description\": \"Artsy gallery with prints and artwork listings\",\n      \"estimated_usable_images\": 20\n    },\n    {\n      \"url\": \"https://mizuma-art.co.jp/en/artists/amano-yoshitaka/\",\n      \"type\": \"gallery\",\n      \"description\": \"Mizuma Art Gallery representation \u00e2\u20ac\u201d contemporary works with exhibition documentation\",\n      \"estimated_usable_images\": 15\n    }\n  ]\n}\n"}], "jrpg-amano-style-without_skill": [{"name": "dataset-plan.md", "type": "text", "content": "# Dataset Plan: Amano JRPG Style LoRA (Baseline)\n\n## Target\n- **Subject**: Yoshitaka Amano watercolor JRPG style\n- **Base Model**: FLUX.1-dev\n- **Target Images**: 200-330 images\n- **Resolution**: 1024x1024 minimum\n\n## Image Selection Criteria\n- Must show Amano's signature watercolor/ink style\n- Prefer complete illustrations over sketches\n- Avoid heavily cropped or low-res scans\n- Focus on character art and key visual pieces\n\n## Captioning Strategy\n- Trigger word: `amano_style`\n- Detailed descriptions of content, medium, color palette, composition\n\n## Preprocessing\n- Resize to 1024x1024\n- Remove watermarks where possible\n- Convert to PNG\n\n## Training Parameters\n- Learning rate: ~1e-4\n- Steps: 1500-3000\n- Rank: 16-32\n- Optimizer: AdamW8bit\n\n## Quality Validation\n- Generate test images at multiple LoRA strengths\n- Compare against reference Amano artworks\n"}, {"name": "research-report.md", "type": "text", "content": "# Research Report: Yoshitaka Amano JRPG Watercolor Style (Baseline - No Skill)\n\n## Overview\nResearch findings on Yoshitaka Amano's watercolor/ink style for LoRA training. Based on general knowledge (web search was unavailable).\n\n## Key Visual Characteristics\n- Ethereal watercolor washes with ink line work\n- Elongated, graceful figure proportions\n- Rich color palettes with luminous highlights\n- Flowing organic forms and dramatic compositions\n- Blend of Eastern and Western art traditions\n\n## Potential Image Sources\n\n### Art Books\n- **The Sky: The Art of Final Fantasy** \u00e2\u20ac\u201d Comprehensive collection of FF concept art\n- **Dawn: The Worlds of Final Fantasy** \u00e2\u20ac\u201d Environmental and character art\n- **Beyond the Fantasy** \u00e2\u20ac\u201d Later FF works\n- **Vampire Hunter D art books** \u00e2\u20ac\u201d Non-FF Amano work, same style\n\n### Websites\n- amanosworld.com \u00e2\u20ac\u201d Official portfolio\n- Final Fantasy Wiki (finalfantasy.fandom.com) \u00e2\u20ac\u201d Game art galleries\n- Danbooru/Gelbooru \u00e2\u20ac\u201d Tagged anime art archives\n\n### Other\n- CivitAI \u00e2\u20ac\u201d Check for existing Amano-style LoRAs as reference\n- Auction house listings (Christie's, Sotheby's) \u00e2\u20ac\u201d High-res scans of original art\n- ArtStation \u00e2\u20ac\u201d Fan art inspired by Amano\n\n## Training Challenges\n- Amano's style varies significantly across decades\n- Watercolor effects are difficult to capture in LoRA\n- Need to distinguish Amano's personal style from generic \"JRPG art\"\n\n## Legal Considerations\n- Amano's art is copyrighted \u00e2\u20ac\u201d training data use for personal LoRA is a gray area\n- Fan art may be more accessible but less stylistically pure\n"}, {"name": "sample-captions.md", "type": "text", "content": "# Sample Captions: Amano Style (Baseline)\n\n## Caption 1\namano_style, a warrior with flowing silver hair standing before a crystal palace, watercolor medium with ink outlines, luminous blue and purple palette, dramatic upward composition\n\n## Caption 2\namano_style, ethereal woman in elaborate flowing robes holding a staff, delicate watercolor washes with fine ink details, gold and crimson accents, centered portrait composition\n\n## Caption 3\namano_style, armored knight on horseback charging through mist, loose watercolor technique with bold ink strokes, cool blue and grey tones, dynamic diagonal composition\n\n## Caption 4\namano_style, group of adventurers standing on a cliff overlooking a fantasy landscape, layered watercolor with ink line work, warm sunset palette, panoramic wide composition\n\n## Caption 5\namano_style, mystical creature with ornate wings and flowing tendrils, wet-on-wet watercolor with splatter effects, iridescent jewel tones, swirling organic composition\n"}, {"name": "sources.json", "type": "text", "content": "{\n  \"sources\": [\n    {\n      \"url\": \"https://amanosworld.com\",\n      \"type\": \"gallery\",\n      \"description\": \"Official Amano portfolio site with curated artwork\",\n      \"estimated_usable_images\": 30,\n      \"quality\": \"high\",\n      \"priority\": 1\n    },\n    {\n      \"url\": \"https://finalfantasy.fandom.com/wiki/Yoshitaka_Amano\",\n      \"type\": \"wiki\",\n      \"description\": \"Final Fantasy Wiki with concept art galleries\",\n      \"estimated_usable_images\": 50,\n      \"quality\": \"medium\",\n      \"priority\": 2\n    },\n    {\n      \"url\": \"https://danbooru.donmai.us/posts?tags=amano_yoshitaka\",\n      \"type\": \"archive\",\n      \"description\": \"Tagged Amano art on Danbooru\",\n      \"estimated_usable_images\": 40,\n      \"quality\": \"variable\",\n      \"priority\": 3\n    },\n    {\n      \"url\": \"https://www.artstation.com/search?query=amano+final+fantasy\",\n      \"type\": \"gallery\",\n      \"description\": \"Fan art and tributes on ArtStation\",\n      \"estimated_usable_images\": 20,\n      \"quality\": \"variable\",\n      \"priority\": 5\n    }\n  ]\n}\n"}], "vintage-keyboards-with_skill": [{"name": "dataset-plan.md", "type": "text", "content": "# Dataset Plan: Vintage Mechanical Keyboard LoRA\n\n## Configuration\n\n| Parameter | Value | Rationale |\n|---|---|---|\n| **Trigger word** | `vtgkbd` | Short, unique, no collision with existing tokens |\n| **Captioning mode** | `object` | We want the LoRA to learn what vintage keyboards look like |\n| **Target resolution** | 1024px | SDXL native resolution |\n| **Target image count** | 25-30 | Enough variety across models without over-representing one board |\n| **Captioner** | Florence-2 | Good at describing physical objects and their properties |\n| **Base model** | SDXL | User's target architecture |\n\n## Collection Strategy\n\n### Phase 1: Web Download\n1. Crawl Deskthority wiki pages for IBM Model M, Apple Extended Keyboard II, Commodore 64, etc.\n2. Download from ClickyKeyboards product pages\n3. Selectively grab high-quality eBay listing photos\n\n```bash\npython scripts/download_images.py \\\n  --urls-file sources.json \\\n  --output-dir datasets/vintage-keyboards/raw/ \\\n  --min-resolution 512\n```\n\n### Phase 2: Video Frame Extraction\nExtract frames from keyboard collection tour videos and restoration videos:\n\n```bash\nyt-dlp -f \"bestvideo[height>=720]\" -o \"datasets/vintage-keyboards/video/%(title)s.%(ext)s\" \"{video_url}\"\n\npython scripts/extract_frames.py \\\n  --video-dir datasets/vintage-keyboards/video/ \\\n  --output-dir datasets/vintage-keyboards/raw/ \\\n  --interval 5.0 \\\n  --min-resolution 512 \\\n  --dedupe-threshold 0.95\n```\n\nUse 5-second intervals \u00e2\u20ac\u201d collection tours linger on each board.\n\n### Phase 3: Curation Criteria\n- **Include**: Full keyboard shots, close-ups of keycaps, angled views showing profile, keyboards on desks\n- **Exclude**: Modern RGB keyboards, laptop keyboards, keyboards that aren't beige/retro styled, extreme close-ups of single switches, blurry photos\n- **Variety needed**: Different keyboard models (IBM, Apple, Commodore, etc.), different angles (top-down, 3/4, side profile), different contexts (desk setup, isolated product shot)\n\n### Phase 4: Processing\n\n```bash\npython scripts/prepare_dataset.py \\\n  --input-dir datasets/vintage-keyboards/raw/ \\\n  --output-dir datasets/vintage-keyboards/processed/ \\\n  --target-resolution 1024 \\\n  --crop-mode smart \\\n  --format png\n```\n\n### Phase 5: Captioning\n\n```bash\npython scripts/auto_caption.py \\\n  --image-dir datasets/vintage-keyboards/processed/ \\\n  --trigger-word \"vtgkbd\" \\\n  --mode object \\\n  --captioner florence2\n```\n\n### Phase 6: Hand-off\nDataset ready at `datasets/vintage-keyboards/processed/`. To start training:\n> \"Train a LoRA using the vintage-keyboards dataset\"\n\nRecommended SDXL LoRA training params for an object:\n- Network rank: 32\n- Learning rate: 1e-4 (unet), 5e-5 (text encoder)\n- Epochs: 10\n- Resolution: 1024\n"}, {"name": "research-report.md", "type": "text", "content": "# Research Report: Vintage Mechanical Keyboard LoRA\n\n## Subject Analysis\n\n**What the LoRA should learn**: The retro aesthetic of vintage mechanical keyboards \u00e2\u20ac\u201d specifically beige/cream cases with colorful keycaps, chunky proportions, thick bezels, and the industrial design language of 1980s-90s computer peripherals (IBM Model M, Apple Extended Keyboard, etc.)\n\n**LoRA type**: Object LoRA\n**Base model**: SDXL (1024px target)\n\n## Search Queries Used\n\n1. \"vintage mechanical keyboard retro beige IBM Model M gallery photos\"\n2. \"vintage mechanical keyboard collection photos reddit r/mechanicalkeyboards retro\"\n3. \"retro keyboard photography product shots\"\n\n## Sources Found\n\n### Tier 1: Enthusiast Communities (best variety and quality)\n\n| Source | Type | Est. Images | Quality | Notes |\n|---|---|---|---|---|\n| [r/MechanicalKeyboards](https://reddit.com/r/MechanicalKeyboards) | Community | 100+ | High | Search \"vintage\", \"retro\", \"beige\" \u00e2\u20ac\u201d collectors post high-quality photos |\n| [Deskthority Wiki](https://deskthority.net/) | Wiki + forum | 50+ | High | Dedicated vintage keyboard wiki with detailed photo galleries |\n| [ClickyKeyboards](https://www.clickykeyboards.com/) | Specialty retailer | 30+ | High | Restoration specialist \u00e2\u20ac\u201d clean product photography |\n\n### Tier 2: Product/Marketplace Sources\n\n| Source | Type | Est. Images | Quality | Notes |\n|---|---|---|---|---|\n| [eBay vintage keyboard listings](https://www.ebay.com/b/IBM-Vintage-Computer-Keyboards/175690/bn_557456) | Marketplace | 200+ | Variable | Many listing photos, need to filter for quality |\n| [Model F Keyboards](https://www.modelfkeyboards.com/) | Product gallery | 20+ | Very High | Professional product photography of reproductions |\n| [Unicomp/PCKeyboard](https://www.pckeyboard.com/) | Product gallery | 15+ | High | Modern Model M manufacturer |\n\n### Tier 3: Review/Article Sources\n\n| Source | Type | Est. Images | Quality | Notes |\n|---|---|---|---|---|\n| [HHKB Blog - Vintage Keyboards](https://hhkeyboard.us/blog/vintage-mechanical-keyboard) | Article | 10-15 | High | Curated editorial photos |\n| [RetroSquid - Best Retro Keyboards](https://www.retrosquid.com/best-retro-mechanical-keyboards/) | Review | 10+ | High | Well-photographed review images |\n| [Keychron Retro Collection](https://www.keychron.com/collections/retro-mechanical-keyboards) | Product gallery | 15+ | Very High | Professional product shots of retro-styled boards |\n\n### Tier 4: Video Sources\n\n| Source | Type | Est. Frames | Notes |\n|---|---|---|---|\n| YouTube: \"Vintage keyboard collection\" tours | Video | 30-40 frames | Collectors showing their boards, varied angles |\n| YouTube: \"IBM Model M review/restoration\" | Video | 20-30 frames | Close-up detail shots during restoration |\n\n## Key Visual Qualities to Capture\n\n- **Color**: Warm beige/cream cases, sometimes with grey accents. Keycaps in PBT cream with colorful legends or accent keys\n- **Form factor**: Full-size or TKL, thick bezels, industrial proportions\n- **Details**: Coiled cables, DIN connectors, prominent branding badges, thick keycap profiles (SA, DSA)\n- **Context**: On desks, with CRT monitors, or clean product-shot style\n- **Texture**: Matte plastic cases, textured keycaps, visible switch mechanisms in profile shots\n\n## Recommendation\n\nStart with r/MechanicalKeyboards (search \"vintage collection\" posts \u00e2\u20ac\u201d collectors often post beautifully photographed sets). Supplement with Deskthority wiki pages for specific models and ClickyKeyboards product shots. Use eBay listings selectively for varied angles. Target 25-30 images with diverse models but consistent retro aesthetic.\n"}, {"name": "sample-captions.md", "type": "text", "content": "# Sample Captions: Vintage Mechanical Keyboards\n\nThese demonstrate the `object` captioning mode: `{trigger_word}, {description of context and setting}`. The trigger word represents the keyboard itself; the caption describes the surrounding context.\n\n## Caption 1\n```\nvtgkbd, a beige full-size mechanical keyboard with cream PBT keycaps and grey modifier keys, photographed from a three-quarter angle on a wooden desk next to a CRT monitor\n```\n\n## Caption 2\n```\nvtgkbd, close-up of a vintage keyboard showing thick double-shot keycaps with crisp black legends, coiled cable visible in the background, soft studio lighting on beige plastic case\n```\n\n## Caption 3\n```\nvtgkbd, an IBM Model M buckling spring keyboard with classic two-tone beige colorway, top-down flat lay on a dark desk mat, blue oval badge visible above arrow keys\n```\n\n## Caption 4\n```\nvtgkbd, side profile view of a chunky retro keyboard showing the tall SA-style keycap sculpt and thick bezels of the beige case, warm afternoon light casting soft shadows\n```\n\n## Caption 5\n```\nvtgkbd, a vintage keyboard with colorful accent keycaps in red, blue, and orange on the function row, set up on a retro computer desk alongside a floppy disk drive and green-phosphor monitor\n```\n"}, {"name": "sources.json", "type": "text", "content": "{\n  \"sources\": [\n    {\n      \"url\": \"https://reddit.com/r/MechanicalKeyboards/search?q=vintage+beige\",\n      \"type\": \"community\",\n      \"description\": \"Reddit mechanical keyboards community \u00e2\u20ac\u201d search for vintage/beige collection posts with high-quality photos\",\n      \"estimated_usable_images\": 40\n    },\n    {\n      \"url\": \"https://deskthority.net/wiki/Main_Page\",\n      \"type\": \"wiki\",\n      \"description\": \"Deskthority vintage keyboard wiki \u00e2\u20ac\u201d detailed model pages with photo galleries\",\n      \"estimated_usable_images\": 50\n    },\n    {\n      \"url\": \"https://www.clickykeyboards.com/\",\n      \"type\": \"gallery\",\n      \"description\": \"ClickyKeyboards restoration specialist \u00e2\u20ac\u201d clean product photography of restored vintage boards\",\n      \"estimated_usable_images\": 30\n    },\n    {\n      \"url\": \"https://www.ebay.com/b/IBM-Vintage-Computer-Keyboards/175690/bn_557456\",\n      \"type\": \"marketplace\",\n      \"description\": \"eBay vintage IBM keyboards \u00e2\u20ac\u201d large volume of listing photos, needs quality filtering\",\n      \"estimated_usable_images\": 50\n    },\n    {\n      \"url\": \"https://www.modelfkeyboards.com/\",\n      \"type\": \"gallery\",\n      \"description\": \"Model F Keyboards \u00e2\u20ac\u201d professional product photography of reproduction classic keyboards\",\n      \"estimated_usable_images\": 20\n    },\n    {\n      \"url\": \"https://www.pckeyboard.com/\",\n      \"type\": \"gallery\",\n      \"description\": \"Unicomp New Model M \u00e2\u20ac\u201d modern production of classic design with product photos\",\n      \"estimated_usable_images\": 15\n    },\n    {\n      \"url\": \"https://hhkeyboard.us/blog/vintage-mechanical-keyboard\",\n      \"type\": \"article\",\n      \"description\": \"HHKB vintage keyboard spotlight \u00e2\u20ac\u201d curated editorial photos of 5 essential vintage boards\",\n      \"estimated_usable_images\": 12\n    },\n    {\n      \"url\": \"https://www.keychron.com/collections/retro-mechanical-keyboards\",\n      \"type\": \"gallery\",\n      \"description\": \"Keychron retro collection \u00e2\u20ac\u201d professional product photography with retro colorways\",\n      \"estimated_usable_images\": 15\n    },\n    {\n      \"url\": \"https://www.aziocorp.com/collections/retro-keyboard-collection\",\n      \"type\": \"gallery\",\n      \"description\": \"AZIO retro keyboard collection \u00e2\u20ac\u201d premium retro-styled boards with studio photography\",\n      \"estimated_usable_images\": 10\n    }\n  ]\n}\n"}], "vintage-keyboards-without_skill": [{"name": "dataset-plan.md", "type": "text", "content": "# Dataset Plan: Vintage Keyboard LoRA (Baseline)\n\n## Target\n- **Subject**: Vintage mechanical keyboards, retro beige aesthetic\n- **Base Model**: SDXL\n- **Target Images**: 20-30\n- **Resolution**: 1024x1024\n\n## Steps\n1. Download images from Reddit, Deskthority, eBay\n2. Filter for quality \u00e2\u20ac\u201d minimum 512px, sharp, well-lit\n3. Remove duplicates\n4. Resize to 1024x1024\n5. Caption each image with a trigger word + description\n\n## Captioning\n- Trigger word: `vintage_keyboard`\n- Format: trigger word followed by description of the keyboard and scene\n\n## Training Parameters\n- SDXL LoRA with Kohya_ss\n- Network rank: 32\n- Learning rate: 1e-4\n- Epochs: 10\n"}, {"name": "research-report.md", "type": "text", "content": "# Research Report: Vintage Mechanical Keyboards (Baseline - No Skill)\n\n## Overview\nResearch findings for collecting vintage mechanical keyboard images for LoRA training.\n\n## Potential Image Sources\n\n- **Reddit r/MechanicalKeyboards** \u00e2\u20ac\u201d Large enthusiast community, search \"vintage\" or \"retro\" for collection posts\n- **Deskthority.net** \u00e2\u20ac\u201d Dedicated vintage keyboard wiki and forum\n- **eBay listings** \u00e2\u20ac\u201d IBM Model M, Apple Extended Keyboard listings with photos\n- **ClickyKeyboards.com** \u00e2\u20ac\u201d Restoration specialist, product photos\n- **Keychron retro collection** \u00e2\u20ac\u201d Modern retro-styled boards\n\n## Key Models to Include\n- IBM Model M (beige, buckling spring)\n- Apple Extended Keyboard II\n- Commodore 64 keyboard\n- AZIO retro collection\n- Unicomp New Model M\n\n## Visual Characteristics\n- Beige/cream plastic cases\n- Thick bezels and chunky proportions\n- PBT keycaps with colorful legends\n- Coiled cables\n- Industrial 1980s-90s design language\n\n## Training Notes\n- Use SDXL at 1024px\n- Need 20-30 varied images\n- Mix of product shots, collection photos, and detail close-ups\n"}, {"name": "sample-captions.md", "type": "text", "content": "# Sample Captions: Vintage Keyboards (Baseline)\n\n## Caption 1\nvintage_keyboard, a beige IBM Model M keyboard on a wooden desk, buckling spring switches, classic design\n\n## Caption 2\nvintage_keyboard, top-down photo of a retro keyboard with cream keycaps and grey modifiers, coiled cable\n\n## Caption 3\nvintage_keyboard, Apple Extended Keyboard II in beige with Alps switches, next to a Macintosh computer\n\n## Caption 4\nvintage_keyboard, close-up of thick PBT keycaps with colorful function key legends on a beige case\n\n## Caption 5\nvintage_keyboard, collection of three vintage keyboards displayed on a shelf, various beige and grey colorways\n"}, {"name": "sources.json", "type": "text", "content": "{\n  \"sources\": [\n    {\n      \"url\": \"https://reddit.com/r/MechanicalKeyboards\",\n      \"type\": \"community\",\n      \"description\": \"Keyboard enthusiast subreddit\",\n      \"estimated_usable_images\": 50\n    },\n    {\n      \"url\": \"https://deskthority.net\",\n      \"type\": \"wiki\",\n      \"description\": \"Vintage keyboard wiki and forum\",\n      \"estimated_usable_images\": 40\n    },\n    {\n      \"url\": \"https://www.ebay.com/b/IBM-Vintage-Computer-Keyboards/175690\",\n      \"type\": \"marketplace\",\n      \"description\": \"eBay vintage keyboard listings\",\n      \"estimated_usable_images\": 100\n    },\n    {\n      \"url\": \"https://www.clickykeyboards.com\",\n      \"type\": \"gallery\",\n      \"description\": \"Restored vintage keyboards\",\n      \"estimated_usable_images\": 30\n    }\n  ]\n}\n"}], "cyberpunk-anime-with_skill": [{"name": "dataset-plan.md", "type": "text", "content": "# Dataset Plan: Cyberpunk Anime Style LoRA\n\n## Configuration\n\n| Parameter | Value | Rationale |\n|---|---|---|\n| **Trigger word** | `cybranime` | Short, unique, combines \"cyberpunk\" + \"anime\" |\n| **Captioning mode** | `style` | We want the LoRA to learn the cyberpunk anime aesthetic |\n| **Target resolution** | 1024px | SDXL native resolution (user specified SDXL) |\n| **Target image count** | 30-35 | Style spans two major franchises + broader aesthetic \u00e2\u20ac\u201d needs more variety |\n| **Captioner** | WD14 Tagger | Better at anime-specific visual elements and tags |\n| **Base model** | SDXL | User's target architecture |\n\n## Collection Strategy\n\n### Phase 1: Web Download\n1. Crawl Halcyon Realms articles for Akira and GITS production art\n2. Download from akira.ie cel documentation\n3. Pull select images from Heritage Auctions listings\n\n```bash\npython scripts/download_images.py \\\n  --urls-file sources.json \\\n  --output-dir datasets/cyberpunk-anime/raw/ \\\n  --min-resolution 512\n```\n\n### Phase 2: Video Frame Extraction\nExtract key frames from anime analysis videos and \"making of\" documentaries:\n\n```bash\nyt-dlp -f \"bestvideo[height>=720]\" -o \"datasets/cyberpunk-anime/video/%(title)s.%(ext)s\" \"{video_url}\"\n\npython scripts/extract_frames.py \\\n  --video-dir datasets/cyberpunk-anime/video/ \\\n  --output-dir datasets/cyberpunk-anime/raw/ \\\n  --interval 3.0 \\\n  --min-resolution 512 \\\n  --dedupe-threshold 0.95\n```\n\nFor actual anime footage (if extracting from the films directly), use 10-second intervals to avoid too many similar frames from the same scene.\n\n### Phase 3: Curation Criteria\n- **Include**: Background art, key animation frames, cityscape paintings, detailed mechanical designs, atmospheric scenes with neon lighting\n- **Exclude**: Simple dialogue scenes, extreme close-ups of just faces, modern CG anime that doesn't match the hand-painted look, images with subtitles or UI overlays\n- **Balance**: Aim for ~40% Akira, ~40% Ghost in the Shell, ~20% other cyberpunk anime (Bubblegum Crisis, Blade Runner: Black Lotus) for breadth\n- **Style consistency**: Prefer hand-painted cel/gouache aesthetic over modern digital anime\n\n### Phase 4: Processing\n\n```bash\npython scripts/prepare_dataset.py \\\n  --input-dir datasets/cyberpunk-anime/raw/ \\\n  --output-dir datasets/cyberpunk-anime/processed/ \\\n  --target-resolution 1024 \\\n  --crop-mode smart \\\n  --format png\n```\n\n### Phase 5: Captioning\n\n```bash\npython scripts/auto_caption.py \\\n  --image-dir datasets/cyberpunk-anime/processed/ \\\n  --trigger-word \"cybranime\" \\\n  --mode style \\\n  --captioner wd14\n```\n\nWD14 will produce tag-style captions good for anime. Review and supplement with scene descriptions where tags are too sparse.\n\n### Phase 6: Hand-off\nDataset ready at `datasets/cyberpunk-anime/processed/`. To start training:\n> \"Train a LoRA using the cyberpunk-anime dataset\"\n\nRecommended SDXL LoRA training params for a style:\n- Network rank: 32\n- Learning rate: 1e-4 (unet), 5e-5 (text encoder)\n- Epochs: 10\n- Resolution: 1024\n- Noise offset: 0.1 (helps with the high-contrast neon lighting in this style)\n"}, {"name": "research-report.md", "type": "text", "content": "# Research Report: Cyberpunk Anime Style LoRA\n\n## Subject Analysis\n\n**What the LoRA should learn**: The visual style of classic cyberpunk anime \u00e2\u20ac\u201d specifically the detailed, gritty, neon-drenched aesthetic of Ghost in the Shell (1995) and Akira (1988). Key visual qualities:\n- Highly detailed mechanical/cybernetic designs\n- Dense urban environments with towering architecture\n- Neon lighting against dark, rain-soaked environments\n- Hand-painted cel animation look with rich gouache backgrounds\n- Contrast between organic human forms and hard-edged technology\n- Muted palette punctuated by vivid neon (pink, cyan, orange)\n- Atmospheric depth with haze, fog, reflections\n\n**LoRA type**: Style LoRA\n**Base model**: SDXL (1024px target \u00e2\u20ac\u201d user specified)\n\n## Search Queries Used\n\n1. \"cyberpunk anime art style Ghost in the Shell Akira illustration gallery\"\n2. \"Akira anime background art production cel concept art high resolution\"\n3. \"cyberpunk anime aesthetic neon city illustration\"\n\n## Sources Found\n\n### Tier 1: Production Art & Archives (highest quality)\n\n| Source | Type | Est. Images | Quality | Notes |\n|---|---|---|---|---|\n| [akira.ie \u00e2\u20ac\u201d Akira Cels & Production Artwork](https://akira.ie/) | Archive | 50+ | Very High | Personal collection of Akira production cels, documented |\n| [Riekeles Gallery \u00e2\u20ac\u201d Akira Backgrounds](https://www.riekeles.com/) | Gallery | 30+ | Very High | Premium solegraph reproductions of Akira production backgrounds |\n| [Halcyon Realms \u00e2\u20ac\u201d Akira Animation Archives](https://halcyonrealms.com/animation/revisiting-the-art-of-akira-part-i-akira-animation-archives/) | Article + gallery | 40+ | High | Detailed articles with production art scans |\n| [Halcyon Realms \u00e2\u20ac\u201d GITS Background Art](https://halcyonrealms.com/anime/ghost-in-the-shell-background-art-cut-no-683/) | Article + gallery | 20+ | High | Individual background art documentation |\n\n### Tier 2: Community Collections\n\n| Source | Type | Est. Images | Quality | Notes |\n|---|---|---|---|---|\n| [Pinterest \u00e2\u20ac\u201d Ghost in the Shell (900+ pins)](https://www.pinterest.com/atsf100/ghost-in-the-shell/) | Curated board | 100+ | Variable | Large collection, needs filtering for production art vs. fan art |\n| [Pinterest \u00e2\u20ac\u201d Ghost in the Shell ideas](https://www.pinterest.com/ideas/ghost-in-the-shell/959654803881/) | Community | 50+ | Variable | Broader collection including fan interpretations |\n| [DeviantArt \u00e2\u20ac\u201d Cyberpunk Anime Style](https://www.deviantart.com/tag/cyberpunkanime) | Community | 100+ | Variable | Mix of original and fan art in cyberpunk anime style |\n\n### Tier 3: Exhibition Documentation\n\n| Source | Type | Est. Images | Quality | Notes |\n|---|---|---|---|---|\n| [Anime Architecture Exhibition](https://www.archipanic.com/anime-architecture/) | Article | 15+ | High | Curated exhibition of 100 technical drawings + watercolours from GITS, Akira, Metropolis |\n| [Akira: The Architecture of Neo Tokyo Exhibition](https://www.itsnicethat.com/news/akira-the-architecture-of-neo-tokyo-exhibition-illustration-080622) | Article | 10+ | High | Rare artworks by Akira's art directors |\n\n### Tier 4: Video Sources\n\n| Source | Type | Est. Frames | Notes |\n|---|---|---|---|\n| YouTube: \"Akira art analysis\" / \"making of Akira\" | Video | 30-40 frames | Behind-the-scenes with production art |\n| YouTube: \"Ghost in the Shell animation analysis\" | Video | 20-30 frames | Breakdowns showing background art and key frames |\n| YouTube: \"cyberpunk anime aesthetic\" compilations | Video | 40-50 frames | Curated compilations across multiple shows |\n\n## Additional Cyberpunk Anime References\n\nBeyond GITS and Akira, these sources broaden the style without diluting it:\n- **Blade Runner: Black Lotus** \u00e2\u20ac\u201d Direct cyberpunk anime, similar aesthetic\n- **Psycho-Pass** \u00e2\u20ac\u201d Modern take on cyberpunk anime environments\n- **Bubblegum Crisis** \u00e2\u20ac\u201d Classic 80s cyberpunk anime OVA\n- **Ergo Proxy** \u00e2\u20ac\u201d Dark, atmospheric cyberpunk\n\n## Ethical Notes\n\n- Production cels and backgrounds are copyrighted by their respective studios (Tokyo Movie Shinsha for Akira, Production I.G for GITS)\n- Heritage Auctions and Riekeles Gallery sell originals \u00e2\u20ac\u201d high-res scans from these are ideal quality\n- Fan art on DeviantArt/Pinterest may be useful for expanding the dataset but introduces style variation\n\n## Recommendation\n\nStart with Halcyon Realms articles (well-documented production art) and the akira.ie collection (dedicated Akira production cels). For GITS, use the Anime Architecture exhibition documentation. Supplement with Pinterest boards after filtering strictly for production art and official illustrations. Target 30-35 images focusing on background art and key animation frames rather than character close-ups, since the urban environments are the strongest style signal. Use WD14 Tagger for captioning since this is anime content.\n"}, {"name": "sample-captions.md", "type": "text", "content": "# Sample Captions: Cyberpunk Anime Style\n\nThese demonstrate the `style` captioning mode with WD14-style tags: `{trigger_word} style, {tag-based description}`. WD14 produces comma-separated tags rather than natural language, which works well for anime LoRAs.\n\n## Caption 1\n```\ncybranime style, cityscape, neon lights, rain, night, skyscraper, dense urban environment, wet street, reflections, holographic advertisement, atmospheric perspective, detailed background, no humans\n```\n\n## Caption 2\n```\ncybranime style, 1girl, cybernetic enhancements, short hair, jacket, neon glow, dark background, serious expression, wires, technological, detailed face, upper body, looking at viewer\n```\n\n## Caption 3\n```\ncybranime style, motorcycle, speed lines, highway, futuristic city, night scene, motion blur, neon red taillights, detailed mechanical design, dynamic angle, dark atmosphere\n```\n\n## Caption 4\n```\ncybranime style, interior, laboratory, monitors, cables, dim lighting, green phosphor screens, control panels, sci-fi, detailed machinery, industrial, no humans, atmospheric\n```\n\n## Caption 5\n```\ncybranime style, explosion, mecha, military, urban destruction, debris, smoke, dramatic lighting, action scene, wide shot, crumbling buildings, fire, dynamic composition\n```\n"}, {"name": "sources.json", "type": "text", "content": "{\n  \"sources\": [\n    {\n      \"url\": \"https://akira.ie/\",\n      \"type\": \"archive\",\n      \"description\": \"Personal collection documenting Akira production cels and artwork with high-res scans\",\n      \"estimated_usable_images\": 50\n    },\n    {\n      \"url\": \"https://www.riekeles.com/\",\n      \"type\": \"gallery\",\n      \"description\": \"Riekeles Gallery \u00e2\u20ac\u201d premium solegraph reproductions of Akira production backgrounds\",\n      \"estimated_usable_images\": 25\n    },\n    {\n      \"url\": \"https://halcyonrealms.com/animation/revisiting-the-art-of-akira-part-i-akira-animation-archives/\",\n      \"type\": \"article\",\n      \"description\": \"Halcyon Realms Akira animation archives \u00e2\u20ac\u201d detailed articles with production art scans\",\n      \"estimated_usable_images\": 40\n    },\n    {\n      \"url\": \"https://halcyonrealms.com/anime/ghost-in-the-shell-background-art-cut-no-683/\",\n      \"type\": \"article\",\n      \"description\": \"Halcyon Realms Ghost in the Shell background art documentation\",\n      \"estimated_usable_images\": 20\n    },\n    {\n      \"url\": \"https://www.archipanic.com/anime-architecture/\",\n      \"type\": \"article\",\n      \"description\": \"Anime Architecture exhibition \u00e2\u20ac\u201d 100 technical drawings and illustrations from GITS, Akira, Metropolis\",\n      \"estimated_usable_images\": 15\n    },\n    {\n      \"url\": \"https://www.pinterest.com/atsf100/ghost-in-the-shell/\",\n      \"type\": \"community\",\n      \"description\": \"Pinterest Ghost in the Shell board \u00e2\u20ac\u201d 900+ pins, filter for production art and official illustrations\",\n      \"estimated_usable_images\": 40\n    },\n    {\n      \"url\": \"https://www.deviantart.com/tag/cyberpunkanime\",\n      \"type\": \"community\",\n      \"description\": \"DeviantArt cyberpunk anime tag \u00e2\u20ac\u201d fan art and original work in cyberpunk anime style\",\n      \"estimated_usable_images\": 30\n    },\n    {\n      \"url\": \"https://comics.ha.com/c/search-results.zx?N=790+231+2088&Ntt=akira+production\",\n      \"type\": \"gallery\",\n      \"description\": \"Heritage Auctions Akira production art \u00e2\u20ac\u201d high-resolution auction photography\",\n      \"estimated_usable_images\": 20\n    }\n  ]\n}\n"}], "cyberpunk-anime-without_skill": [{"name": "dataset-plan.md", "type": "text", "content": "# Dataset Plan: Cyberpunk Anime LoRA (Baseline)\n\n## Target\n- **Subject**: Cyberpunk anime style (GITS, Akira)\n- **Base Model**: SDXL\n- **Target Images**: 30-40\n- **Resolution**: 1024x1024\n\n## Steps\n1. Scrape Danbooru for cyberpunk + anime tagged images\n2. Download production art from Halcyon Realms\n3. Collect from Pinterest boards\n4. Filter for quality and style consistency\n5. Resize and crop to 1024px\n6. Auto-caption with WD14 tagger\n\n## Captioning\n- Trigger word: `cyberpunk_anime_style`\n- Tag-based captions from WD14\n\n## Training Parameters\n- SDXL LoRA with Kohya_ss\n- Network rank: 32\n- Epochs: 10\n- Resolution: 1024\n"}, {"name": "research-report.md", "type": "text", "content": "# Research Report: Cyberpunk Anime Style (Baseline - No Skill)\n\n## Overview\nResearch for collecting cyberpunk anime art in the style of Ghost in the Shell and Akira for LoRA training.\n\n## Potential Sources\n- **Danbooru/Safebooru** \u00e2\u20ac\u201d Tagged anime art archives, search cyberpunk + cityscape + neon tags\n- **Pinterest** \u00e2\u20ac\u201d Large Ghost in the Shell and Akira boards\n- **DeviantArt** \u00e2\u20ac\u201d Cyberpunk anime fan art\n- **Halcyon Realms** \u00e2\u20ac\u201d Anime art book reviews and production art documentation\n- **CivitAI** \u00e2\u20ac\u201d Check for existing cyberpunk anime LoRAs as reference\n\n## Key Visual Elements\n- Neon-lit megacity environments\n- Cybernetic enhancements on characters\n- Detailed mechanical designs (mecha, motorcycles, weapons)\n- Dark atmospheric palette with vivid neon accents\n- Hand-painted cel animation look\n- Rain, reflections, fog, atmospheric effects\n\n## Shows to Source From\n- Akira (1988)\n- Ghost in the Shell (1995)\n- Bubblegum Crisis (1987)\n- Psycho-Pass\n- Blade Runner: Black Lotus\n\n## Training Notes\n- SDXL at 1024px\n- 30+ images for style diversity\n- Focus on background art and key animation frames\n- WD14 tagger recommended for anime content\n"}, {"name": "sample-captions.md", "type": "text", "content": "# Sample Captions: Cyberpunk Anime (Baseline)\n\n## Caption 1\ncyberpunk_anime_style, neon-lit cityscape at night with towering skyscrapers, rain, reflections on wet streets\n\n## Caption 2\ncyberpunk_anime_style, female character with cybernetic implants, short purple hair, neon background\n\n## Caption 3\ncyberpunk_anime_style, red motorcycle speeding through a futuristic highway, motion blur, city lights\n\n## Caption 4\ncyberpunk_anime_style, dark laboratory interior with glowing screens and cables, sci-fi atmosphere\n\n## Caption 5\ncyberpunk_anime_style, mecha battle in an urban setting, explosions, debris, dramatic angle\n"}, {"name": "sources.json", "type": "text", "content": "{\n  \"sources\": [\n    {\n      \"url\": \"https://danbooru.donmai.us/posts?tags=cyberpunk+cityscape\",\n      \"type\": \"archive\",\n      \"description\": \"Danbooru tagged anime art\",\n      \"estimated_usable_images\": 100\n    },\n    {\n      \"url\": \"https://www.pinterest.com/atsf100/ghost-in-the-shell/\",\n      \"type\": \"community\",\n      \"description\": \"Ghost in the Shell Pinterest board\",\n      \"estimated_usable_images\": 50\n    },\n    {\n      \"url\": \"https://halcyonrealms.com\",\n      \"type\": \"article\",\n      \"description\": \"Anime art book reviews and production art\",\n      \"estimated_usable_images\": 30\n    },\n    {\n      \"url\": \"https://www.deviantart.com/tag/cyberpunkanime\",\n      \"type\": \"community\",\n      \"description\": \"DeviantArt cyberpunk anime fan art\",\n      \"estimated_usable_images\": 60\n    }\n  ]\n}\n"}]}, "benchmark": {"skill_name": "comfyui-lora-data-gathering", "iteration": 2, "configurations": [{"name": "with_skill", "label": "With Skill (v2)", "evals": [{"eval_name": "jrpg-amano-style", "pass_rate": 1.0, "passed": 8, "total": 8, "assertions": [{"text": "source_diversity", "passed": true}, {"text": "structured_source_list", "passed": true}, {"text": "training_aligned_plan", "passed": true}, {"text": "caption_format", "passed": true}, {"text": "actionable_handoff", "passed": true}, {"text": "source_tiering", "passed": true}, {"text": "gap_analysis", "passed": true}, {"text": "caption_hygiene", "passed": true}]}, {"eval_name": "vintage-keyboards", "pass_rate": 1.0, "passed": 8, "total": 8, "assertions": [{"text": "source_diversity", "passed": true}, {"text": "structured_source_list", "passed": true}, {"text": "training_aligned_plan", "passed": true}, {"text": "caption_format", "passed": true}, {"text": "actionable_handoff", "passed": true}, {"text": "source_tiering", "passed": true}, {"text": "gap_analysis", "passed": true}, {"text": "caption_hygiene", "passed": true}]}, {"eval_name": "cyberpunk-anime", "pass_rate": 1.0, "passed": 8, "total": 8, "assertions": [{"text": "source_diversity", "passed": true}, {"text": "structured_source_list", "passed": true}, {"text": "training_aligned_plan", "passed": true}, {"text": "caption_format", "passed": true}, {"text": "actionable_handoff", "passed": true}, {"text": "source_tiering", "passed": true}, {"text": "gap_analysis", "passed": true}, {"text": "caption_hygiene", "passed": true}]}], "aggregate": {"mean_pass_rate": 1.0, "stddev_pass_rate": 0.0, "total_passed": 24, "total_assertions": 24}}, {"name": "without_skill", "label": "Without Skill (Baseline)", "evals": [{"eval_name": "jrpg-amano-style", "pass_rate": 0.375, "passed": 3, "total": 8, "assertions": [{"text": "source_diversity", "passed": true}, {"text": "structured_source_list", "passed": true}, {"text": "training_aligned_plan", "passed": false}, {"text": "caption_format", "passed": false}, {"text": "actionable_handoff", "passed": true}, {"text": "source_tiering", "passed": false}, {"text": "gap_analysis", "passed": false}, {"text": "caption_hygiene", "passed": false}]}, {"eval_name": "vintage-keyboards", "pass_rate": 0.5, "passed": 4, "total": 8, "assertions": [{"text": "source_diversity", "passed": true}, {"text": "structured_source_list", "passed": true}, {"text": "training_aligned_plan", "passed": false}, {"text": "caption_format", "passed": true}, {"text": "actionable_handoff", "passed": true}, {"text": "source_tiering", "passed": false}, {"text": "gap_analysis", "passed": false}, {"text": "caption_hygiene", "passed": false}]}, {"eval_name": "cyberpunk-anime", "pass_rate": 0.375, "passed": 3, "total": 8, "assertions": [{"text": "source_diversity", "passed": true}, {"text": "structured_source_list", "passed": true}, {"text": "training_aligned_plan", "passed": false}, {"text": "caption_format", "passed": false}, {"text": "actionable_handoff", "passed": true}, {"text": "source_tiering", "passed": false}, {"text": "gap_analysis", "passed": false}, {"text": "caption_hygiene", "passed": false}]}], "aggregate": {"mean_pass_rate": 0.417, "stddev_pass_rate": 0.059, "total_passed": 10, "total_assertions": 24}}], "delta": {"pass_rate_improvement": 0.583, "description": "Skill improves pass rate from 42% to 100%. The 3 new assertions (source_tiering, gap_analysis, caption_hygiene) are fully discriminating \u00e2\u20ac\u201d baseline passes 0/9 across all evals. Original 5 assertions show same pattern as iteration 1."}, "analyst_notes": ["source_diversity, structured_source_list, and actionable_handoff remain non-discriminating \u00e2\u20ac\u201d baseline passes all 3 across all evals", "training_aligned_plan and caption_format remain discriminating from iteration 1 \u00e2\u20ac\u201d baseline fails these due to missing style-mode format and suboptimal trigger words", "NEW: source_tiering fails 3/3 baselines \u00e2\u20ac\u201d without the skill, sources are listed flat with no quality/priority ranking", "NEW: gap_analysis fails 3/3 baselines \u00e2\u20ac\u201d this is the strongest discriminator; no baseline considers dataset bias, gaps, or iteration strategy", "NEW: caption_hygiene fails 3/3 baselines \u00e2\u20ac\u201d baselines consistently include style-describing words (watercolor, retro, neon-lit) that would weaken LoRA training", "The 3 new assertions test genuinely useful behaviors that improve real-world LoRA training outcomes, not just formatting compliance", "Compared to iteration 1: with_skill maintains 100% (now on 8 assertions vs 5), baseline drops from 67% to 42% due to harder assertion set"]}};
+
+    // ---- State ----
+    let feedbackMap = {};  // run_id -> feedback text
+    let currentIndex = 0;
+    let visitedRuns = new Set();
+
+    // ---- Init ----
+    async function init() {
+      // Load saved feedback from server — but only if this isn't a fresh
+      // iteration (indicated by previous_feedback being present). When
+      // previous feedback exists, the feedback.json on disk is stale from
+      // the prior iteration and should not pre-fill the textareas.
+      const hasPrevious = Object.keys(EMBEDDED_DATA.previous_feedback || {}).length > 0
+        || Object.keys(EMBEDDED_DATA.previous_outputs || {}).length > 0;
+      if (!hasPrevious) {
+        try {
+          const resp = await fetch("/api/feedback");
+          const data = await resp.json();
+          if (data.reviews) {
+            for (const r of data.reviews) feedbackMap[r.run_id] = r.feedback;
+          }
+        } catch { /* first run, no feedback yet */ }
+      }
+
+      document.getElementById("skill-name").textContent = EMBEDDED_DATA.skill_name;
+      showRun(0);
+
+      // Wire up feedback auto-save
+      const textarea = document.getElementById("feedback");
+      let saveTimeout = null;
+      textarea.addEventListener("input", () => {
+        clearTimeout(saveTimeout);
+        document.getElementById("feedback-status").textContent = "";
+        saveTimeout = setTimeout(() => saveCurrentFeedback(), 800);
+      });
+    }
+
+    // ---- Navigation ----
+    function navigate(delta) {
+      const newIndex = currentIndex + delta;
+      if (newIndex >= 0 && newIndex < EMBEDDED_DATA.runs.length) {
+        saveCurrentFeedback();
+        showRun(newIndex);
+      }
+    }
+
+    function updateNavButtons() {
+      document.getElementById("prev-btn").disabled = currentIndex === 0;
+      document.getElementById("next-btn").disabled =
+        currentIndex === EMBEDDED_DATA.runs.length - 1;
+    }
+
+    // ---- Show a run ----
+    function showRun(index) {
+      currentIndex = index;
+      const run = EMBEDDED_DATA.runs[index];
+
+      // Progress
+      document.getElementById("progress").textContent =
+        `${index + 1} of ${EMBEDDED_DATA.runs.length}`;
+
+      // Prompt
+      document.getElementById("prompt-text").textContent = run.prompt;
+
+      // Config badge
+      const badge = document.getElementById("config-badge");
+      const configMatch = run.id.match(/(with_skill|without_skill|new_skill|old_skill)/);
+      if (configMatch) {
+        const config = configMatch[1];
+        const isBaseline = config === "without_skill" || config === "old_skill";
+        badge.textContent = config.replace(/_/g, " ");
+        badge.className = "config-badge " + (isBaseline ? "config-baseline" : "config-primary");
+        badge.style.display = "inline-block";
+      } else {
+        badge.style.display = "none";
+      }
+
+      // Outputs
+      renderOutputs(run);
+
+      // Previous outputs
+      renderPrevOutputs(run);
+
+      // Grades
+      renderGrades(run);
+
+      // Previous feedback
+      const prevFb = (EMBEDDED_DATA.previous_feedback || {})[run.id];
+      const prevEl = document.getElementById("prev-feedback");
+      if (prevFb) {
+        document.getElementById("prev-feedback-text").textContent = prevFb;
+        prevEl.style.display = "block";
+      } else {
+        prevEl.style.display = "none";
+      }
+
+      // Feedback
+      document.getElementById("feedback").value = feedbackMap[run.id] || "";
+      document.getElementById("feedback-status").textContent = "";
+
+      updateNavButtons();
+
+      // Track visited runs and promote done button when all visited
+      visitedRuns.add(index);
+      const doneBtn = document.getElementById("done-btn");
+      if (visitedRuns.size >= EMBEDDED_DATA.runs.length) {
+        doneBtn.classList.add("ready");
+      }
+
+      // Scroll main content to top
+      document.querySelector(".main").scrollTop = 0;
+    }
+
+    // ---- Render outputs ----
+    function renderOutputs(run) {
+      const container = document.getElementById("outputs-body");
+      container.innerHTML = "";
+
+      const outputs = run.outputs || [];
+      if (outputs.length === 0) {
+        container.innerHTML = '<div class="empty-state">No output files</div>';
+        return;
+      }
+
+      for (const file of outputs) {
+        const fileDiv = document.createElement("div");
+        fileDiv.className = "output-file";
+
+        // Always show file header with download link
+        const header = document.createElement("div");
+        header.className = "output-file-header";
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = file.name;
+        header.appendChild(nameSpan);
+        const dlBtn = document.createElement("a");
+        dlBtn.className = "dl-btn";
+        dlBtn.textContent = "Download";
+        dlBtn.download = file.name;
+        dlBtn.href = getDownloadUri(file);
+        header.appendChild(dlBtn);
+        fileDiv.appendChild(header);
+
+        const content = document.createElement("div");
+        content.className = "output-file-content";
+
+        if (file.type === "text") {
+          const pre = document.createElement("pre");
+          pre.textContent = file.content;
+          content.appendChild(pre);
+        } else if (file.type === "image") {
+          const img = document.createElement("img");
+          img.src = file.data_uri;
+          img.alt = file.name;
+          content.appendChild(img);
+        } else if (file.type === "pdf") {
+          const iframe = document.createElement("iframe");
+          iframe.src = file.data_uri;
+          content.appendChild(iframe);
+        } else if (file.type === "xlsx") {
+          renderXlsx(content, file.data_b64);
+        } else if (file.type === "binary") {
+          const a = document.createElement("a");
+          a.className = "download-link";
+          a.href = file.data_uri;
+          a.download = file.name;
+          a.textContent = "Download " + file.name;
+          content.appendChild(a);
+        } else if (file.type === "error") {
+          const pre = document.createElement("pre");
+          pre.textContent = file.content;
+          pre.style.color = "var(--red)";
+          content.appendChild(pre);
+        }
+
+        fileDiv.appendChild(content);
+        container.appendChild(fileDiv);
+      }
+    }
+
+    // ---- XLSX rendering via SheetJS ----
+    function renderXlsx(container, b64Data) {
+      try {
+        const raw = Uint8Array.from(atob(b64Data), c => c.charCodeAt(0));
+        const wb = XLSX.read(raw, { type: "array" });
+
+        for (let i = 0; i < wb.SheetNames.length; i++) {
+          const sheetName = wb.SheetNames[i];
+          const ws = wb.Sheets[sheetName];
+
+          if (wb.SheetNames.length > 1) {
+            const sheetLabel = document.createElement("div");
+            sheetLabel.style.cssText =
+              "font-weight:600; font-size:0.8rem; color:#b0aea5; margin-top:0.5rem; margin-bottom:0.25rem;";
+            sheetLabel.textContent = "Sheet: " + sheetName;
+            container.appendChild(sheetLabel);
+          }
+
+          const htmlStr = XLSX.utils.sheet_to_html(ws, { editable: false });
+          const wrapper = document.createElement("div");
+          wrapper.innerHTML = htmlStr;
+          container.appendChild(wrapper);
+        }
+      } catch (err) {
+        container.textContent = "Error rendering spreadsheet: " + err.message;
+      }
+    }
+
+    // ---- Grades ----
+    function renderGrades(run) {
+      const section = document.getElementById("grades-section");
+      const content = document.getElementById("grades-content");
+
+      if (!run.grading) {
+        section.style.display = "none";
+        return;
+      }
+
+      const grading = run.grading;
+      section.style.display = "block";
+      // Reset to collapsed
+      content.classList.remove("open");
+      document.getElementById("grades-arrow").classList.remove("open");
+
+      const summary = grading.summary || {};
+      const expectations = grading.expectations || [];
+
+      let html = '<div style="padding: 1rem;">';
+
+      // Summary line
+      const passRate = summary.pass_rate != null
+        ? Math.round(summary.pass_rate * 100) + "%"
+        : "?";
+      const badgeClass = summary.pass_rate >= 0.8 ? "grade-pass" : summary.pass_rate >= 0.5 ? "" : "grade-fail";
+      html += '<div class="grades-summary">';
+      html += '<span class="grade-badge ' + badgeClass + '">' + passRate + '</span>';
+      html += '<span>' + (summary.passed || 0) + ' passed, ' + (summary.failed || 0) + ' failed of ' + (summary.total || 0) + '</span>';
+      html += '</div>';
+
+      // Assertions list
+      html += '<ul class="assertion-list">';
+      for (const exp of expectations) {
+        const statusClass = exp.passed ? "pass" : "fail";
+        const statusIcon = exp.passed ? "\u2713" : "\u2717";
+        html += '<li class="assertion-item">';
+        html += '<span class="assertion-status ' + statusClass + '">' + statusIcon + '</span>';
+        html += '<span>' + escapeHtml(exp.text) + '</span>';
+        if (exp.evidence) {
+          html += '<div class="assertion-evidence">' + escapeHtml(exp.evidence) + '</div>';
+        }
+        html += '</li>';
+      }
+      html += '</ul>';
+
+      html += '</div>';
+      content.innerHTML = html;
+    }
+
+    function toggleGrades() {
+      const content = document.getElementById("grades-content");
+      const arrow = document.getElementById("grades-arrow");
+      content.classList.toggle("open");
+      arrow.classList.toggle("open");
+    }
+
+    // ---- Previous outputs (collapsible) ----
+    function renderPrevOutputs(run) {
+      const section = document.getElementById("prev-outputs-section");
+      const content = document.getElementById("prev-outputs-content");
+      const prevOutputs = (EMBEDDED_DATA.previous_outputs || {})[run.id];
+
+      if (!prevOutputs || prevOutputs.length === 0) {
+        section.style.display = "none";
+        return;
+      }
+
+      section.style.display = "block";
+      // Reset to collapsed
+      content.classList.remove("open");
+      document.getElementById("prev-outputs-arrow").classList.remove("open");
+
+      // Render the files into the content area
+      content.innerHTML = "";
+      const wrapper = document.createElement("div");
+      wrapper.style.padding = "1rem";
+
+      for (const file of prevOutputs) {
+        const fileDiv = document.createElement("div");
+        fileDiv.className = "output-file";
+
+        const header = document.createElement("div");
+        header.className = "output-file-header";
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = file.name;
+        header.appendChild(nameSpan);
+        const dlBtn = document.createElement("a");
+        dlBtn.className = "dl-btn";
+        dlBtn.textContent = "Download";
+        dlBtn.download = file.name;
+        dlBtn.href = getDownloadUri(file);
+        header.appendChild(dlBtn);
+        fileDiv.appendChild(header);
+
+        const fc = document.createElement("div");
+        fc.className = "output-file-content";
+
+        if (file.type === "text") {
+          const pre = document.createElement("pre");
+          pre.textContent = file.content;
+          fc.appendChild(pre);
+        } else if (file.type === "image") {
+          const img = document.createElement("img");
+          img.src = file.data_uri;
+          img.alt = file.name;
+          fc.appendChild(img);
+        } else if (file.type === "pdf") {
+          const iframe = document.createElement("iframe");
+          iframe.src = file.data_uri;
+          fc.appendChild(iframe);
+        } else if (file.type === "xlsx") {
+          renderXlsx(fc, file.data_b64);
+        } else if (file.type === "binary") {
+          const a = document.createElement("a");
+          a.className = "download-link";
+          a.href = file.data_uri;
+          a.download = file.name;
+          a.textContent = "Download " + file.name;
+          fc.appendChild(a);
+        }
+
+        fileDiv.appendChild(fc);
+        wrapper.appendChild(fileDiv);
+      }
+
+      content.appendChild(wrapper);
+    }
+
+    function togglePrevOutputs() {
+      const content = document.getElementById("prev-outputs-content");
+      const arrow = document.getElementById("prev-outputs-arrow");
+      content.classList.toggle("open");
+      arrow.classList.toggle("open");
+    }
+
+    // ---- Feedback (saved to server -> feedback.json) ----
+    function saveCurrentFeedback() {
+      const run = EMBEDDED_DATA.runs[currentIndex];
+      const text = document.getElementById("feedback").value;
+
+      if (text.trim() === "") {
+        delete feedbackMap[run.id];
+      } else {
+        feedbackMap[run.id] = text;
+      }
+
+      // Build reviews array from map
+      const reviews = [];
+      for (const [run_id, feedback] of Object.entries(feedbackMap)) {
+        if (feedback.trim()) {
+          reviews.push({ run_id, feedback, timestamp: new Date().toISOString() });
+        }
+      }
+
+      fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reviews, status: "in_progress" }),
+      }).then(() => {
+        document.getElementById("feedback-status").textContent = "Saved";
+      }).catch(() => {
+        // Static mode or server unavailable — no-op on auto-save,
+        // feedback will be downloaded on final submit
+        document.getElementById("feedback-status").textContent = "Will download on submit";
+      });
+    }
+
+    // ---- Done ----
+    function showDoneDialog() {
+      // Save current textarea to feedbackMap (but don't POST yet)
+      const run = EMBEDDED_DATA.runs[currentIndex];
+      const text = document.getElementById("feedback").value;
+      if (text.trim() === "") {
+        delete feedbackMap[run.id];
+      } else {
+        feedbackMap[run.id] = text;
+      }
+
+      // POST once with status: complete — include ALL runs so the model
+      // can distinguish "no feedback" (looks good) from "not reviewed"
+      const reviews = [];
+      const ts = new Date().toISOString();
+      for (const r of EMBEDDED_DATA.runs) {
+        reviews.push({ run_id: r.id, feedback: feedbackMap[r.id] || "", timestamp: ts });
+      }
+      const payload = JSON.stringify({ reviews, status: "complete" }, null, 2);
+      fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: payload,
+      }).then(() => {
+        document.getElementById("done-overlay").classList.add("visible");
+      }).catch(() => {
+        // Server not available (static mode) — download as file
+        const blob = new Blob([payload], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "feedback.json";
+        a.click();
+        URL.revokeObjectURL(url);
+        document.getElementById("done-overlay").classList.add("visible");
+      });
+    }
+
+    function closeDoneDialog() {
+      // Reset status back to in_progress
+      saveCurrentFeedback();
+      document.getElementById("done-overlay").classList.remove("visible");
+    }
+
+    // ---- Toast ----
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("visible");
+      setTimeout(() => toast.classList.remove("visible"), 2000);
+    }
+
+    // ---- Keyboard nav ----
+    document.addEventListener("keydown", (e) => {
+      // Don't capture when typing in textarea
+      if (e.target.tagName === "TEXTAREA") return;
+
+      if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+        e.preventDefault();
+        navigate(-1);
+      } else if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+        e.preventDefault();
+        navigate(1);
+      }
+    });
+
+    // ---- Util ----
+    function getDownloadUri(file) {
+      if (file.data_uri) return file.data_uri;
+      if (file.data_b64) return "data:application/octet-stream;base64," + file.data_b64;
+      if (file.type === "text") return "data:text/plain;charset=utf-8," + encodeURIComponent(file.content);
+      return "#";
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement("div");
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // ---- View switching ----
+    function switchView(view) {
+      document.querySelectorAll(".view-tab").forEach(t => t.classList.remove("active"));
+      document.querySelectorAll(".view-panel").forEach(p => p.classList.remove("active"));
+      document.querySelector(`[onclick="switchView('${view}')"]`).classList.add("active");
+      document.getElementById("panel-" + view).classList.add("active");
+    }
+
+    // ---- Benchmark rendering ----
+    function renderBenchmark() {
+      const data = EMBEDDED_DATA.benchmark;
+      if (!data) return;
+
+      // Show the tabs
+      document.getElementById("view-tabs").style.display = "flex";
+
+      const container = document.getElementById("benchmark-content");
+      const summary = data.run_summary || {};
+      const metadata = data.metadata || {};
+      const notes = data.notes || [];
+
+      let html = "";
+
+      // Header
+      html += "<h2 style='font-family: Poppins, sans-serif; margin-bottom: 0.5rem;'>Benchmark Results</h2>";
+      html += "<p style='color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.25rem;'>";
+      if (metadata.skill_name) html += "<strong>" + escapeHtml(metadata.skill_name) + "</strong> &mdash; ";
+      if (metadata.timestamp) html += metadata.timestamp + " &mdash; ";
+      if (metadata.evals_run) html += "Evals: " + metadata.evals_run.join(", ") + " &mdash; ";
+      html += (metadata.runs_per_configuration || "?") + " runs per configuration";
+      html += "</p>";
+
+      // Summary table
+      html += '<table class="benchmark-table">';
+
+      function fmtStat(stat, pct) {
+        if (!stat) return "—";
+        const suffix = pct ? "%" : "";
+        const m = pct ? (stat.mean * 100).toFixed(0) : stat.mean.toFixed(1);
+        const s = pct ? (stat.stddev * 100).toFixed(0) : stat.stddev.toFixed(1);
+        return m + suffix + " ± " + s + suffix;
+      }
+
+      function deltaClass(val) {
+        if (!val) return "";
+        const n = parseFloat(val);
+        if (n > 0) return "benchmark-delta-positive";
+        if (n < 0) return "benchmark-delta-negative";
+        return "";
+      }
+
+      // Discover config names dynamically (everything except "delta")
+      const configs = Object.keys(summary).filter(k => k !== "delta");
+      const configA = configs[0] || "config_a";
+      const configB = configs[1] || "config_b";
+      const labelA = configA.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+      const labelB = configB.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+      const a = summary[configA] || {};
+      const b = summary[configB] || {};
+      const delta = summary.delta || {};
+
+      html += "<thead><tr><th>Metric</th><th>" + escapeHtml(labelA) + "</th><th>" + escapeHtml(labelB) + "</th><th>Delta</th></tr></thead>";
+      html += "<tbody>";
+
+      html += "<tr><td><strong>Pass Rate</strong></td>";
+      html += "<td>" + fmtStat(a.pass_rate, true) + "</td>";
+      html += "<td>" + fmtStat(b.pass_rate, true) + "</td>";
+      html += '<td class="' + deltaClass(delta.pass_rate) + '">' + (delta.pass_rate || "—") + "</td></tr>";
+
+      // Time (only show row if data exists)
+      if (a.time_seconds || b.time_seconds) {
+        html += "<tr><td><strong>Time (s)</strong></td>";
+        html += "<td>" + fmtStat(a.time_seconds, false) + "</td>";
+        html += "<td>" + fmtStat(b.time_seconds, false) + "</td>";
+        html += '<td class="' + deltaClass(delta.time_seconds) + '">' + (delta.time_seconds ? delta.time_seconds + "s" : "—") + "</td></tr>";
+      }
+
+      // Tokens (only show row if data exists)
+      if (a.tokens || b.tokens) {
+        html += "<tr><td><strong>Tokens</strong></td>";
+        html += "<td>" + fmtStat(a.tokens, false) + "</td>";
+        html += "<td>" + fmtStat(b.tokens, false) + "</td>";
+        html += '<td class="' + deltaClass(delta.tokens) + '">' + (delta.tokens || "—") + "</td></tr>";
+      }
+
+      html += "</tbody></table>";
+
+      // Per-eval breakdown (if runs data available)
+      const runs = data.runs || [];
+      if (runs.length > 0) {
+        const evalIds = [...new Set(runs.map(r => r.eval_id))].sort((a, b) => a - b);
+
+        html += "<h3 style='font-family: Poppins, sans-serif; margin-bottom: 0.75rem;'>Per-Eval Breakdown</h3>";
+
+        const hasTime = runs.some(r => r.result && r.result.time_seconds != null);
+        const hasErrors = runs.some(r => r.result && r.result.errors > 0);
+
+        for (const evalId of evalIds) {
+          const evalRuns = runs.filter(r => r.eval_id === evalId);
+          const evalName = evalRuns[0] && evalRuns[0].eval_name ? evalRuns[0].eval_name : "Eval " + evalId;
+
+          html += "<h4 style='font-family: Poppins, sans-serif; margin: 1rem 0 0.5rem; color: var(--text);'>" + escapeHtml(evalName) + "</h4>";
+          html += '<table class="benchmark-table">';
+          html += "<thead><tr><th>Config</th><th>Run</th><th>Pass Rate</th>";
+          if (hasTime) html += "<th>Time (s)</th>";
+          if (hasErrors) html += "<th>Crashes During Execution</th>";
+          html += "</tr></thead>";
+          html += "<tbody>";
+
+          // Group by config and render with average rows
+          const configGroups = [...new Set(evalRuns.map(r => r.configuration))];
+          for (let ci = 0; ci < configGroups.length; ci++) {
+            const config = configGroups[ci];
+            const configRuns = evalRuns.filter(r => r.configuration === config);
+            if (configRuns.length === 0) continue;
+
+            const rowClass = ci === 0 ? "benchmark-row-with" : "benchmark-row-without";
+            const configLabel = config.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+
+            for (const run of configRuns) {
+              const r = run.result || {};
+              const prClass = r.pass_rate >= 0.8 ? "benchmark-delta-positive" : r.pass_rate < 0.5 ? "benchmark-delta-negative" : "";
+              html += '<tr class="' + rowClass + '">';
+              html += "<td>" + configLabel + "</td>";
+              html += "<td>" + run.run_number + "</td>";
+              html += '<td class="' + prClass + '">' + ((r.pass_rate || 0) * 100).toFixed(0) + "% (" + (r.passed || 0) + "/" + (r.total || 0) + ")</td>";
+              if (hasTime) html += "<td>" + (r.time_seconds != null ? r.time_seconds.toFixed(1) : "—") + "</td>";
+              if (hasErrors) html += "<td>" + (r.errors || 0) + "</td>";
+              html += "</tr>";
+            }
+
+            // Average row
+            const rates = configRuns.map(r => (r.result || {}).pass_rate || 0);
+            const avgRate = rates.reduce((a, b) => a + b, 0) / rates.length;
+            const avgPrClass = avgRate >= 0.8 ? "benchmark-delta-positive" : avgRate < 0.5 ? "benchmark-delta-negative" : "";
+            html += '<tr class="benchmark-row-avg ' + rowClass + '">';
+            html += "<td>" + configLabel + "</td>";
+            html += "<td>Avg</td>";
+            html += '<td class="' + avgPrClass + '">' + (avgRate * 100).toFixed(0) + "%</td>";
+            if (hasTime) {
+              const times = configRuns.map(r => (r.result || {}).time_seconds).filter(t => t != null);
+              html += "<td>" + (times.length ? (times.reduce((a, b) => a + b, 0) / times.length).toFixed(1) : "—") + "</td>";
+            }
+            if (hasErrors) html += "<td></td>";
+            html += "</tr>";
+          }
+          html += "</tbody></table>";
+
+          // Per-assertion detail for this eval
+          const runsWithExpectations = {};
+          for (const config of configGroups) {
+            runsWithExpectations[config] = evalRuns.filter(r => r.configuration === config && r.expectations && r.expectations.length > 0);
+          }
+          const hasAnyExpectations = Object.values(runsWithExpectations).some(runs => runs.length > 0);
+          if (hasAnyExpectations) {
+            // Collect all unique assertion texts across all configs
+            const allAssertions = [];
+            const seen = new Set();
+            for (const config of configGroups) {
+              for (const run of runsWithExpectations[config]) {
+                for (const exp of (run.expectations || [])) {
+                  if (!seen.has(exp.text)) {
+                    seen.add(exp.text);
+                    allAssertions.push(exp.text);
+                  }
+                }
+              }
+            }
+
+            html += '<table class="benchmark-table" style="margin-top: 0.5rem;">';
+            html += "<thead><tr><th>Assertion</th>";
+            for (const config of configGroups) {
+              const label = config.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+              html += "<th>" + escapeHtml(label) + "</th>";
+            }
+            html += "</tr></thead><tbody>";
+
+            for (const assertionText of allAssertions) {
+              html += "<tr><td>" + escapeHtml(assertionText) + "</td>";
+
+              for (const config of configGroups) {
+                html += "<td>";
+                for (const run of runsWithExpectations[config]) {
+                  const exp = (run.expectations || []).find(e => e.text === assertionText);
+                  if (exp) {
+                    const cls = exp.passed ? "benchmark-delta-positive" : "benchmark-delta-negative";
+                    const icon = exp.passed ? "\u2713" : "\u2717";
+                    html += '<span class="' + cls + '" title="Run ' + run.run_number + ': ' + escapeHtml(exp.evidence || "") + '">' + icon + "</span> ";
+                  } else {
+                    html += "— ";
+                  }
+                }
+                html += "</td>";
+              }
+              html += "</tr>";
+            }
+            html += "</tbody></table>";
+          }
+        }
+      }
+
+      // Notes
+      if (notes.length > 0) {
+        html += '<div class="benchmark-notes">';
+        html += "<h3>Analysis Notes</h3>";
+        html += "<ul>";
+        for (const note of notes) {
+          html += "<li>" + escapeHtml(note) + "</li>";
+        }
+        html += "</ul></div>";
+      }
+
+      container.innerHTML = html;
+    }
+
+    // ---- Start ----
+    init();
+    renderBenchmark();
+  </script>
+</body>
+</html>

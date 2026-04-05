@@ -1,0 +1,32 @@
+{
+  "eval_id": 1,
+  "eval_name": "jrpg-amano-style",
+  "prompt": "Help me gather LoRA data for JRPG art styles, specifically the watercolor look from classic Final Fantasy games by Yoshitaka Amano",
+  "assertions": [
+    {
+      "name": "source_diversity",
+      "description": "Output identifies at least 3 different source types (e.g., gallery, video, wiki, community)",
+      "check": "Count distinct source types in sources.json or research-report.md"
+    },
+    {
+      "name": "structured_source_list",
+      "description": "sources.json exists with url, type, description fields for each source",
+      "check": "Validate JSON structure has required fields"
+    },
+    {
+      "name": "training_aligned_plan",
+      "description": "dataset-plan.md specifies trigger word, captioning mode (style), target resolution (1024), and image count (20-30 range)",
+      "check": "Check for presence of all four parameters with correct values"
+    },
+    {
+      "name": "caption_format",
+      "description": "Sample captions follow style-mode format: '{trigger} style, {description}'",
+      "check": "Verify sample-captions.md uses correct prefix pattern"
+    },
+    {
+      "name": "actionable_handoff",
+      "description": "Output explains how to proceed to training (mentions lora-training skill or training next steps)",
+      "check": "Search for training handoff instructions in any output file"
+    }
+  ]
+}

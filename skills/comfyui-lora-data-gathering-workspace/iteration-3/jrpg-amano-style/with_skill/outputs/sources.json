@@ -1,0 +1,99 @@
+{
+  "project_name": "jrpg-amano-style",
+  "created": "2026-04-05T12:00:00Z",
+  "target_subject": "Yoshitaka Amano watercolor JRPG illustration style",
+  "target_image_count": 30,
+  "note": "WebSearch was unavailable during this session. URLs are based on well-established, known-real sources. In a live session, each would be verified and image URLs extracted via WebFetch.",
+  "sources": [
+    {
+      "id": "src-01",
+      "url": "https://finalfantasy.fandom.com/wiki/Yoshitaka_Amano/Gallery",
+      "type": "gallery",
+      "tier": "A",
+      "description": "Final Fantasy Wiki comprehensive gallery of Amano's official artwork across all FF titles. High-res scans of character portraits, key visuals, and promotional art.",
+      "estimated_usable_images": 35,
+      "notes": "Focus on FF I-VI entries for classic watercolor period. Skip FF VII+ where Nomura took over character design.",
+      "added_in": "iteration-1"
+    },
+    {
+      "id": "src-02",
+      "url": "https://www.amanoyoshitaka.com",
+      "type": "gallery",
+      "tier": "A",
+      "description": "Yoshitaka Amano's official portfolio website. Curated selection of his work across games, fine art, and commercial illustration.",
+      "estimated_usable_images": 15,
+      "notes": "Highest authenticity. Filter for watercolor/mixed-media pieces; skip pure fine art abstractions.",
+      "added_in": "iteration-1"
+    },
+    {
+      "id": "src-03",
+      "url": "https://finalfantasy.fandom.com/wiki/The_Sky:_The_Art_of_Final_Fantasy",
+      "type": "gallery",
+      "tier": "A",
+      "description": "Art book scans from 'The Sky: The Art of Final Fantasy' 3-volume collection. Full-page high-resolution reproductions covering FF I through X.",
+      "estimated_usable_images": 40,
+      "notes": "Best single source for consistent quality. Curate heavily to the best 15-20 watercolor pieces.",
+      "added_in": "iteration-1"
+    },
+    {
+      "id": "src-04",
+      "url": "https://finalfantasy.fandom.com/wiki/Yoshitaka_Amano",
+      "type": "gallery",
+      "tier": "A",
+      "description": "Amano's Vampire Hunter D illustrations. Same watercolor technique applied to gothic horror subjects, adding subject diversity.",
+      "estimated_usable_images": 10,
+      "notes": "Include 3-5 pieces to help the LoRA generalize style beyond FF characters.",
+      "added_in": "iteration-1"
+    },
+    {
+      "id": "src-05",
+      "url": "https://www.artstation.com/search?query=yoshitaka%20amano%20official",
+      "type": "gallery",
+      "tier": "B",
+      "description": "ArtStation search for Amano official artwork. Some users post high-res art book scans and official promotional pieces.",
+      "estimated_usable_images": 8,
+      "notes": "Must carefully filter out fan art, tributes, and Amano-inspired work. Only use confirmed official pieces.",
+      "added_in": "iteration-1"
+    },
+    {
+      "id": "src-06",
+      "url": "https://danbooru.donmai.us/posts?tags=amano_yoshitaka+official_art+score%3A%3E5",
+      "type": "gallery",
+      "tier": "B",
+      "description": "Danbooru tagged archive filtered to official Amano art with quality score threshold. Well-organized with consistent tagging.",
+      "estimated_usable_images": 12,
+      "notes": "Good for finding pieces missing from the wiki galleries. Filter by high score for quality scans.",
+      "added_in": "iteration-1"
+    },
+    {
+      "id": "src-07",
+      "url": "https://www.pinterest.com/search/pins/?q=yoshitaka%20amano%20final%20fantasy%20watercolor",
+      "type": "gallery",
+      "tier": "B",
+      "description": "Pinterest collections of Amano FF watercolors. Images often downscaled; use as discovery tool to find higher-res versions elsewhere.",
+      "estimated_usable_images": 5,
+      "notes": "Use for discovering pieces, then locate full-resolution versions from Tier A sources.",
+      "added_in": "iteration-1"
+    },
+    {
+      "id": "src-08",
+      "url": "https://www.youtube.com/results?search_query=yoshitaka+amano+art+of+final+fantasy+showcase",
+      "type": "video",
+      "tier": "C",
+      "description": "YouTube art showcase compilations featuring Amano's FF artwork with zooms and pans. Good for capturing detail shots.",
+      "estimated_usable_images": 8,
+      "notes": "Use extract_frames.py at 3-5s intervals. Many frames will be transitions or duplicates.",
+      "added_in": "iteration-1"
+    },
+    {
+      "id": "src-09",
+      "url": "https://www.youtube.com/results?search_query=yoshitaka+amano+painting+process+timelapse",
+      "type": "video",
+      "tier": "C",
+      "description": "Rare process/timelapse videos of Amano painting. Only the final frames of each are useful for training.",
+      "estimated_usable_images": 3,
+      "notes": "Use extract_frames.py with long interval (10-15s). Low priority source.",
+      "added_in": "iteration-1"
+    }
+  ]
+}

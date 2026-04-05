@@ -1,0 +1,36 @@
+{
+  "sources": [
+    {
+      "url": "https://amanosworld.com",
+      "type": "gallery",
+      "description": "Official Amano portfolio site with curated artwork",
+      "estimated_usable_images": 30,
+      "quality": "high",
+      "priority": 1
+    },
+    {
+      "url": "https://finalfantasy.fandom.com/wiki/Yoshitaka_Amano",
+      "type": "wiki",
+      "description": "Final Fantasy Wiki with concept art galleries",
+      "estimated_usable_images": 50,
+      "quality": "medium",
+      "priority": 2
+    },
+    {
+      "url": "https://danbooru.donmai.us/posts?tags=amano_yoshitaka",
+      "type": "archive",
+      "description": "Tagged Amano art on Danbooru",
+      "estimated_usable_images": 40,
+      "quality": "variable",
+      "priority": 3
+    },
+    {
+      "url": "https://www.artstation.com/search?query=amano+final+fantasy",
+      "type": "gallery",
+      "description": "Fan art and tributes on ArtStation",
+      "estimated_usable_images": 20,
+      "quality": "variable",
+      "priority": 5
+    }
+  ]
+}

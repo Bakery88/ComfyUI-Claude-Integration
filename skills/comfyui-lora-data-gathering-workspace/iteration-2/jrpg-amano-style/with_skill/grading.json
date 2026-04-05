@@ -1,0 +1,14 @@
+{
+  "eval_name": "jrpg-amano-style",
+  "config": "with_skill",
+  "expectations": [
+    {"text": "source_diversity", "passed": true, "evidence": "5 sources across 3 types: gallery (2), community (1), archive (1), video (1)"},
+    {"text": "structured_source_list", "passed": true, "evidence": "sources.json contains url, type, tier, description, estimated_usable_images fields"},
+    {"text": "training_aligned_plan", "passed": true, "evidence": "Trigger word 'amanoart', style captioning mode, 1024px resolution, 25-30 images target, Florence-2 captioner"},
+    {"text": "caption_format", "passed": true, "evidence": "All captions follow 'amanoart style, {description}' format"},
+    {"text": "actionable_handoff", "passed": true, "evidence": "Dataset plan ends with 'Say: Train a LoRA using the amano-jrpg dataset' referencing lora-training skill"},
+    {"text": "source_tiering", "passed": true, "evidence": "Sources classified as Tier A (official gallery, FF wiki), Tier B (ArtStation, Safebooru), Tier C (YouTube)"},
+    {"text": "gap_analysis", "passed": true, "evidence": "Research report identifies portrait bias risk, color desaturation risk, and medium variety need. Dataset plan includes iteration plan: 'if >60% single-character portraits, loop back'"},
+    {"text": "caption_hygiene", "passed": true, "evidence": "Captions contain no style words (watercolor, painting, illustration, ethereal, art nouveau). Hygiene rules explicitly listed in dataset plan."}
+  ]
+}

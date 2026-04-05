@@ -1,0 +1,32 @@
+# Staleness Thresholds
+# Controls how old a resource can be before it's considered stale.
+# Adjust these values based on how frequently your setup changes.
+
+inventory:
+  file: state/inventory.json
+  field: timestamp           # ISO 8601 timestamp field in JSON
+  max_age: 1h               # Refresh via list_models + list_nodes
+  action: auto_refresh       # Silently refresh when stale
+
+model_landscape:
+  file: foundation/model-landscape.md
+  marker: "<!-- Updated:"    # HTML comment with date
+  max_age: 3mo               # 3 months
+  action: warn_user          # Ask before modifying
+
+hardware_profile:
+  file: foundation/hardware-profile.md
+  marker: "<!-- Updated:"
+  max_age: never             # Only update on hardware change
+  action: manual             # User-initiated only
+
+workflows:
+  path: workflows/*.json
+  max_age: never             # No expiry
+  action: validate_on_use    # Validate against inventory before execution
+
+# Duration format:
+#   h  = hours (e.g., 1h, 24h)
+#   d  = days (e.g., 7d, 30d)
+#   mo = months (e.g., 3mo, 6mo)
+#   never = no automatic staleness

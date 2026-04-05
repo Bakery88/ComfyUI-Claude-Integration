@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir *)",
+      "Bash(curl *)",
+      "Write(c:\\Users\\drago\\ComfyUI-Claude-Integration\\skills\\comfyui-lora-data-gathering-workspace\\*)",
+      "WebSearch",
+      "WebFetch"
+    ]
+  }
+}

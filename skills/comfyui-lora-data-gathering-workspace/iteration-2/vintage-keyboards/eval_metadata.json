@@ -1,0 +1,15 @@
+{
+  "eval_id": 2,
+  "eval_name": "vintage-keyboards",
+  "prompt": "I need to collect training images for a LoRA of vintage mechanical keyboards. I want it to learn the retro aesthetic with beige cases and colorful keycaps",
+  "assertions": [
+    {"name": "source_diversity", "description": "Identifies 3+ different source types"},
+    {"name": "structured_source_list", "description": "sources.json with url/type/description fields"},
+    {"name": "training_aligned_plan", "description": "Specifies trigger word, object captioning mode, 1024px resolution, 20-30 images"},
+    {"name": "caption_format", "description": "Captions use '{trigger}, {description}' format (object mode)"},
+    {"name": "actionable_handoff", "description": "Mentions training next steps or lora-training skill"},
+    {"name": "source_tiering", "description": "Sources are classified into tiers (A/B/C) by quality/relevance"},
+    {"name": "gap_analysis", "description": "Plan identifies dataset gaps, biases, or suggests iteration to fill holes"},
+    {"name": "caption_hygiene", "description": "Captions avoid style-describing words like 'vintage', 'retro', 'aesthetic'"}
+  ]
+}

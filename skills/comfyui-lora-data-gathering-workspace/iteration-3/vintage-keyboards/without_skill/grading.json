@@ -1,0 +1,66 @@
+{
+  "eval_name": "vintage-keyboards",
+  "configuration": "without_skill",
+  "expectations": [
+    {
+      "text": "source_diversity",
+      "passed": true,
+      "evidence": "Research report identifies 5+ source types: community forums (Reddit, GeekHack), wiki references (Deskthority), photo sharing (Flickr), product/reference sites (ClickyKeyboards), marketplaces (eBay), and video (YouTube channels Chyrosran22, LGR, 8-Bit Guy)."
+    },
+    {
+      "text": "source_tiering",
+      "passed": false,
+      "evidence": "Research report uses 'Tier 1', 'Tier 2', 'Tier 3' labels rather than the required A/B/C tier labels. The tiers are described as 'High-Quality Curated Sources', 'Product and Reference Sources', and 'Video Sources' but never use A/B/C designations."
+    },
+    {
+      "text": "structured_source_list",
+      "passed": true,
+      "evidence": "sources.json contains an array of source objects each with url, type, and description-like fields (name, url, type, search_queries, estimated_yield, quality, download_method, notes)."
+    },
+    {
+      "text": "download_commands",
+      "passed": false,
+      "evidence": "Dataset plan uses gallery-dl, wget, and yt-dlp commands for downloading. There is no reference to the specific script 'download_images.py' with --urls-file, --output-dir, --min-resolution flags."
+    },
+    {
+      "text": "curation_guidance",
+      "passed": false,
+      "evidence": "Dataset plan Phase 2 provides detailed keep/reject criteria and a keep/ directory structure, but does not mention 'keep.txt' specifically."
+    },
+    {
+      "text": "processing_commands",
+      "passed": false,
+      "evidence": "Dataset plan uses a custom inline Python/Pillow script for resizing and cropping. There is no reference to the specific script 'prepare_dataset.py' with --target-resolution 1024 and --crop-mode smart."
+    },
+    {
+      "text": "captioning_commands",
+      "passed": false,
+      "evidence": "Dataset plan uses kohya-ss make_captions.py, WD14 tagger, and inline BLIP-2 Python code. There is no reference to the specific script 'auto_caption.py' with --trigger-word, --mode, --captioner flags."
+    },
+    {
+      "text": "caption_hygiene",
+      "passed": false,
+      "evidence": "Multiple sample captions contain prohibited words. Caption #3 uses 'vintage office desk setup'. Caption #7 contains 'retro computing aesthetic'. The casual variation caption uses 'beige retro keyboard'. The detail-focused caption uses 'vintage keyboard keycaps'. Words 'vintage', 'retro', and 'aesthetic' appear in captions."
+    },
+    {
+      "text": "caption_format",
+      "passed": false,
+      "evidence": "Captions use '{trigger}, {natural language description}' format which is close but not the required '{trigger}, {description}' object mode format. The captions include style words like 'vintage' in the description and use long-form natural language rather than the strict object-mode format specified."
+    },
+    {
+      "text": "dataset_report",
+      "passed": true,
+      "evidence": "Phase 6 in dataset-plan.md produces a dataset-report.json with total_images, total_captions, matched_pairs, resolutions (resolution stats), avg_caption_length, and trigger_word_coverage (caption coverage)."
+    },
+    {
+      "text": "training_handoff",
+      "passed": true,
+      "evidence": "Phase 7 'Handoff to Training' provides detailed training recommendations including Kohya ss directory structure, SDXL LoRA training parameters (accelerate launch command), network dim/alpha settings, and training notes about regularization images and overfitting."
+    },
+    {
+      "text": "gap_analysis",
+      "passed": true,
+      "evidence": "Research report 'Challenges' section identifies gaps: angle diversity bias (most photos are top-down), background variety issues, modern vs. actual vintage confusion, watermark/overlay issues. Recommended dataset composition addresses this with percentage breakdowns. Also notes minimum vs recommended vs ideal dataset sizes."
+    }
+  ]
+}

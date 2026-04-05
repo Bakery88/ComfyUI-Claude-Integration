@@ -1,0 +1,98 @@
+{
+  "project_name": "cyberpunk-anime",
+  "created": "2026-04-05T12:00:00Z",
+  "style_references": ["Ghost in the Shell (1995)", "Akira (1988)", "Appleseed", "Bubblegum Crisis"],
+  "target_base_model": "SDXL",
+  "target_resolution": 1024,
+  "target_image_count": "25-35",
+  "sources": [
+    {
+      "id": "A1",
+      "url": "https://www.artstation.com/search?q=ghost+in+the+shell+background+art+production",
+      "type": "gallery",
+      "tier": "A",
+      "description": "Ghost in the Shell production background art by Hiromasa Ogura. Hong Kong-inspired cityscapes, market sequences, waterway scenes, rooftop panoramas, cybernetics labs. The gold standard for cyberpunk anime environments.",
+      "estimated_usable_images": 10,
+      "notes": "Also search for art book scans of 'The Analysis of Ghost in the Shell'"
+    },
+    {
+      "id": "A2",
+      "url": "https://www.artstation.com/search?q=akira+katsuhiro+otomo+art",
+      "type": "gallery",
+      "tier": "A",
+      "description": "Akira art book illustrations and production art by Katsuhiro Otomo. Neo-Tokyo cityscapes, motorcycle chase backgrounds, SOL satellite, military facilities, detailed mechanical designs.",
+      "estimated_usable_images": 10,
+      "notes": "Akira Club art book is the primary reference. Look for high-res scans."
+    },
+    {
+      "id": "A3",
+      "url": "https://www.artstation.com/search?q=cyberpunk+anime+cityscape+neon",
+      "type": "gallery",
+      "tier": "A",
+      "description": "ArtStation professional artists creating cyberpunk anime-style art. Portfolio-quality pieces with consistent high resolution. Filter for anime/illustration style specifically, exclude 3D renders and Western comic styles.",
+      "estimated_usable_images": 12,
+      "notes": "Look for artists citing Otomo, Oshii, or Shirow as influences. Also try search terms: 'neo-tokyo', 'sci-fi anime', 'dark anime cityscape'."
+    },
+    {
+      "id": "B1",
+      "url": "https://danbooru.donmai.us/posts?tags=cyberpunk+cityscape+neon_lights+detailed_background+-chibi",
+      "type": "gallery",
+      "tier": "B",
+      "description": "Danbooru tagged anime art archive. Combined tags for cyberpunk cityscapes with detailed backgrounds, excluding chibi/cute styles. Large volume but needs quality filtering.",
+      "estimated_usable_images": 7,
+      "notes": "Additional useful tag combos: 'rain+city+night+science_fiction', 'cyberpunk+dark+atmospheric'. Filter for score:10+ for quality."
+    },
+    {
+      "id": "B2",
+      "url": "https://www.deviantart.com/search?q=cyberpunk+anime+cityscape",
+      "type": "gallery",
+      "tier": "B",
+      "description": "DeviantArt cyberpunk anime art. Fan art and original works. Filter to Digital Art category and sort by popularity for quality control.",
+      "estimated_usable_images": 4,
+      "notes": "Quality is inconsistent. Only take pieces that match the Akira/GitS aesthetic, not generic anime with neon."
+    },
+    {
+      "id": "B3",
+      "url": "https://www.pinterest.com/search/pins/?q=cyberpunk+anime+aesthetic+ghost+in+the+shell+akira",
+      "type": "gallery",
+      "tier": "B",
+      "description": "Pinterest curated mood boards for cyberpunk anime aesthetic. Useful as a discovery tool to find original sources. Most pins are low-res thumbnails -- trace back to originals.",
+      "estimated_usable_images": 3,
+      "notes": "Use Pinterest to discover new artist portfolios or gallery pages, then add those as separate Tier A/B sources."
+    },
+    {
+      "id": "C1",
+      "url": "https://www.youtube.com/results?search_query=ghost+in+the+shell+background+art+production+compilation",
+      "type": "video",
+      "tier": "C",
+      "description": "YouTube compilations of Ghost in the Shell and Akira production art. Video slideshows and art book flip-throughs. Extract frames at key moments showing distinct artworks.",
+      "estimated_usable_images": 8,
+      "notes": "Only use 720p+ videos. Set extract interval to 3-5s for art compilations. Also search: 'Akira art book flip through', 'cyberpunk anime art compilation'."
+    },
+    {
+      "id": "C2",
+      "url": "https://www.reddit.com/r/Cyberpunk/search/?q=anime+art&sort=top",
+      "type": "gallery",
+      "tier": "C",
+      "description": "Reddit r/Cyberpunk and r/anime community posts with cyberpunk anime art. Also check r/ImaginaryCityscapes and r/ImaginarySliceOfLife for environment art.",
+      "estimated_usable_images": 3,
+      "notes": "Sort by top/all-time for quality. Many are reposts at reduced resolution -- trace to original source when possible."
+    },
+    {
+      "id": "C3",
+      "url": "https://wallhaven.cc/search?q=cyberpunk+anime&categories=010&purity=100&sorting=relevance",
+      "type": "gallery",
+      "tier": "C",
+      "description": "Wallhaven high-resolution anime wallpapers tagged cyberpunk. Good resolution but images may be cropped, AI-upscaled, or otherwise modified from originals.",
+      "estimated_usable_images": 4,
+      "notes": "Filter for resolution 1920x1080+ minimum. Good for gap-filling specific composition types (wide cityscapes, vertical portraits)."
+    }
+  ],
+  "total_estimated_images": {
+    "tier_a": 32,
+    "tier_b": 14,
+    "tier_c": 15,
+    "total": 61,
+    "note": "Expect ~50% usability rate after quality filtering. Tier A alone should yield 20-25 usable images."
+  }
+}

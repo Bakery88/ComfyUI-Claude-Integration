@@ -1,0 +1,46 @@
+{
+  "sources": [
+    {
+      "url": "https://deskthority.net/wiki/Category:Keyboard_photos",
+      "type": "gallery",
+      "tier": "A",
+      "description": "Deskthority wiki keyboard photography — multi-angle, high-res, well-documented",
+      "estimated_usable_images": 25
+    },
+    {
+      "url": "https://www.reddit.com/r/MechanicalKeyboards/search/?q=vintage&sort=top",
+      "type": "community",
+      "tier": "A",
+      "description": "Top vintage keyboard posts on r/MechanicalKeyboards — community-curated best photos",
+      "estimated_usable_images": 15
+    },
+    {
+      "url": "https://geekhack.org/index.php?topic=vintage",
+      "type": "community",
+      "tier": "B",
+      "description": "GeekHack vintage keyboard photo threads",
+      "estimated_usable_images": 12
+    },
+    {
+      "url": "https://www.ebay.com/sch/i.html?_nkw=vintage+mechanical+keyboard",
+      "type": "marketplace",
+      "tier": "B",
+      "description": "eBay vintage keyboard listings — product photos with varied angles",
+      "estimated_usable_images": 20
+    },
+    {
+      "url": "https://www.flickr.com/groups/vintagecomputing/pool/",
+      "type": "community",
+      "tier": "B",
+      "description": "Flickr vintage computing group — in-context desk photography",
+      "estimated_usable_images": 10
+    },
+    {
+      "url": "https://www.youtube.com/results?search_query=vintage+mechanical+keyboard+review",
+      "type": "video",
+      "tier": "C",
+      "description": "YouTube keyboard review/restoration videos — frame extraction for detail shots",
+      "estimated_usable_images": 8
+    }
+  ]
+}

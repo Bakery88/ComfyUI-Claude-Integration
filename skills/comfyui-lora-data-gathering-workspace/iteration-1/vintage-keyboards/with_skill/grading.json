@@ -1,0 +1,9 @@
+{
+  "expectations": [
+    {"text": "source_diversity", "passed": true, "evidence": "Found 5 distinct types in sources.json: community, wiki, gallery, marketplace, article"},
+    {"text": "structured_source_list", "passed": true, "evidence": "9 entries, all have url, type, and description fields"},
+    {"text": "training_aligned_plan", "passed": true, "evidence": "Trigger word: vtgkbd, captioning mode: object, target resolution: 1024px (SDXL), target image count: 25-30 (within 20-35 range)"},
+    {"text": "caption_format", "passed": true, "evidence": "All 5 sample captions follow object format: 'vtgkbd, {description}'"},
+    {"text": "actionable_handoff", "passed": true, "evidence": "dataset-plan.md Phase 6 explicitly references comfyui-lora-training skill and provides recommended SDXL training params (rank 32, LR 1e-4, epochs 10)"}
+  ]
+}

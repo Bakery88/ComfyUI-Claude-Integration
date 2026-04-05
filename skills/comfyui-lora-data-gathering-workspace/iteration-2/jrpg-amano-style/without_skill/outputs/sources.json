@@ -1,0 +1,28 @@
+{
+  "sources": [
+    {
+      "url": "https://finalfantasy.fandom.com/wiki/Yoshitaka_Amano/Gallery",
+      "type": "gallery",
+      "description": "Final Fantasy wiki Amano art gallery",
+      "estimated_usable_images": 25
+    },
+    {
+      "url": "https://www.artstation.com/search?q=yoshitaka+amano+style",
+      "type": "community",
+      "description": "ArtStation Amano-style fan art",
+      "estimated_usable_images": 15
+    },
+    {
+      "url": "https://www.pinterest.com/search/pins/?q=yoshitaka%20amano%20art",
+      "type": "community",
+      "description": "Pinterest Amano art boards",
+      "estimated_usable_images": 20
+    },
+    {
+      "url": "https://www.deviantart.com/tag/yoshitakaamano",
+      "type": "community",
+      "description": "DeviantArt Amano-tagged fan art",
+      "estimated_usable_images": 15
+    }
+  ]
+}

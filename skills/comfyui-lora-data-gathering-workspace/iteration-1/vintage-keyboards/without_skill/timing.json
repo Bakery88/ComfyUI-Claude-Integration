@@ -1,0 +1,6 @@
+{
+  "total_tokens": 21312,
+  "duration_ms": 154869,
+  "total_duration_seconds": 154.9,
+  "note": "Agent had tool permissions denied - could not write files or search web."
+}

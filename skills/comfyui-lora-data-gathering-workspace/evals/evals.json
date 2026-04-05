@@ -1,0 +1,65 @@
+{
+  "skill_name": "comfyui-lora-data-gathering",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Help me gather LoRA data for JRPG art styles, specifically the watercolor look from classic Final Fantasy games by Yoshitaka Amano. Walk me through the entire pipeline from research to training-ready dataset.",
+      "expected_output": "Full pipeline walkthrough: research with tiered sources, download commands, curation criteria, processing commands, captioning with hygiene, dataset report, and training handoff.",
+      "files": [],
+      "assertions": [
+        {"name": "source_diversity", "description": "Step 1: Identifies 3+ different source types (galleries, communities, video, etc.)"},
+        {"name": "source_tiering", "description": "Step 1: Sources are classified into tiers (A/B/C) by quality/relevance"},
+        {"name": "structured_source_list", "description": "Step 2: Produces image-urls.json or sources.json with url/type/description fields"},
+        {"name": "download_commands", "description": "Step 2: Shows correct download_images.py invocation with --urls-file, --output-dir, --min-resolution flags"},
+        {"name": "curation_guidance", "description": "Step 4: Provides criteria for what to keep/reject and mentions keep.txt"},
+        {"name": "processing_commands", "description": "Step 5: Shows correct prepare_dataset.py invocation with --target-resolution 1024 and --crop-mode smart"},
+        {"name": "captioning_commands", "description": "Step 6: Shows correct auto_caption.py invocation with --trigger-word, --mode style, --captioner"},
+        {"name": "caption_hygiene", "description": "Step 6: Captions avoid style-describing words like 'watercolor', 'painting', 'illustration'"},
+        {"name": "caption_format", "description": "Step 6: Sample captions use '{trigger} style, {description}' format"},
+        {"name": "dataset_report", "description": "Step 7: Produces or describes a dataset report with image count, resolution stats, caption coverage"},
+        {"name": "training_handoff", "description": "Step 8: Mentions next steps, lora-training skill, or specific training recommendations"},
+        {"name": "gap_analysis", "description": "Identifies dataset gaps, biases, or suggests iteration to fill holes"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I need to collect training images for a LoRA of vintage mechanical keyboards. I want it to learn the retro aesthetic with beige cases and colorful keycaps. Walk me through the entire pipeline from research to training-ready dataset.",
+      "expected_output": "Full pipeline walkthrough: research with tiered sources, download commands, curation criteria, processing commands, captioning in object mode with hygiene, dataset report, and training handoff.",
+      "files": [],
+      "assertions": [
+        {"name": "source_diversity", "description": "Step 1: Identifies 3+ different source types (galleries, communities, video, etc.)"},
+        {"name": "source_tiering", "description": "Step 1: Sources are classified into tiers (A/B/C) by quality/relevance"},
+        {"name": "structured_source_list", "description": "Step 2: Produces image-urls.json or sources.json with url/type/description fields"},
+        {"name": "download_commands", "description": "Step 2: Shows correct download_images.py invocation with --urls-file, --output-dir, --min-resolution flags"},
+        {"name": "curation_guidance", "description": "Step 4: Provides criteria for what to keep/reject and mentions keep.txt"},
+        {"name": "processing_commands", "description": "Step 5: Shows correct prepare_dataset.py invocation with --target-resolution 1024 and --crop-mode smart"},
+        {"name": "captioning_commands", "description": "Step 6: Shows correct auto_caption.py invocation with --trigger-word, --mode object, --captioner"},
+        {"name": "caption_hygiene", "description": "Step 6: Captions avoid style-describing words like 'vintage', 'retro', 'aesthetic'"},
+        {"name": "caption_format", "description": "Step 6: Sample captions use '{trigger}, {description}' format (object mode)"},
+        {"name": "dataset_report", "description": "Step 7: Produces or describes a dataset report with image count, resolution stats, caption coverage"},
+        {"name": "training_handoff", "description": "Step 8: Mentions next steps, lora-training skill, or specific training recommendations"},
+        {"name": "gap_analysis", "description": "Identifies dataset gaps, biases, or suggests iteration to fill holes"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Gather reference images for training a LoRA on cyberpunk anime style, like Ghost in the Shell and Akira. I'll be training on SDXL. Walk me through the entire pipeline from research to training-ready dataset.",
+      "expected_output": "Full pipeline walkthrough: research with tiered sources, download commands, curation criteria, processing commands, captioning with hygiene, dataset report, and training handoff. Should note SDXL = 1024px resolution.",
+      "files": [],
+      "assertions": [
+        {"name": "source_diversity", "description": "Step 1: Identifies 3+ different source types (galleries, communities, video, etc.)"},
+        {"name": "source_tiering", "description": "Step 1: Sources are classified into tiers (A/B/C) by quality/relevance"},
+        {"name": "structured_source_list", "description": "Step 2: Produces image-urls.json or sources.json with url/type/description fields"},
+        {"name": "download_commands", "description": "Step 2: Shows correct download_images.py invocation with --urls-file, --output-dir, --min-resolution flags"},
+        {"name": "curation_guidance", "description": "Step 4: Provides criteria for what to keep/reject and mentions keep.txt"},
+        {"name": "processing_commands", "description": "Step 5: Shows correct prepare_dataset.py invocation with --target-resolution 1024 and --crop-mode smart"},
+        {"name": "captioning_commands", "description": "Step 6: Shows correct auto_caption.py invocation with --trigger-word, --mode style, --captioner"},
+        {"name": "caption_hygiene", "description": "Step 6: Captions avoid style-describing words like 'anime', 'cyberpunk style', 'cel-shaded'"},
+        {"name": "caption_format", "description": "Step 6: Sample captions use '{trigger} style, {description}' format"},
+        {"name": "dataset_report", "description": "Step 7: Produces or describes a dataset report with image count, resolution stats, caption coverage"},
+        {"name": "training_handoff", "description": "Step 8: Mentions next steps, lora-training skill, or specific training recommendations"},
+        {"name": "gap_analysis", "description": "Identifies dataset gaps, biases, or suggests iteration to fill holes"}
+      ]
+    }
+  ]
+}

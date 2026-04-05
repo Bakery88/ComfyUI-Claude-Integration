@@ -1,0 +1,66 @@
+{
+  "eval_name": "cyberpunk-anime",
+  "configuration": "with_skill",
+  "expectations": [
+    {
+      "text": "source_diversity",
+      "passed": true,
+      "evidence": "research-report.md identifies 5+ source types: galleries (ArtStation, Danbooru, DeviantArt), communities (Reddit r/Cyberpunk, r/anime), video (YouTube art compilations), wallpaper sites (Wallhaven, Alphacoders), and discovery tools (Pinterest). 9 distinct sources across 3 tiers."
+    },
+    {
+      "text": "source_tiering",
+      "passed": true,
+      "evidence": "Sources are classified into Tier A (A1: GitS production art, A2: Akira art book, A3: ArtStation professional), Tier B (B1: Danbooru, B2: DeviantArt, B3: Pinterest), and Tier C (C1: YouTube, C2: Reddit, C3: Wallhaven) with quality/relevance rationale for each tier."
+    },
+    {
+      "text": "structured_source_list",
+      "passed": true,
+      "evidence": "sources.json contains 9 source entries each with 'url', 'type' (all 'gallery' or 'video'), and 'description' fields. Also includes 'id', 'tier', 'estimated_usable_images', and 'notes'."
+    },
+    {
+      "text": "download_commands",
+      "passed": true,
+      "evidence": "dataset-plan.md Step 2 shows: 'python scripts/download_images.py --urls-file datasets/cyberpunk-anime/image-urls.json --output-dir datasets/cyberpunk-anime/raw/ --min-resolution 512 --tier A --start-index 1' with all three required flags (--urls-file, --output-dir, --min-resolution)."
+    },
+    {
+      "text": "curation_guidance",
+      "passed": true,
+      "evidence": "dataset-plan.md Step 4 provides detailed criteria for what to keep/reject (too small, watermarked, collages, off-topic, text overlays, near-duplicates). Step 5 explicitly mentions creating 'keep.txt' with one filename per line for approved images."
+    },
+    {
+      "text": "processing_commands",
+      "passed": true,
+      "evidence": "dataset-plan.md Step 5 shows: 'python scripts/prepare_dataset.py --input-dir datasets/cyberpunk-anime/raw/ --output-dir datasets/cyberpunk-anime/processed/ --target-resolution 1024 --crop-mode smart --format png --keep-list datasets/cyberpunk-anime/keep.txt' with both --target-resolution 1024 and --crop-mode smart."
+    },
+    {
+      "text": "captioning_commands",
+      "passed": true,
+      "evidence": "dataset-plan.md Step 6 shows: 'python scripts/auto_caption.py --image-dir datasets/cyberpunk-anime/processed/ --output-dir datasets/cyberpunk-anime/processed/ --trigger-word \"cyberpunkanime\" --mode style --captioner wd14' with all required flags."
+    },
+    {
+      "text": "caption_hygiene",
+      "passed": true,
+      "evidence": "sample-captions.md explicitly states under 'What Makes These Captions Good': 'None of the captions say \"anime\", \"cyberpunk\", \"futuristic\", \"sci-fi\", \"illustration\", \"digital art\"'. The --extra-strip-words flag strips 'anime style', 'cyberpunk', 'cel-shaded' (via built-in blocklist). All 8 sample captions are verified free of these terms."
+    },
+    {
+      "text": "caption_format",
+      "passed": true,
+      "evidence": "All 8 sample captions follow the format 'cyberpunkanime style, {description}' exactly. E.g., '001.txt: cyberpunkanime style, sprawling city skyline at night...' The document confirms 'All follow cyberpunkanime style, {description} exactly.'"
+    },
+    {
+      "text": "dataset_report",
+      "passed": true,
+      "evidence": "dataset-plan.md Step 7 describes generating a dataset-report.json with image_count (27), resolution_buckets (8 buckets with counts), caption coverage (captioning_mode, captioning_method, trigger_word), sources_summary with counts, and quality_scorecard. Full expected JSON structure is provided."
+    },
+    {
+      "text": "training_handoff",
+      "passed": true,
+      "evidence": "dataset-plan.md Step 8 explicitly says 'To start training, say: \"Train a LoRA using the cyberpunk-anime dataset\"' and states 'The training skill will read dataset-report.json to pick up your trigger word, resolution, and captioning settings automatically.' This is a direct handoff to the lora-training skill."
+    },
+    {
+      "text": "gap_analysis",
+      "passed": true,
+      "evidence": "dataset-plan.md Step 4b 'Gap Analysis and Iteration' identifies specific biases (cityscape dominance, night-only bias, male bias from Akira) and provides example gaps ('Close-up mechanical detail -- only 2 of 30', 'Interior environments -- only 3 images', 'Daytime scenes -- 0 of 30'). Includes iteration strategy with targeted search queries to fill holes."
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "sources": [
+    {
+      "url": "https://reddit.com/r/MechanicalKeyboards/search?q=vintage+beige",
+      "type": "community",
+      "description": "Reddit mechanical keyboards community — search for vintage/beige collection posts with high-quality photos",
+      "estimated_usable_images": 40
+    },
+    {
+      "url": "https://deskthority.net/wiki/Main_Page",
+      "type": "wiki",
+      "description": "Deskthority vintage keyboard wiki — detailed model pages with photo galleries",
+      "estimated_usable_images": 50
+    },
+    {
+      "url": "https://www.clickykeyboards.com/",
+      "type": "gallery",
+      "description": "ClickyKeyboards restoration specialist — clean product photography of restored vintage boards",
+      "estimated_usable_images": 30
+    },
+    {
+      "url": "https://www.ebay.com/b/IBM-Vintage-Computer-Keyboards/175690/bn_557456",
+      "type": "marketplace",
+      "description": "eBay vintage IBM keyboards — large volume of listing photos, needs quality filtering",
+      "estimated_usable_images": 50
+    },
+    {
+      "url": "https://www.modelfkeyboards.com/",
+      "type": "gallery",
+      "description": "Model F Keyboards — professional product photography of reproduction classic keyboards",
+      "estimated_usable_images": 20
+    },
+    {
+      "url": "https://www.pckeyboard.com/",
+      "type": "gallery",
+      "description": "Unicomp New Model M — modern production of classic design with product photos",
+      "estimated_usable_images": 15
+    },
+    {
+      "url": "https://hhkeyboard.us/blog/vintage-mechanical-keyboard",
+      "type": "article",
+      "description": "HHKB vintage keyboard spotlight — curated editorial photos of 5 essential vintage boards",
+      "estimated_usable_images": 12
+    },
+    {
+      "url": "https://www.keychron.com/collections/retro-mechanical-keyboards",
+      "type": "gallery",
+      "description": "Keychron retro collection — professional product photography with retro colorways",
+      "estimated_usable_images": 15
+    },
+    {
+      "url": "https://www.aziocorp.com/collections/retro-keyboard-collection",
+      "type": "gallery",
+      "description": "AZIO retro keyboard collection — premium retro-styled boards with studio photography",
+      "estimated_usable_images": 10
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "sources": [
+    {
+      "url": "https://www.yoshitakaamano.com/gallery",
+      "type": "gallery",
+      "tier": "A",
+      "description": "Amano's official artwork gallery — authoritative, high-res originals",
+      "estimated_usable_images": 15
+    },
+    {
+      "url": "https://finalfantasy.fandom.com/wiki/Yoshitaka_Amano/Gallery",
+      "type": "gallery",
+      "tier": "A",
+      "description": "Final Fantasy wiki concept art collection, FF I-VI",
+      "estimated_usable_images": 20
+    },
+    {
+      "url": "https://www.artstation.com/search?q=amano%20style%20final%20fantasy",
+      "type": "community",
+      "tier": "B",
+      "description": "ArtStation fan studies of Amano's style — adds subject variety",
+      "estimated_usable_images": 12
+    },
+    {
+      "url": "https://safebooru.org/index.php?page=post&s=list&tags=yoshitaka_amano_%28style%29",
+      "type": "archive",
+      "tier": "B",
+      "description": "Safebooru tagged Amano-style art, needs quality filtering",
+      "estimated_usable_images": 30
+    },
+    {
+      "url": "https://www.youtube.com/results?search_query=art+of+final+fantasy+amano",
+      "type": "video",
+      "tier": "C",
+      "description": "YouTube art compilation videos for frame extraction — gap filler for environment pieces",
+      "estimated_usable_images": 8
+    }
+  ]
+}

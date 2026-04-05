@@ -1,0 +1,66 @@
+{
+  "eval_name": "jrpg-amano-style",
+  "configuration": "with_skill",
+  "expectations": [
+    {
+      "text": "source_diversity",
+      "passed": true,
+      "evidence": "Research report identifies 5+ source types: gallery (FF Wiki, official site, ArtStation, Danbooru, Pinterest), art book scans (The Sky collection), video (YouTube showcase compilations, painting process timelapses). At least 4 distinct source types across 9 sources."
+    },
+    {
+      "text": "source_tiering",
+      "passed": true,
+      "evidence": "Sources are explicitly classified into Tier A (Primary: FF Wiki, Official Site, Art Book Scans, Vampire Hunter D), Tier B (Supplementary: ArtStation, Danbooru, Pinterest), and Tier C (Opportunistic: YouTube showcase/process videos). A summary table shows estimated usable images per tier."
+    },
+    {
+      "text": "structured_source_list",
+      "passed": true,
+      "evidence": "sources.json contains 9 entries each with id, url, type, tier, description, estimated_usable_images, notes, and added_in fields. E.g. {\"id\":\"src-01\",\"url\":\"https://finalfantasy.fandom.com/wiki/Yoshitaka_Amano/Gallery\",\"type\":\"gallery\",\"tier\":\"A\",\"description\":\"Final Fantasy Wiki comprehensive gallery...\"}."
+    },
+    {
+      "text": "download_commands",
+      "passed": true,
+      "evidence": "dataset-plan.md Step 2 shows: 'python scripts/download_images.py --urls-file datasets/jrpg-amano-style/image-urls.json --output-dir datasets/jrpg-amano-style/raw/ --min-resolution 512 --tier A --start-index 1'. All three required flags (--urls-file, --output-dir, --min-resolution) are present."
+    },
+    {
+      "text": "curation_guidance",
+      "passed": true,
+      "evidence": "Step 4 provides detailed criteria: a quality scan table listing issues to flag (too small, watermarks, text overlays, collages, off-topic, muddy scans, near-duplicates) with actions for each. Explicitly mentions creating keep.txt with one filename per line, saved to 'datasets/jrpg-amano-style/keep.txt'."
+    },
+    {
+      "text": "processing_commands",
+      "passed": true,
+      "evidence": "Step 5 shows: 'python scripts/prepare_dataset.py --input-dir datasets/jrpg-amano-style/raw/ --output-dir datasets/jrpg-amano-style/processed/ --target-resolution 1024 --crop-mode smart --format png --keep-list datasets/jrpg-amano-style/keep.txt'. Both --target-resolution 1024 and --crop-mode smart are present."
+    },
+    {
+      "text": "captioning_commands",
+      "passed": true,
+      "evidence": "Step 6 shows: 'python scripts/auto_caption.py --image-dir datasets/jrpg-amano-style/processed/ --output-dir datasets/jrpg-amano-style/processed/ --trigger-word \"amanoart\" --mode style --captioner florence2 --overwrite --extra-strip-words ...'. All three flags present: --trigger-word, --mode style, --captioner florence2."
+    },
+    {
+      "text": "caption_hygiene",
+      "passed": true,
+      "evidence": "sample-captions.md explicitly lists 'watercolor', 'painting', 'illustration' in both the built-in blocklist and extra-strip-words. All 7 sample captions were verified: none contain these words. The quality checklist confirms '[x] No style-leaking words (watercolor, painting, illustration, anime, etc.)'."
+    },
+    {
+      "text": "caption_format",
+      "passed": true,
+      "evidence": "All 7 sample captions follow the format 'amanoart style, {description}'. E.g. Caption 1: 'amanoart style, a woman with long flowing green hair wearing ornate red and gold armor, standing pose, ethereal wisps of light surrounding the figure, gradient purple and blue background'."
+    },
+    {
+      "text": "dataset_report",
+      "passed": true,
+      "evidence": "Step 7 in dataset-plan.md produces a full dataset-report.json with image_count (27), resolution_buckets breakdown (896x1152: 9, 1024x1024: 6, etc.), sources_summary with images_kept, caption coverage via captioning_mode/method fields, and a quality_scorecard."
+    },
+    {
+      "text": "training_handoff",
+      "passed": true,
+      "evidence": "Step 8 provides explicit training handoff: 'To start training, say: \"Train a LoRA using the jrpg-amano-style dataset\"' and states 'The training skill will read dataset-report.json to pick up your trigger word, resolution, and captioning settings automatically.'"
+    },
+    {
+      "text": "gap_analysis",
+      "passed": true,
+      "evidence": "Step 4b 'Gap Analysis' identifies specific biases: 'Most Amano artwork features standing/posed characters in full-body view. The dataset may be weak on: close-up portrait compositions, action/dynamic poses, landscape-only pieces, dark/moody color palettes.' Includes targeted search suggestions for gap-filling and an iteration decision framework."
+    }
+  ]
+}

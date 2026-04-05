@@ -1,0 +1,14 @@
+{
+  "eval_name": "cyberpunk-anime",
+  "config": "without_skill",
+  "expectations": [
+    {"text": "source_diversity", "passed": true, "evidence": "4 sources across archive, community, article types"},
+    {"text": "structured_source_list", "passed": true, "evidence": "sources.json has url, type, description, estimated_usable_images"},
+    {"text": "training_aligned_plan", "passed": false, "evidence": "Trigger word 'cyberpunk_anime_style' (too long, contains common tokens). No captioning mode specified — just 'Tag-based captions from WD14'. Target 30-40 images is high."},
+    {"text": "caption_format", "passed": false, "evidence": "Captions use 'cyberpunk_anime_style, {description}' — missing 'style' keyword after trigger for style-mode."},
+    {"text": "actionable_handoff", "passed": true, "evidence": "Training parameters section present with Kohya_ss reference"},
+    {"text": "source_tiering", "passed": false, "evidence": "No tier classification. Sources listed flat without quality/priority ranking."},
+    {"text": "gap_analysis", "passed": false, "evidence": "No gap analysis, bias check, or iteration strategy. No mention of character vs background balance."},
+    {"text": "caption_hygiene", "passed": false, "evidence": "Captions contain 'neon-lit' (style word for this context), 'sci-fi atmosphere' — could be considered style-leaking. No explicit hygiene consideration."}
+  ]
+}

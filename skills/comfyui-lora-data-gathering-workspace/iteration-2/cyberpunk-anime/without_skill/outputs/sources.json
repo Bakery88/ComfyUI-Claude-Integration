@@ -1,0 +1,28 @@
+{
+  "sources": [
+    {
+      "url": "https://danbooru.donmai.us/posts?tags=cyberpunk+cityscape",
+      "type": "archive",
+      "description": "Danbooru tagged anime art",
+      "estimated_usable_images": 100
+    },
+    {
+      "url": "https://www.pinterest.com/atsf100/ghost-in-the-shell/",
+      "type": "community",
+      "description": "Ghost in the Shell Pinterest board",
+      "estimated_usable_images": 50
+    },
+    {
+      "url": "https://halcyonrealms.com",
+      "type": "article",
+      "description": "Anime art book reviews and production art",
+      "estimated_usable_images": 30
+    },
+    {
+      "url": "https://www.deviantart.com/tag/cyberpunkanime",
+      "type": "community",
+      "description": "DeviantArt cyberpunk anime fan art",
+      "estimated_usable_images": 60
+    }
+  ]
+}

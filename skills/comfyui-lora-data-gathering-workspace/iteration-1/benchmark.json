@@ -1,0 +1,118 @@
+{
+  "skill_name": "comfyui-lora-data-gathering",
+  "iteration": 1,
+  "configurations": [
+    {
+      "name": "with_skill",
+      "label": "With Skill",
+      "evals": [
+        {
+          "eval_name": "jrpg-amano-style",
+          "pass_rate": 1.0,
+          "passed": 5,
+          "total": 5,
+          "assertions": [
+            {"text": "source_diversity", "passed": true},
+            {"text": "structured_source_list", "passed": true},
+            {"text": "training_aligned_plan", "passed": true},
+            {"text": "caption_format", "passed": true},
+            {"text": "actionable_handoff", "passed": true}
+          ]
+        },
+        {
+          "eval_name": "vintage-keyboards",
+          "pass_rate": 1.0,
+          "passed": 5,
+          "total": 5,
+          "assertions": [
+            {"text": "source_diversity", "passed": true},
+            {"text": "structured_source_list", "passed": true},
+            {"text": "training_aligned_plan", "passed": true},
+            {"text": "caption_format", "passed": true},
+            {"text": "actionable_handoff", "passed": true}
+          ]
+        },
+        {
+          "eval_name": "cyberpunk-anime",
+          "pass_rate": 1.0,
+          "passed": 5,
+          "total": 5,
+          "assertions": [
+            {"text": "source_diversity", "passed": true},
+            {"text": "structured_source_list", "passed": true},
+            {"text": "training_aligned_plan", "passed": true},
+            {"text": "caption_format", "passed": true},
+            {"text": "actionable_handoff", "passed": true}
+          ]
+        }
+      ],
+      "aggregate": {
+        "mean_pass_rate": 1.0,
+        "stddev_pass_rate": 0.0,
+        "total_passed": 15,
+        "total_assertions": 15
+      }
+    },
+    {
+      "name": "without_skill",
+      "label": "Without Skill (Baseline)",
+      "evals": [
+        {
+          "eval_name": "jrpg-amano-style",
+          "pass_rate": 0.6,
+          "passed": 3,
+          "total": 5,
+          "assertions": [
+            {"text": "source_diversity", "passed": true},
+            {"text": "structured_source_list", "passed": true},
+            {"text": "training_aligned_plan", "passed": false},
+            {"text": "caption_format", "passed": false},
+            {"text": "actionable_handoff", "passed": true}
+          ]
+        },
+        {
+          "eval_name": "vintage-keyboards",
+          "pass_rate": 0.8,
+          "passed": 4,
+          "total": 5,
+          "assertions": [
+            {"text": "source_diversity", "passed": true},
+            {"text": "structured_source_list", "passed": true},
+            {"text": "training_aligned_plan", "passed": false},
+            {"text": "caption_format", "passed": true},
+            {"text": "actionable_handoff", "passed": true}
+          ]
+        },
+        {
+          "eval_name": "cyberpunk-anime",
+          "pass_rate": 0.6,
+          "passed": 3,
+          "total": 5,
+          "assertions": [
+            {"text": "source_diversity", "passed": true},
+            {"text": "structured_source_list", "passed": true},
+            {"text": "training_aligned_plan", "passed": false},
+            {"text": "caption_format", "passed": false},
+            {"text": "actionable_handoff", "passed": true}
+          ]
+        }
+      ],
+      "aggregate": {
+        "mean_pass_rate": 0.67,
+        "stddev_pass_rate": 0.094,
+        "total_passed": 10,
+        "total_assertions": 15
+      }
+    }
+  ],
+  "delta": {
+    "pass_rate_improvement": 0.33,
+    "description": "Skill improves pass rate from 67% to 100%, primarily through correct training parameter alignment and caption format enforcement"
+  },
+  "analyst_notes": [
+    "source_diversity and structured_source_list pass for both configs — these are non-discriminating assertions (baseline can do this too)",
+    "training_aligned_plan fails in all 3 baselines — the skill's biggest value is enforcing correct captioning mode, resolution matching, and reasonable image counts",
+    "caption_format fails in 2/3 baselines — without the skill, style-mode captions miss the 'style' keyword. Object-mode happened to pass by coincidence",
+    "actionable_handoff passes everywhere — both configs mention next steps, though with-skill specifically references the lora-training skill"
+  ]
+}

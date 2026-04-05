@@ -1,0 +1,64 @@
+{
+  "sources": [
+    {
+      "url": "https://finalfantasy.fandom.com/wiki/Category:Yoshitaka_Amano_artwork",
+      "type": "gallery",
+      "description": "Final Fantasy Wiki categorized gallery of all Amano artwork by game title",
+      "estimated_usable_images": 60
+    },
+    {
+      "url": "https://archive.org/details/amano_202203",
+      "type": "art-book-scan",
+      "description": "Internet Archive collection of 9+ Amano art books with high-res scans",
+      "estimated_usable_images": 100
+    },
+    {
+      "url": "https://www.yoshitakaamano.com/",
+      "type": "gallery",
+      "description": "Official A Studio Archive — curated portfolio of limited artworks and rare archives",
+      "estimated_usable_images": 30
+    },
+    {
+      "url": "https://www.artnet.com/artists/yoshitaka-amano/",
+      "type": "gallery",
+      "description": "Artnet professional gallery with 151 artworks, professionally photographed",
+      "estimated_usable_images": 40
+    },
+    {
+      "url": "https://www.pinterest.com/fantasyanime/yoshitaka-amanos-final-fantasy-art/",
+      "type": "community",
+      "description": "Curated Pinterest board focused on FF artwork — 89 pins",
+      "estimated_usable_images": 30
+    },
+    {
+      "url": "https://www.pinterest.com/hellbreathingki/yoshitaka-amano-art/",
+      "type": "community",
+      "description": "Large Pinterest collection — 390 pins, needs filtering for quality and style focus",
+      "estimated_usable_images": 50
+    },
+    {
+      "url": "https://videogamesartwork.com/artists/yoshitaka-amano",
+      "type": "gallery",
+      "description": "Video game art archive with Amano's game-related illustrations",
+      "estimated_usable_images": 40
+    },
+    {
+      "url": "https://www.cookandbecker.com/en/article/174/spotlight-yoshitaka-amano.html",
+      "type": "article",
+      "description": "Cook and Becker art dealer spotlight with high-quality reproductions",
+      "estimated_usable_images": 12
+    },
+    {
+      "url": "https://www.artsy.net/artist/amano-yoshitaka",
+      "type": "gallery",
+      "description": "Artsy gallery with prints and artwork listings",
+      "estimated_usable_images": 20
+    },
+    {
+      "url": "https://mizuma-art.co.jp/en/artists/amano-yoshitaka/",
+      "type": "gallery",
+      "description": "Mizuma Art Gallery representation — contemporary works with exhibition documentation",
+      "estimated_usable_images": 15
+    }
+  ]
+}

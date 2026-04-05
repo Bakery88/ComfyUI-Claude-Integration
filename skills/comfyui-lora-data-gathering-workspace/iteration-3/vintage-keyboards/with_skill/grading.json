@@ -1,0 +1,66 @@
+{
+  "eval_name": "vintage-keyboards",
+  "configuration": "with_skill",
+  "expectations": [
+    {
+      "text": "source_diversity",
+      "passed": true,
+      "evidence": "Research report identifies 5 source categories: enthusiast community galleries (Reddit, Geekhack, Deskthority), keyboard wiki/museum sites, YouTube showcase channels for frame extraction, vendor product photography, and photography communities (Flickr). Also includes marketplace sites (eBay) and Pinterest. Well over 3 different source types."
+    },
+    {
+      "text": "source_tiering",
+      "passed": true,
+      "evidence": "Sources are explicitly classified into Tier A (Primary -- Deskthority, Reddit, Geekhack), Tier B (Supplementary -- ClickyKeyboards, vendors, Flickr), and Tier C (Opportunistic -- YouTube, eBay, Pinterest). Each tier has a clear rationale and quality/relevance description."
+    },
+    {
+      "text": "structured_source_list",
+      "passed": true,
+      "evidence": "sources.json contains 15 entries, each with 'url', 'type', 'description', 'tier', and 'estimated_usable_images' fields. Includes a tier_summary and total_estimated_usable count."
+    },
+    {
+      "text": "download_commands",
+      "passed": true,
+      "evidence": "dataset-plan.md Step 2 shows correct download_images.py invocations with --urls-file, --output-dir, and --min-resolution 512 flags. Three separate commands shown for Tier A, B, and C downloads, e.g.: 'python scripts/download_images.py --urls-file datasets/vintage-keyboards/image-urls.json --output-dir datasets/vintage-keyboards/raw/ --min-resolution 512 --tier A --start-index 1'"
+    },
+    {
+      "text": "curation_guidance",
+      "passed": true,
+      "evidence": "Step 4 provides detailed curation criteria: REMOVE watermarked images, below 400px images, collage/grid images, near-duplicates, non-keyboard video frames. KEEP all on-target images. Explicitly mentions 'Create keep.txt with approved filenames after user review' and references keep.txt in Step 5 as --keep-list parameter."
+    },
+    {
+      "text": "processing_commands",
+      "passed": true,
+      "evidence": "Step 5 shows: 'python scripts/prepare_dataset.py --input-dir datasets/vintage-keyboards/raw/ --output-dir datasets/vintage-keyboards/processed/ --target-resolution 1024 --crop-mode smart --format png --keep-list datasets/vintage-keyboards/keep.txt' with correct --target-resolution 1024 and --crop-mode smart flags."
+    },
+    {
+      "text": "captioning_commands",
+      "passed": true,
+      "evidence": "Step 6 shows: 'python scripts/auto_caption.py --image-dir datasets/vintage-keyboards/processed/ --output-dir datasets/vintage-keyboards/processed/ --trigger-word \"retrokb\" --mode object --captioner florence2 --overwrite --extra-strip-words \"mechanical keyboard,keyboard,retro,vintage,computer keyboard,typing,keys\"' with --trigger-word, --mode object, and --captioner flags all present."
+    },
+    {
+      "text": "caption_hygiene",
+      "passed": true,
+      "evidence": "sample-captions.md explicitly states: 'None of the captions say \"vintage\", \"retro\", \"classic\", \"old\", \"nostalgic\", or \"mechanical keyboard\"'. Reviewing all 8 sample captions confirms none contain style-describing words like 'vintage', 'retro', or 'aesthetic'. The extra-strip-words list includes 'retro', 'vintage', 'mechanical keyboard', 'keyboard'."
+    },
+    {
+      "text": "caption_format",
+      "passed": true,
+      "evidence": "All 8 sample captions follow '{trigger}, {description}' format for object mode. Examples: 'retrokb, beige device with grey and white keycaps on a plain white surface...' and 'retrokb, cream colored device with multicolored legends...'. The description focuses on context/setting rather than naming the object."
+    },
+    {
+      "text": "dataset_report",
+      "passed": true,
+      "evidence": "Step 7 in dataset-plan.md produces a detailed dataset-report.json with image_count (28), resolution_buckets breakdown (6 buckets with counts), caption_coverage implied by captioning_mode/method fields, sources_summary with tier counts and images_kept, and a quality_scorecard. All key stats are present."
+    },
+    {
+      "text": "training_handoff",
+      "passed": true,
+      "evidence": "Step 8 explicitly says 'To start training, say: \"Train a LoRA using the vintage-keyboards dataset\"' and notes 'The training skill will read dataset-report.json to pick up your trigger word, resolution, and captioning settings automatically.' Also provides recommendation about background variety weakness and option to gather more images first."
+    },
+    {
+      "text": "gap_analysis",
+      "passed": true,
+      "evidence": "Step 4b provides detailed gap analysis: identifies IBM Model M over-representation bias, WEAK background variety score, possible gap in Japanese vintage boards (NEC, Fujitsu), and gap in close-up detail shots. Suggests targeted searches ('vintage computer setup desk', 'retro computing workspace') to fill gaps. Offers user choice: proceed with WEAK score or iterate."
+    }
+  ]
+}

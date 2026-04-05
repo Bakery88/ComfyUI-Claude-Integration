@@ -1,0 +1,9 @@
+{
+  "expectations": [
+    {"text": "source_diversity", "passed": true, "evidence": "Found 4 distinct types in sources.json: gallery, art-book-scan, community, article"},
+    {"text": "structured_source_list", "passed": true, "evidence": "10 entries, all have url, type, and description fields"},
+    {"text": "training_aligned_plan", "passed": true, "evidence": "Trigger word: amanostyle, captioning mode: style, target resolution: 1024px (FLUX), target image count: 25-30 (within 20-35 range)"},
+    {"text": "caption_format", "passed": true, "evidence": "All 5 sample captions follow style format: 'amanostyle style, {description}'"},
+    {"text": "actionable_handoff", "passed": true, "evidence": "dataset-plan.md Phase 6 explicitly references comfyui-lora-training skill and provides recommended training params (rank 16, LR 4e-4, steps 1000-1500)"}
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "sources": [
+    {
+      "url": "https://halcyonrealms.com/anime/akira-art-book/",
+      "type": "article",
+      "tier": "A",
+      "description": "Halcyon Realms Akira art book review — high-res production art scans",
+      "estimated_usable_images": 15
+    },
+    {
+      "url": "https://setteidreams.net/settei/ghost-in-the-shell/",
+      "type": "gallery",
+      "tier": "A",
+      "description": "GITS background art and key animation settei — authoritative production material",
+      "estimated_usable_images": 12
+    },
+    {
+      "url": "https://safebooru.org/index.php?page=post&s=list&tags=cyberpunk+cityscape+neon",
+      "type": "archive",
+      "tier": "B",
+      "description": "Safebooru cyberpunk anime art — filter for hand-painted cel style only",
+      "estimated_usable_images": 20
+    },
+    {
+      "url": "https://www.artstation.com/search?q=akira+ghost+shell+hand+painted",
+      "type": "community",
+      "tier": "B",
+      "description": "ArtStation fan tributes — filter for traditional/cel-style rendering",
+      "estimated_usable_images": 10
+    },
+    {
+      "url": "https://www.deviantart.com/tag/cyberpunkanime",
+      "type": "community",
+      "tier": "B",
+      "description": "DeviantArt cyberpunk anime art — needs strict style filtering",
+      "estimated_usable_images": 8
+    },
+    {
+      "url": "https://www.youtube.com/results?search_query=akira+background+art+compilation",
+      "type": "video",
+      "tier": "C",
+      "description": "YouTube art compilations — frame extraction for background/environment shots",
+      "estimated_usable_images": 6
+    }
+  ]
+}

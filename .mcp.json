@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "comfyui": {
+      "type": "stdio",
+      "command": "docker",
+      "args": [
+        "run", "-i", "--rm", "--pull", "always",
+        "-e", "COMFYUI_URL=http://host.docker.internal:8188",
+        "ghcr.io/shawnrushefsky/comfyui-mcp:latest"
+      ]
+    }
+  }
+}

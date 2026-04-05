@@ -1,0 +1,207 @@
+{
+  "project": "Cyberpunk Anime Style LoRA",
+  "target_model": "SDXL",
+  "trigger_word": "cpanime",
+  "target_dataset_size": "150-250 images",
+  "reference_works": [
+    "Ghost in the Shell (1995 film)",
+    "Ghost in the Shell: Stand Alone Complex (2002-2005)",
+    "Akira (1988 film)"
+  ],
+  "sources": [
+    {
+      "id": "src-001",
+      "name": "Ghost in the Shell (1995) - Blu-ray Frame Extraction",
+      "type": "video_extraction",
+      "url": null,
+      "source_format": "4K UHD Blu-ray / 1080p Blu-ray (personal copy)",
+      "description": "Frame extraction from the 1995 Mamoru Oshii film. Focus on cityscape establishing shots, diving sequence, market chase, Puppet Master scenes, and atmospheric rain/water sequences.",
+      "estimated_yield": "150-300 usable frames",
+      "quality": "excellent",
+      "resolution": "3840x2160 (4K) or 1920x1080",
+      "priority": "critical",
+      "extraction_method": "ffmpeg -i input.mkv -vf fps=1/3 -q:v 1 frames/%05d.png",
+      "notes": "Subtitle-free audio track recommended. If hardsubbed, crop bottom 120px of 1080p frames."
+    },
+    {
+      "id": "src-002",
+      "name": "Akira (1988) - Blu-ray Frame Extraction",
+      "type": "video_extraction",
+      "url": null,
+      "source_format": "4K UHD Blu-ray / 1080p Blu-ray (personal copy)",
+      "description": "Frame extraction from the 1988 Katsuhiro Otomo film. Priority scenes: Neo-Tokyo cityscapes, motorcycle chase, Kaneda vs Tetsuo confrontations, SOL satellite, stadium sequences, Akira chamber.",
+      "estimated_yield": "200-400 usable frames",
+      "quality": "excellent",
+      "resolution": "3840x2160 (4K) or 1920x1080",
+      "priority": "critical",
+      "extraction_method": "ffmpeg -i input.mkv -vf fps=1/3 -q:v 1 frames/%05d.png",
+      "notes": "Akira's hand-drawn quality means nearly every frame is usable. Be selective to avoid over-representing action scenes."
+    },
+    {
+      "id": "src-003",
+      "name": "Ghost in the Shell: Stand Alone Complex - Blu-ray Frame Extraction",
+      "type": "video_extraction",
+      "url": null,
+      "source_format": "1080p Blu-ray (personal copy)",
+      "description": "Frame extraction from SAC Season 1 and 2nd GIG. Focus on city infrastructure, Tachikoma scenes, Section 9 operations, and holographic UI overlays.",
+      "estimated_yield": "300-600 usable frames across 52 episodes",
+      "quality": "very_good",
+      "resolution": "1920x1080",
+      "priority": "high",
+      "extraction_method": "ffmpeg -i input.mkv -vf fps=1/5 -q:v 1 frames/%05d.png",
+      "notes": "Lower extraction rate (1 frame per 5 seconds) since series has more dialogue scenes. Cherry-pick episodes with strong visual set pieces."
+    },
+    {
+      "id": "src-004",
+      "name": "Danbooru - Ghost in the Shell Official Art",
+      "type": "image_board",
+      "url": "https://danbooru.donmai.us/posts?tags=ghost_in_the_shell+official_art",
+      "source_format": "Mixed PNG/JPEG",
+      "description": "Official artwork, key visuals, and production art for the Ghost in the Shell franchise tagged on Danbooru.",
+      "estimated_yield": "30-80 images after quality filtering",
+      "quality": "variable - needs curation",
+      "resolution": "variable",
+      "priority": "medium",
+      "download_tool": "gallery-dl",
+      "download_command": "gallery-dl 'https://danbooru.donmai.us/posts?tags=ghost_in_the_shell+official_art+highres' --filter 'width >= 1024 and height >= 768'",
+      "notes": "Filter by highres tag. Manually review for quality. Exclude heavily JPEG-compressed images."
+    },
+    {
+      "id": "src-005",
+      "name": "Danbooru - Akira Official Art & Screencaps",
+      "type": "image_board",
+      "url": "https://danbooru.donmai.us/posts?tags=akira_%28manga%29+official_art",
+      "source_format": "Mixed PNG/JPEG",
+      "description": "Official Akira artwork, manga color pages, and key visuals. Also search with screencap tag for film stills.",
+      "estimated_yield": "20-50 images after filtering",
+      "quality": "variable - needs curation",
+      "resolution": "variable",
+      "priority": "medium",
+      "download_tool": "gallery-dl",
+      "download_command": "gallery-dl 'https://danbooru.donmai.us/posts?tags=akira_%28manga%29+highres' --filter 'width >= 1024 and height >= 768'",
+      "notes": "Akira manga color pages are excellent style references. Film screencaps may duplicate src-002."
+    },
+    {
+      "id": "src-006",
+      "name": "Danbooru - Cyberpunk Anime Cityscape",
+      "type": "image_board",
+      "url": "https://danbooru.donmai.us/posts?tags=cyberpunk+cityscape+no_humans+highres",
+      "source_format": "Mixed PNG/JPEG",
+      "description": "High-resolution cyberpunk cityscape images in anime style. Captures the environmental aesthetic without character-specific content.",
+      "estimated_yield": "40-100 images after filtering",
+      "quality": "variable",
+      "resolution": "variable, filtered to highres",
+      "priority": "medium",
+      "download_tool": "gallery-dl",
+      "download_command": "gallery-dl 'https://danbooru.donmai.us/posts?tags=cyberpunk+cityscape+highres+anime_style' --filter 'width >= 1024 and height >= 768'",
+      "notes": "Good for environment variety. Manually exclude images that don't match the target aesthetic."
+    },
+    {
+      "id": "src-007",
+      "name": "Safebooru - Cyberpunk Neon Aesthetic",
+      "type": "image_board",
+      "url": "https://safebooru.donmai.us/posts?tags=cyberpunk+neon_lights+night",
+      "source_format": "Mixed PNG/JPEG",
+      "description": "SFW-filtered cyberpunk images with neon lighting and night settings. Safe for training without content concerns.",
+      "estimated_yield": "30-60 images after filtering",
+      "quality": "variable",
+      "resolution": "variable",
+      "priority": "low",
+      "download_tool": "gallery-dl",
+      "download_command": "gallery-dl 'https://safebooru.donmai.us/posts?tags=cyberpunk+neon_lights+night+highres'",
+      "notes": "Supplementary source. Use to fill gaps in specific visual categories (e.g., more neon signage, rainy streets)."
+    },
+    {
+      "id": "src-008",
+      "name": "The Art of Ghost in the Shell (Art Book Scans)",
+      "type": "art_book",
+      "url": null,
+      "source_format": "High-DPI scans (300+ DPI), PNG",
+      "description": "Production background art by Hiromasa Ogura, character design sheets, color scripts, and layout drawings from the 1995 film.",
+      "estimated_yield": "20-40 images",
+      "quality": "excellent (if scanned properly)",
+      "resolution": "2000px+ per side at 300 DPI",
+      "priority": "high",
+      "notes": "Background art is especially valuable -- it captures the painterly cityscape style uniquely. Correct for page curvature near spine."
+    },
+    {
+      "id": "src-009",
+      "name": "Akira Club / Akira Animation Archives (Art Book)",
+      "type": "art_book",
+      "url": null,
+      "source_format": "High-DPI scans, PNG",
+      "description": "Otomo's original color illustrations, production backgrounds, key animation frames, and color reference sheets.",
+      "estimated_yield": "25-50 images",
+      "quality": "excellent",
+      "resolution": "2000px+ per side at 300 DPI",
+      "priority": "high",
+      "notes": "Otomo's color illustrations are the purest expression of the Akira style. Essential for the dataset."
+    },
+    {
+      "id": "src-010",
+      "name": "Psycho-Pass - Selective Frame Extraction",
+      "type": "video_extraction",
+      "url": null,
+      "source_format": "1080p Blu-ray (personal copy)",
+      "description": "Frame extraction from Psycho-Pass Season 1, focusing on Sybil System city environments, holographic UI, and dark urban scenes.",
+      "estimated_yield": "30-60 usable frames",
+      "quality": "very_good",
+      "resolution": "1920x1080",
+      "priority": "low",
+      "extraction_method": "ffmpeg - selective episode extraction",
+      "notes": "Supplementary source only. Episodes 1, 11, 16, 22 have the strongest cyberpunk city visuals."
+    },
+    {
+      "id": "src-011",
+      "name": "Bubblegum Crisis (1987 OVA) - Frame Extraction",
+      "type": "video_extraction",
+      "url": null,
+      "source_format": "DVD or Blu-ray remaster",
+      "description": "Classic 80s cyberpunk OVA. MegaTokyo cityscapes, Knight Sabers hardsuit designs, and Genom Tower environments.",
+      "estimated_yield": "30-50 usable frames",
+      "quality": "good (lower resolution source)",
+      "resolution": "720p-1080p depending on release",
+      "priority": "low",
+      "notes": "Valuable for capturing the specific 80s anime cyberpunk look that influenced both GitS and many later works. May need Real-ESRGAN upscale."
+    },
+    {
+      "id": "src-012",
+      "name": "Pixiv - Cyberpunk Anime Illustrations",
+      "type": "artist_platform",
+      "url": "https://www.pixiv.net/en/tags/cyberpunk%20anime/artworks?s_mode=s_tag",
+      "source_format": "PNG/JPEG",
+      "description": "Professional and semi-professional cyberpunk anime illustrations. Filter by bookmark count for quality.",
+      "estimated_yield": "15-30 images after strict curation",
+      "quality": "variable - needs heavy curation",
+      "resolution": "variable, often high",
+      "priority": "low",
+      "download_tool": "gallery-dl",
+      "download_command": "gallery-dl 'https://www.pixiv.net/en/tags/cyberpunk/artworks' --filter 'bookmark_count >= 200'",
+      "notes": "Only include images that match the GitS/Akira aesthetic. Exclude modern 'neon girl' style that looks more like Cyberpunk 2077 than classic anime."
+    }
+  ],
+  "excluded_sources": [
+    {
+      "name": "Low-quality streaming screenshots",
+      "reason": "Compression artifacts from streaming services produce training artifacts"
+    },
+    {
+      "name": "AI-generated cyberpunk anime images",
+      "reason": "Training on AI-generated images causes quality degradation and style drift"
+    },
+    {
+      "name": "Cyberpunk 2077 / Edgerunners content",
+      "reason": "Different visual style (more Western/digital painting). Would dilute the classic anime aesthetic."
+    },
+    {
+      "name": "Manga pages (black and white)",
+      "reason": "Style LoRA targets color aesthetic. B&W would confuse color learning."
+    }
+  ],
+  "dataset_composition_target": {
+    "film_series_screencaps": "60-70%",
+    "official_production_art": "15-20%",
+    "curated_image_board": "10-15%",
+    "professional_fan_art": "0-5%"
+  }
+}

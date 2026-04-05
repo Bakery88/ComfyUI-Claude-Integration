@@ -1,0 +1,14 @@
+{
+  "eval_name": "vintage-keyboards",
+  "config": "with_skill",
+  "expectations": [
+    {"text": "source_diversity", "passed": true, "evidence": "6 sources across gallery, community, marketplace, video types"},
+    {"text": "structured_source_list", "passed": true, "evidence": "sources.json contains url, type, tier, description, estimated_usable_images fields"},
+    {"text": "training_aligned_plan", "passed": true, "evidence": "Trigger word 'vintage_kb', object captioning mode, 1024px resolution, 25-30 images target, Florence-2 captioner"},
+    {"text": "caption_format", "passed": true, "evidence": "All captions follow 'vintage_kb, {description}' format (object mode, no 'style' keyword)"},
+    {"text": "actionable_handoff", "passed": true, "evidence": "Dataset plan ends with 'Say: Train a LoRA using the vintage-keyboards dataset' referencing lora-training skill"},
+    {"text": "source_tiering", "passed": true, "evidence": "Sources classified: Tier A (Deskthority, r/MK), Tier B (GeekHack, eBay, Flickr), Tier C (YouTube)"},
+    {"text": "gap_analysis", "passed": true, "evidence": "Identifies IBM Model M over-representation risk, angle bias toward top-down, and iteration plan: 'if any single brand >40%, loop back'"},
+    {"text": "caption_hygiene", "passed": true, "evidence": "Captions contain no style words (vintage, retro, aesthetic, old-school, classic). Hygiene rules explicitly listed in dataset plan."}
+  ]
+}

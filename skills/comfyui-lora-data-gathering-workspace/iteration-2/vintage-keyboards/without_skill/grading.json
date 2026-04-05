@@ -1,0 +1,14 @@
+{
+  "eval_name": "vintage-keyboards",
+  "config": "without_skill",
+  "expectations": [
+    {"text": "source_diversity", "passed": true, "evidence": "4 sources across gallery, community, marketplace types"},
+    {"text": "structured_source_list", "passed": true, "evidence": "sources.json has url, type, description, estimated_usable_images"},
+    {"text": "training_aligned_plan", "passed": false, "evidence": "Trigger word 'vintage_keyboard' (too long, contains common English word). No explicit captioning mode specified — just 'Natural language captions'."},
+    {"text": "caption_format", "passed": true, "evidence": "Captions use 'vintage_keyboard, {description}' — correct object-mode format (trigger + comma + description). Happens to match by coincidence."},
+    {"text": "actionable_handoff", "passed": true, "evidence": "Training parameters section present with reasonable values"},
+    {"text": "source_tiering", "passed": false, "evidence": "No tier classification. Sources listed flat without quality/priority ranking."},
+    {"text": "gap_analysis", "passed": false, "evidence": "No gap analysis, bias check, or iteration strategy. No mention of model diversity or angle variety."},
+    {"text": "caption_hygiene", "passed": false, "evidence": "Captions contain 'retro' (x2), 'vintage' (x1 in description context), 'aesthetic retro look', 'old-school' — style-describing words that should be stripped."}
+  ]
+}

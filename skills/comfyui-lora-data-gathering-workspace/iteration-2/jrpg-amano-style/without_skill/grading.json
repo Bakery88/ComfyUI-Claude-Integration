@@ -1,0 +1,14 @@
+{
+  "eval_name": "jrpg-amano-style",
+  "config": "without_skill",
+  "expectations": [
+    {"text": "source_diversity", "passed": true, "evidence": "4 sources across gallery, community types"},
+    {"text": "structured_source_list", "passed": true, "evidence": "sources.json has url, type, description, estimated_usable_images"},
+    {"text": "training_aligned_plan", "passed": false, "evidence": "Trigger word uses underscore 'amano_style' (OK but suboptimal). No explicit captioning mode specified — just says 'Natural language captions'. Missing style-mode format."},
+    {"text": "caption_format", "passed": false, "evidence": "Captions use 'amano_style, a watercolor painting of...' — missing 'style' keyword after trigger. Also includes style-describing words."},
+    {"text": "actionable_handoff", "passed": true, "evidence": "Training parameters section present but no explicit reference to lora-training skill or handoff instruction"},
+    {"text": "source_tiering", "passed": false, "evidence": "No tier classification. Sources listed flat without quality/priority ranking."},
+    {"text": "gap_analysis", "passed": false, "evidence": "No gap analysis, bias check, or iteration strategy. No diversity checklist."},
+    {"text": "caption_hygiene", "passed": false, "evidence": "Captions contain 'watercolor painting' (x3), 'illustration' (x2), 'painted', 'art nouveau style', 'masterpiece quality' — all style-describing words that should be stripped."}
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "eval_name": "cyberpunk-anime",
+  "config": "with_skill",
+  "expectations": [
+    {"text": "source_diversity", "passed": true, "evidence": "6 sources across article, gallery, archive, community, video types"},
+    {"text": "structured_source_list", "passed": true, "evidence": "sources.json contains url, type, tier, description, estimated_usable_images fields"},
+    {"text": "training_aligned_plan", "passed": true, "evidence": "Trigger word 'cpanime90s', style captioning mode, 1024px SDXL resolution, 25-30 images, WD14/Florence-2 captioner"},
+    {"text": "caption_format", "passed": true, "evidence": "All captions follow 'cpanime90s style, {description}' format"},
+    {"text": "actionable_handoff", "passed": true, "evidence": "Dataset plan ends with 'Say: Train a LoRA using the cyberpunk-anime dataset' referencing lora-training skill"},
+    {"text": "source_tiering", "passed": true, "evidence": "Sources classified: Tier A (Halcyon Realms, settei archives), Tier B (Safebooru, ArtStation, DeviantArt), Tier C (YouTube)"},
+    {"text": "gap_analysis", "passed": true, "evidence": "Identifies character vs background bias, style drift risk from modern digital art, night-scene bias. Iteration plan: 'check background vs character ratio — aim for 40% backgrounds; night vs day — 15% non-night'"},
+    {"text": "caption_hygiene", "passed": true, "evidence": "Captions contain no style words (anime, cyberpunk, cel-shaded, hand-painted, neon-lit, retro anime). Hygiene rules explicitly listed."}
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "skill_name": "comfyui-lora-data-gathering",
+  "iteration": 2,
+  "configurations": [
+    {
+      "name": "with_skill",
+      "label": "With Skill (v2)",
+      "evals": [
+        {
+          "eval_name": "jrpg-amano-style",
+          "pass_rate": 1.0,
+          "passed": 8,
+          "total": 8,
+          "assertions": [
+            {"text": "source_diversity", "passed": true},
+            {"text": "structured_source_list", "passed": true},
+            {"text": "training_aligned_plan", "passed": true},
+            {"text": "caption_format", "passed": true},
+            {"text": "actionable_handoff", "passed": true},
+            {"text": "source_tiering", "passed": true},
+            {"text": "gap_analysis", "passed": true},
+            {"text": "caption_hygiene", "passed": true}
+          ]
+        },
+        {
+          "eval_name": "vintage-keyboards",
+          "pass_rate": 1.0,
+          "passed": 8,
+          "total": 8,
+          "assertions": [
+            {"text": "source_diversity", "passed": true},
+            {"text": "structured_source_list", "passed": true},
+            {"text": "training_aligned_plan", "passed": true},
+            {"text": "caption_format", "passed": true},
+            {"text": "actionable_handoff", "passed": true},
+            {"text": "source_tiering", "passed": true},
+            {"text": "gap_analysis", "passed": true},
+            {"text": "caption_hygiene", "passed": true}
+          ]
+        },
+        {
+          "eval_name": "cyberpunk-anime",
+          "pass_rate": 1.0,
+          "passed": 8,
+          "total": 8,
+          "assertions": [
+            {"text": "source_diversity", "passed": true},
+            {"text": "structured_source_list", "passed": true},
+            {"text": "training_aligned_plan", "passed": true},
+            {"text": "caption_format", "passed": true},
+            {"text": "actionable_handoff", "passed": true},
+            {"text": "source_tiering", "passed": true},
+            {"text": "gap_analysis", "passed": true},
+            {"text": "caption_hygiene", "passed": true}
+          ]
+        }
+      ],
+      "aggregate": {
+        "mean_pass_rate": 1.0,
+        "stddev_pass_rate": 0.0,
+        "total_passed": 24,
+        "total_assertions": 24
+      }
+    },
+    {
+      "name": "without_skill",
+      "label": "Without Skill (Baseline)",
+      "evals": [
+        {
+          "eval_name": "jrpg-amano-style",
+          "pass_rate": 0.375,
+          "passed": 3,
+          "total": 8,
+          "assertions": [
+            {"text": "source_diversity", "passed": true},
+            {"text": "structured_source_list", "passed": true},
+            {"text": "training_aligned_plan", "passed": false},
+            {"text": "caption_format", "passed": false},
+            {"text": "actionable_handoff", "passed": true},
+            {"text": "source_tiering", "passed": false},
+            {"text": "gap_analysis", "passed": false},
+            {"text": "caption_hygiene", "passed": false}
+          ]
+        },
+        {
+          "eval_name": "vintage-keyboards",
+          "pass_rate": 0.5,
+          "passed": 4,
+          "total": 8,
+          "assertions": [
+            {"text": "source_diversity", "passed": true},
+            {"text": "structured_source_list", "passed": true},
+            {"text": "training_aligned_plan", "passed": false},
+            {"text": "caption_format", "passed": true},
+            {"text": "actionable_handoff", "passed": true},
+            {"text": "source_tiering", "passed": false},
+            {"text": "gap_analysis", "passed": false},
+            {"text": "caption_hygiene", "passed": false}
+          ]
+        },
+        {
+          "eval_name": "cyberpunk-anime",
+          "pass_rate": 0.375,
+          "passed": 3,
+          "total": 8,
+          "assertions": [
+            {"text": "source_diversity", "passed": true},
+            {"text": "structured_source_list", "passed": true},
+            {"text": "training_aligned_plan", "passed": false},
+            {"text": "caption_format", "passed": false},
+            {"text": "actionable_handoff", "passed": true},
+            {"text": "source_tiering", "passed": false},
+            {"text": "gap_analysis", "passed": false},
+            {"text": "caption_hygiene", "passed": false}
+          ]
+        }
+      ],
+      "aggregate": {
+        "mean_pass_rate": 0.417,
+        "stddev_pass_rate": 0.059,
+        "total_passed": 10,
+        "total_assertions": 24
+      }
+    }
+  ],
+  "delta": {
+    "pass_rate_improvement": 0.583,
+    "description": "Skill improves pass rate from 42% to 100%. The 3 new assertions (source_tiering, gap_analysis, caption_hygiene) are fully discriminating — baseline passes 0/9 across all evals. Original 5 assertions show same pattern as iteration 1."
+  },
+  "analyst_notes": [
+    "source_diversity, structured_source_list, and actionable_handoff remain non-discriminating — baseline passes all 3 across all evals",
+    "training_aligned_plan and caption_format remain discriminating from iteration 1 — baseline fails these due to missing style-mode format and suboptimal trigger words",
+    "NEW: source_tiering fails 3/3 baselines — without the skill, sources are listed flat with no quality/priority ranking",
+    "NEW: gap_analysis fails 3/3 baselines — this is the strongest discriminator; no baseline considers dataset bias, gaps, or iteration strategy",
+    "NEW: caption_hygiene fails 3/3 baselines — baselines consistently include style-describing words (watercolor, retro, neon-lit) that would weaken LoRA training",
+    "The 3 new assertions test genuinely useful behaviors that improve real-world LoRA training outcomes, not just formatting compliance",
+    "Compared to iteration 1: with_skill maintains 100% (now on 8 assertions vs 5), baseline drops from 67% to 42% due to harder assertion set"
+  ]
+}

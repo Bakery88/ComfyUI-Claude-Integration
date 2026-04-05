@@ -1,0 +1,28 @@
+{
+  "sources": [
+    {
+      "url": "https://deskthority.net/wiki/Category:Keyboard_photos",
+      "type": "gallery",
+      "description": "Deskthority keyboard photo archive",
+      "estimated_usable_images": 30
+    },
+    {
+      "url": "https://www.reddit.com/r/MechanicalKeyboards/search/?q=vintage",
+      "type": "community",
+      "description": "Reddit vintage keyboard posts",
+      "estimated_usable_images": 20
+    },
+    {
+      "url": "https://www.ebay.com/sch/i.html?_nkw=vintage+mechanical+keyboard",
+      "type": "marketplace",
+      "description": "eBay vintage keyboard listings",
+      "estimated_usable_images": 15
+    },
+    {
+      "url": "https://www.pinterest.com/search/pins/?q=vintage%20mechanical%20keyboard",
+      "type": "community",
+      "description": "Pinterest vintage keyboard boards",
+      "estimated_usable_images": 20
+    }
+  ]
+}

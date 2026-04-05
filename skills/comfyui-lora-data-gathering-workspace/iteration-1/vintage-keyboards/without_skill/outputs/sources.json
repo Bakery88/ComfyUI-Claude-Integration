@@ -1,0 +1,28 @@
+{
+  "sources": [
+    {
+      "url": "https://reddit.com/r/MechanicalKeyboards",
+      "type": "community",
+      "description": "Keyboard enthusiast subreddit",
+      "estimated_usable_images": 50
+    },
+    {
+      "url": "https://deskthority.net",
+      "type": "wiki",
+      "description": "Vintage keyboard wiki and forum",
+      "estimated_usable_images": 40
+    },
+    {
+      "url": "https://www.ebay.com/b/IBM-Vintage-Computer-Keyboards/175690",
+      "type": "marketplace",
+      "description": "eBay vintage keyboard listings",
+      "estimated_usable_images": 100
+    },
+    {
+      "url": "https://www.clickykeyboards.com",
+      "type": "gallery",
+      "description": "Restored vintage keyboards",
+      "estimated_usable_images": 30
+    }
+  ]
+}

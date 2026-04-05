@@ -1,0 +1,32 @@
+{
+  "eval_id": 2,
+  "eval_name": "vintage-keyboards",
+  "prompt": "I need to collect training images for a LoRA of vintage mechanical keyboards. I want it to learn the retro aesthetic with beige cases and colorful keycaps",
+  "assertions": [
+    {
+      "name": "source_diversity",
+      "description": "Output identifies at least 3 different source types (e.g., enthusiast forums, product galleries, review sites, YouTube)",
+      "check": "Count distinct source types in sources.json or research-report.md"
+    },
+    {
+      "name": "structured_source_list",
+      "description": "sources.json exists with url, type, description fields for each source",
+      "check": "Validate JSON structure has required fields"
+    },
+    {
+      "name": "training_aligned_plan",
+      "description": "dataset-plan.md specifies trigger word, captioning mode (object), target resolution (1024 for SDXL), and image count (20-30 range)",
+      "check": "Check for presence of all four parameters with correct values"
+    },
+    {
+      "name": "caption_format",
+      "description": "Sample captions follow object-mode format: '{trigger}, {description}'",
+      "check": "Verify sample-captions.md uses correct prefix pattern"
+    },
+    {
+      "name": "actionable_handoff",
+      "description": "Output explains how to proceed to training (mentions lora-training skill or training next steps)",
+      "check": "Search for training handoff instructions in any output file"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "expectations": [
+    {"text": "source_diversity", "passed": true, "evidence": "Found 3 distinct types in sources.json: gallery, wiki, archive"},
+    {"text": "structured_source_list", "passed": true, "evidence": "4 entries, all have url, type, and description fields (also has extra fields quality and priority, but required fields present)"},
+    {"text": "training_aligned_plan", "passed": false, "evidence": "Trigger word: amano_style, resolution: 1024x1024 (correct). However, target image count is 200-330 (far exceeds 20-35 range) and captioning mode is not explicitly specified as 'style'"},
+    {"text": "caption_format", "passed": false, "evidence": "Captions use format 'amano_style, {description}' but missing 'style' keyword — should be '{trigger} style, {description}' for style mode"},
+    {"text": "actionable_handoff", "passed": true, "evidence": "dataset-plan.md includes Training Parameters section (LR 1e-4, steps 1500-3000, rank 16-32) and Quality Validation section with next steps"}
+  ]
+}

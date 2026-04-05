@@ -1,0 +1,66 @@
+{
+  "eval_name": "jrpg-amano-style",
+  "configuration": "without_skill",
+  "expectations": [
+    {
+      "text": "source_diversity",
+      "passed": true,
+      "evidence": "Research report identifies 4+ source types: art books (Tier 1), digital/exhibition/web sources (Tier 2), game-adjacent digital releases (Tier 3), and video sources (Tier 4). sources.json includes art_book, web_archive, web_gallery, press_kit, digital_release, illustrated_book, and video types."
+    },
+    {
+      "text": "source_tiering",
+      "passed": false,
+      "evidence": "Sources use 'Tier 1/2/3/4' labels and numeric 'priority' fields (1-4) in sources.json, but do NOT use the required A/B/C tier labels. No mention of A, B, or C tier classification anywhere in the outputs."
+    },
+    {
+      "text": "structured_source_list",
+      "passed": true,
+      "evidence": "sources.json contains 13 source entries each with url (or description), type, and description/notes fields. Example: src-007 has url 'https://finalfantasy.fandom.com/wiki/Category:Yoshitaka_Amano_artwork', type 'web_archive', and notes describing content."
+    },
+    {
+      "text": "download_commands",
+      "passed": false,
+      "evidence": "Dataset plan uses gallery-dl commands and generic wget-style approaches. No reference to the specific 'download_images.py' script with --urls-file, --output-dir, --min-resolution flags."
+    },
+    {
+      "text": "curation_guidance",
+      "passed": false,
+      "evidence": "Dataset plan provides detailed accept/reject criteria in Phase 2 with checkboxes and directory structure (accept/reject/maybe). However, there is no mention of 'keep.txt' anywhere in the outputs."
+    },
+    {
+      "text": "processing_commands",
+      "passed": false,
+      "evidence": "Dataset plan uses ImageMagick 'convert' commands for resizing and processing. No reference to the specific 'prepare_dataset.py' script with --target-resolution 1024 and --crop-mode smart flags."
+    },
+    {
+      "text": "captioning_commands",
+      "passed": false,
+      "evidence": "Dataset plan uses 'caption_with_blip2.py' and 'tag_images_by_wd14_tagger.py' for captioning. No reference to the specific 'auto_caption.py' script with --trigger-word, --mode, --captioner flags."
+    },
+    {
+      "text": "caption_hygiene",
+      "passed": false,
+      "evidence": "Multiple sample captions contain style-describing words. Caption 1: 'watercolor and ink illustration'. Caption 4: 'ethereal watercolor landscape'. Caption 5: 'dark fantasy watercolor and ink illustration'. Caption 6: 'abstract watercolor composition...decorative illustration'. The word 'illustration' appears in nearly every caption."
+    },
+    {
+      "text": "caption_format",
+      "passed": false,
+      "evidence": "Captions use format '{trigger}, watercolor and ink illustration of...' or '{trigger}, ink and watercolor portrait of...'. They do NOT use the required '{trigger} style, {description}' format. The word 'style' does not follow the trigger token."
+    },
+    {
+      "text": "dataset_report",
+      "passed": true,
+      "evidence": "Dataset plan includes a validation script (Phase 5C) that produces a report with total image count, min dimensions (resolution stats), and caption coverage (with_caption count). The research report also includes estimated dataset sizes (80-100 min, 150-250 target)."
+    },
+    {
+      "text": "training_handoff",
+      "passed": true,
+      "evidence": "Dataset plan Phase 6 provides detailed training configuration for both kohya_ss (SDXL) and ai-toolkit (FLUX), including specific training parameters (learning rate, network dim, batch size, etc.). The pipeline checklist ends with 'Post-training: Test with prompts, iterate on dataset/captions if results are off.'"
+    },
+    {
+      "text": "gap_analysis",
+      "passed": true,
+      "evidence": "Dataset plan Phase 2D includes a 'Dataset Balance Check' table with target percentages for 6 categories (single character portraits 30-40%, full-body 20-30%, etc.) and states: 'If any category is severely underrepresented, go back to acquisition and target that gap.' Research report also notes video extraction as low priority and identifies potential resolution gaps."
+    }
+  ]
+}

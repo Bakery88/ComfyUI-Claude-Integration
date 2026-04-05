@@ -1,0 +1,211 @@
+{
+  "meta": {
+    "subject": "Yoshitaka Amano JRPG Watercolor Style",
+    "purpose": "LoRA training data gathering",
+    "created": "2026-04-05",
+    "target_style_period": "1987-2000 (Classic FF / Peak Watercolor)",
+    "target_image_count": "150-250 curated images",
+    "minimum_resolution": "768px shortest edge",
+    "ideal_resolution": "1024px+ shortest edge"
+  },
+  "sources": [
+    {
+      "id": "src-001",
+      "name": "The Sky: The Art of Final Fantasy (3 Volumes)",
+      "type": "art_book",
+      "publisher": "Dark Horse Comics",
+      "url": "https://www.darkhorse.com/Books/23-702/The-Sky-The-Art-of-Final-Fantasy-Boxed-Set",
+      "acquisition_method": "purchase_physical_and_scan",
+      "estimated_images": 500,
+      "usable_for_target_style": 350,
+      "resolution_quality": "high",
+      "priority": 1,
+      "notes": "Single most comprehensive source. Covers FF I through X. Large format pages yield high-res scans. Focus on FF I-VI sections for classic watercolor style.",
+      "covers_games": ["FF1", "FF2", "FF3", "FF4", "FF5", "FF6", "FF7", "FF8", "FF9", "FF10"],
+      "cost_estimate": "$80-150 used"
+    },
+    {
+      "id": "src-002",
+      "name": "Dawn: The Worlds of Final Fantasy",
+      "type": "art_book",
+      "publisher": "Dark Horse Comics",
+      "url": "https://www.darkhorse.com/Books/16-439/Dawn-The-Worlds-of-Final-Fantasy",
+      "acquisition_method": "purchase_physical_and_scan",
+      "estimated_images": 200,
+      "usable_for_target_style": 150,
+      "resolution_quality": "high",
+      "priority": 1,
+      "notes": "Character-focused companion to The Sky. Excellent for individual character studies in the classic watercolor style.",
+      "cost_estimate": "$30-60 used"
+    },
+    {
+      "id": "src-003",
+      "name": "Yoshitaka Amano: The Illustrated Biography - Beyond the Fantasy",
+      "type": "art_book",
+      "publisher": "Dark Horse Comics",
+      "url": "https://www.darkhorse.com/Books/30-368/Yoshitaka-Amano-The-Illustrated-Biography-Beyond-the-Fantasy",
+      "acquisition_method": "purchase_physical_and_scan",
+      "estimated_images": 300,
+      "usable_for_target_style": 120,
+      "resolution_quality": "high",
+      "priority": 2,
+      "notes": "Covers full career so not all images are in target style. Filter for watercolor+ink works from the FF era. Good for supplementary images."
+    },
+    {
+      "id": "src-004",
+      "name": "Amano: The Complete Prints",
+      "type": "art_book",
+      "publisher": "Dark Horse Comics / various",
+      "acquisition_method": "purchase_physical_and_scan",
+      "estimated_images": 150,
+      "usable_for_target_style": 80,
+      "resolution_quality": "very_high",
+      "priority": 2,
+      "notes": "Print reproductions tend to have excellent color accuracy and detail. High-quality source for the images that overlap with FF period."
+    },
+    {
+      "id": "src-005",
+      "name": "Vampire Hunter D Novel Cover Art",
+      "type": "art_book_and_covers",
+      "description": "Cover illustrations for Hideyuki Kikuchi's Vampire Hunter D novel series",
+      "acquisition_method": "purchase_physical_and_scan",
+      "estimated_images": 40,
+      "usable_for_target_style": 35,
+      "resolution_quality": "high",
+      "priority": 2,
+      "notes": "Same period and technique as FF art. Dark fantasy subject matter adds variety. Features the same ethereal watercolor + ink approach. Published by Dark Horse / Asahi Sonorama."
+    },
+    {
+      "id": "src-006",
+      "name": "The Sandman: The Dream Hunters",
+      "type": "illustrated_book",
+      "publisher": "DC Comics / Vertigo",
+      "url": "https://www.dc.com/graphic-novels/the-sandman-the-dream-hunters",
+      "acquisition_method": "purchase_physical_and_scan",
+      "estimated_images": 40,
+      "usable_for_target_style": 30,
+      "resolution_quality": "high",
+      "priority": 3,
+      "notes": "Neil Gaiman collaboration. Gorgeous full-page watercolor illustrations. Slightly different subject matter (Japanese folklore) but unmistakably Amano's watercolor style."
+    },
+    {
+      "id": "src-007",
+      "name": "Final Fantasy Fandom Wiki - Official Art Galleries",
+      "type": "web_archive",
+      "url": "https://finalfantasy.fandom.com/wiki/Category:Yoshitaka_Amano_artwork",
+      "acquisition_method": "web_scrape",
+      "estimated_images": 300,
+      "usable_for_target_style": 150,
+      "resolution_quality": "medium_to_high",
+      "priority": 1,
+      "notes": "Freely accessible. Resolution varies but many images are 1000px+. Good starting point before investing in art books. Check individual image pages for highest resolution versions. Use gallery-dl or similar tool for batch download.",
+      "scraping_tool": "gallery-dl",
+      "scraping_command": "gallery-dl 'https://finalfantasy.fandom.com/wiki/Category:Yoshitaka_Amano_artwork'"
+    },
+    {
+      "id": "src-008",
+      "name": "Official Amano Website Gallery",
+      "type": "web_gallery",
+      "url": "https://www.amanoyoshitaka.com/",
+      "acquisition_method": "manual_download",
+      "estimated_images": 50,
+      "usable_for_target_style": 20,
+      "resolution_quality": "medium",
+      "priority": 3,
+      "notes": "Official gallery tends toward newer, more abstract work. Limited classic FF art. Web resolution only. Still worth checking for unique pieces."
+    },
+    {
+      "id": "src-009",
+      "name": "Square Enix Official Press Assets",
+      "type": "press_kit",
+      "url": "https://press.na.square-enix.com/",
+      "acquisition_method": "press_portal_download",
+      "estimated_images": 30,
+      "usable_for_target_style": 20,
+      "resolution_quality": "very_high",
+      "priority": 2,
+      "notes": "Press kits for FF Pixel Remasters, anniversaries, etc. often include high-res Amano art. Some may require press credentials. Check Archive.org for cached press kits."
+    },
+    {
+      "id": "src-010",
+      "name": "Final Fantasy Pixel Remaster Promotional Art",
+      "type": "digital_release",
+      "description": "New Amano illustrations created for the 2021-2023 Pixel Remaster series",
+      "acquisition_method": "web_download_or_screenshot",
+      "estimated_images": 15,
+      "usable_for_target_style": 12,
+      "resolution_quality": "high",
+      "priority": 2,
+      "notes": "Modern Amano art deliberately recalling his classic FF style. Released digitally so clean, no scan artifacts. Available via press kits and official social media."
+    },
+    {
+      "id": "src-011",
+      "name": "Archive.org - Scanned Art Books",
+      "type": "web_archive",
+      "url": "https://archive.org/search?query=yoshitaka+amano",
+      "acquisition_method": "web_download",
+      "estimated_images": "variable",
+      "usable_for_target_style": "variable",
+      "resolution_quality": "variable",
+      "priority": 3,
+      "notes": "Some art books have been digitized and uploaded. Quality and availability varies. Check for CDL (Controlled Digital Lending) copies of The Sky or Dawn."
+    },
+    {
+      "id": "src-012",
+      "name": "Art Station / Portfolio Sites",
+      "type": "web_gallery",
+      "url": "https://www.artstation.com/search?q=amano%20final%20fantasy%20official",
+      "acquisition_method": "manual_review",
+      "estimated_images": 20,
+      "usable_for_target_style": 5,
+      "resolution_quality": "variable",
+      "priority": 4,
+      "notes": "WARNING: Most results will be fan art, not official Amano work. Must carefully verify authenticity. Only use confirmed official art. Useful for finding high-res reproductions shared by collectors."
+    },
+    {
+      "id": "src-013",
+      "name": "Video: Exhibition Walkthroughs and Art Showcases",
+      "type": "video",
+      "description": "YouTube videos of Amano exhibitions, Square Enix art retrospectives, and art book flip-throughs",
+      "acquisition_method": "frame_extraction",
+      "estimated_images": 50,
+      "usable_for_target_style": 15,
+      "resolution_quality": "low_to_medium",
+      "priority": 4,
+      "notes": "LOW PRIORITY. Video frames suffer from camera angles, reflections, motion blur, and compression. Only use if unable to meet minimum image count from static sources. Extract with ffmpeg at key frames only.",
+      "extraction_command": "ffmpeg -i input.mp4 -vf 'select=eq(pict_type\\,I)' -vsync vfr frame_%04d.png"
+    }
+  ],
+  "acquisition_priority_order": [
+    "src-007 (FF Wiki - free, immediate access, good starting point)",
+    "src-001 (The Sky - most comprehensive, requires purchase + scanning)",
+    "src-002 (Dawn - excellent character art, requires purchase + scanning)",
+    "src-010 (Pixel Remaster art - free, digital, high quality)",
+    "src-009 (Square Enix press - free if accessible, very high quality)",
+    "src-005 (Vampire Hunter D - good variety, requires purchase)",
+    "src-003 (Biography - supplementary, requires purchase)",
+    "src-004 (Complete Prints - supplementary, requires purchase)",
+    "src-006 (Sandman - supplementary, requires purchase)",
+    "src-011 (Archive.org - free, variable quality)",
+    "src-008 (Official website - free, limited selection)",
+    "src-012 (ArtStation - free, requires careful vetting)",
+    "src-013 (Video extraction - last resort only)"
+  ],
+  "budget_tiers": {
+    "free_only": {
+      "sources": ["src-007", "src-008", "src-010", "src-011", "src-012"],
+      "estimated_usable_images": "80-150",
+      "viability": "Minimum viable dataset achievable"
+    },
+    "moderate_budget_50_100": {
+      "sources": ["src-007", "src-008", "src-010", "src-011", "src-002"],
+      "estimated_usable_images": "150-250",
+      "viability": "Good dataset, solid LoRA training"
+    },
+    "full_budget_150_plus": {
+      "sources": ["src-001", "src-002", "src-003", "src-005", "src-007", "src-010"],
+      "estimated_usable_images": "300-500 raw, 200-300 after curation",
+      "viability": "Excellent dataset with good variety"
+    }
+  }
+}

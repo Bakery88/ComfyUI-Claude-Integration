@@ -1,0 +1,172 @@
+{
+  "concept": "vintage_mechanical_keyboards_beige_colorful",
+  "description": "Vintage mechanical keyboards with beige cases and colorful keycaps, 1980s-1990s retro computing aesthetic",
+  "target_count": "80-150 images",
+  "sources": [
+    {
+      "id": "reddit-mk",
+      "name": "r/MechanicalKeyboards",
+      "url": "https://www.reddit.com/r/MechanicalKeyboards/",
+      "type": "community_forum",
+      "search_queries": [
+        "vintage flair:Photos",
+        "beige keyboard",
+        "retro keycaps",
+        "IBM Model M",
+        "GMK Retro",
+        "SA Retro"
+      ],
+      "estimated_yield": "200-500 relevant images",
+      "quality": "high",
+      "download_method": "gallery-dl or reddit API with praw",
+      "notes": "Filter by upvotes (>50) for quality. Use flair:Photos or flair:Vintage."
+    },
+    {
+      "id": "reddit-vintage",
+      "name": "r/VintageComputing",
+      "url": "https://www.reddit.com/r/VintageComputing/",
+      "type": "community_forum",
+      "search_queries": [
+        "keyboard",
+        "IBM keyboard",
+        "terminal keyboard",
+        "restored keyboard"
+      ],
+      "estimated_yield": "50-100 relevant images",
+      "quality": "medium-high",
+      "download_method": "gallery-dl or reddit API",
+      "notes": "Broader subreddit; many posts feature full computer setups. Filter for keyboard-focused shots."
+    },
+    {
+      "id": "deskthority-wiki",
+      "name": "Deskthority Wiki",
+      "url": "https://deskthority.net/wiki/",
+      "type": "wiki_reference",
+      "search_queries": [
+        "Category:Keyboards by manufacturer",
+        "Cherry G80",
+        "IBM Model M",
+        "Alps keyboard"
+      ],
+      "estimated_yield": "300-500 reference images",
+      "quality": "very_high",
+      "download_method": "wget with URL list or gallery-dl",
+      "license": "CC-BY-SA",
+      "notes": "Standardized photography, clean backgrounds. Best single reference source for variety of vintage models."
+    },
+    {
+      "id": "geekhack",
+      "name": "GeekHack Forums",
+      "url": "https://geekhack.org/",
+      "type": "community_forum",
+      "search_queries": [
+        "vintage keyboards",
+        "beige keyboard collection",
+        "retro keycap set"
+      ],
+      "estimated_yield": "100-200 relevant images",
+      "quality": "high",
+      "download_method": "manual curation or scraping with gallery-dl",
+      "notes": "Interest Check threads for retro keycap sets contain excellent renders and group photos."
+    },
+    {
+      "id": "flickr-vintage",
+      "name": "Flickr Vintage Keyboard Groups",
+      "url": "https://www.flickr.com/search/?text=vintage+mechanical+keyboard",
+      "type": "photo_sharing",
+      "search_queries": [
+        "vintage mechanical keyboard",
+        "retro computer keyboard",
+        "IBM Model M keyboard",
+        "beige keyboard"
+      ],
+      "estimated_yield": "100-300 images",
+      "quality": "high",
+      "download_method": "gallery-dl with Creative Commons license filter",
+      "license": "varies_per_image",
+      "notes": "Filter for CC-licensed images. Flickr photographers tend to produce higher-quality, well-lit shots."
+    },
+    {
+      "id": "clickykeyboards",
+      "name": "ClickyKeyboards.com",
+      "url": "https://www.clickykeyboards.com/",
+      "type": "product_reference",
+      "search_queries": [],
+      "estimated_yield": "50-100 images",
+      "quality": "very_high",
+      "download_method": "wget or manual download",
+      "notes": "IBM Model M specialist. Very consistent lighting and backgrounds. Excellent for the 'battleship beige' aesthetic."
+    },
+    {
+      "id": "ebay-vintage",
+      "name": "eBay Vintage Keyboard Listings",
+      "url": "https://www.ebay.com/sch/i.html?_nkw=vintage+mechanical+keyboard",
+      "type": "marketplace",
+      "search_queries": [
+        "vintage mechanical keyboard",
+        "IBM Model M keyboard",
+        "Cherry G80 keyboard vintage",
+        "Alps keyboard vintage beige"
+      ],
+      "estimated_yield": "500+ images (needs heavy curation)",
+      "quality": "medium",
+      "download_method": "gallery-dl or manual curation",
+      "notes": "High volume but inconsistent quality. Good for variety of models. Filter out listings with poor lighting or cluttered backgrounds."
+    },
+    {
+      "id": "youtube-chyrosran22",
+      "name": "Chyrosran22 YouTube Channel",
+      "url": "https://www.youtube.com/@Chyrosran22",
+      "type": "video",
+      "search_queries": [
+        "vintage keyboard review",
+        "retro keyboard"
+      ],
+      "estimated_yield": "500+ frames from 50+ relevant videos",
+      "quality": "high",
+      "download_method": "yt-dlp + ffmpeg frame extraction",
+      "notes": "Best single video source for vintage keyboards. Extract keyframes at interesting moments (close-ups, full board shots). Typically 1080p."
+    },
+    {
+      "id": "youtube-lgr",
+      "name": "LGR / Lazy Game Reviews YouTube",
+      "url": "https://www.youtube.com/@LGR",
+      "type": "video",
+      "search_queries": [
+        "keyboard",
+        "vintage computer setup",
+        "retro desk"
+      ],
+      "estimated_yield": "100-200 frames from 20+ relevant videos",
+      "quality": "high",
+      "download_method": "yt-dlp + ffmpeg frame extraction",
+      "notes": "Excellent environmental context shots. Period-accurate desk setups with CRT monitors and vintage peripherals."
+    },
+    {
+      "id": "youtube-8bitguy",
+      "name": "The 8-Bit Guy YouTube",
+      "url": "https://www.youtube.com/@The8BitGuy",
+      "type": "video",
+      "search_queries": [
+        "keyboard restoration",
+        "retrobright",
+        "vintage computer"
+      ],
+      "estimated_yield": "50-100 frames from 10+ relevant videos",
+      "quality": "medium-high",
+      "download_method": "yt-dlp + ffmpeg frame extraction",
+      "notes": "Restoration content showing before/after of yellowed keyboards. Good for the 'aged' variant of the aesthetic."
+    }
+  ],
+  "download_tools": {
+    "primary": "gallery-dl",
+    "video": "yt-dlp + ffmpeg",
+    "fallback": "wget with URL lists",
+    "reddit_specific": "praw (Python Reddit API Wrapper)"
+  },
+  "metadata": {
+    "created": "2026-04-05",
+    "web_search_available": false,
+    "note": "Sources identified from domain knowledge. Verify availability before executing download pipeline."
+  }
+}

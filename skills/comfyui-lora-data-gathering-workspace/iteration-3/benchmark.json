@@ -1,0 +1,179 @@
+{
+  "skill_name": "comfyui-lora-data-gathering",
+  "iteration": 3,
+  "configurations": [
+    {
+      "name": "with_skill",
+      "label": "With Skill (v3 — progressive disclosure refactor)",
+      "evals": [
+        {
+          "eval_name": "jrpg-amano-style",
+          "pass_rate": 1.0,
+          "passed": 12,
+          "total": 12,
+          "tokens": 41195,
+          "duration_seconds": 332.0,
+          "assertions": [
+            {"text": "source_diversity", "passed": true},
+            {"text": "source_tiering", "passed": true},
+            {"text": "structured_source_list", "passed": true},
+            {"text": "download_commands", "passed": true},
+            {"text": "curation_guidance", "passed": true},
+            {"text": "processing_commands", "passed": true},
+            {"text": "captioning_commands", "passed": true},
+            {"text": "caption_hygiene", "passed": true},
+            {"text": "caption_format", "passed": true},
+            {"text": "dataset_report", "passed": true},
+            {"text": "training_handoff", "passed": true},
+            {"text": "gap_analysis", "passed": true}
+          ]
+        },
+        {
+          "eval_name": "vintage-keyboards",
+          "pass_rate": 1.0,
+          "passed": 12,
+          "total": 12,
+          "tokens": 38982,
+          "duration_seconds": 318.4,
+          "assertions": [
+            {"text": "source_diversity", "passed": true},
+            {"text": "source_tiering", "passed": true},
+            {"text": "structured_source_list", "passed": true},
+            {"text": "download_commands", "passed": true},
+            {"text": "curation_guidance", "passed": true},
+            {"text": "processing_commands", "passed": true},
+            {"text": "captioning_commands", "passed": true},
+            {"text": "caption_hygiene", "passed": true},
+            {"text": "caption_format", "passed": true},
+            {"text": "dataset_report", "passed": true},
+            {"text": "training_handoff", "passed": true},
+            {"text": "gap_analysis", "passed": true}
+          ]
+        },
+        {
+          "eval_name": "cyberpunk-anime",
+          "pass_rate": 1.0,
+          "passed": 12,
+          "total": 12,
+          "tokens": 44084,
+          "duration_seconds": 396.6,
+          "assertions": [
+            {"text": "source_diversity", "passed": true},
+            {"text": "source_tiering", "passed": true},
+            {"text": "structured_source_list", "passed": true},
+            {"text": "download_commands", "passed": true},
+            {"text": "curation_guidance", "passed": true},
+            {"text": "processing_commands", "passed": true},
+            {"text": "captioning_commands", "passed": true},
+            {"text": "caption_hygiene", "passed": true},
+            {"text": "caption_format", "passed": true},
+            {"text": "dataset_report", "passed": true},
+            {"text": "training_handoff", "passed": true},
+            {"text": "gap_analysis", "passed": true}
+          ]
+        }
+      ],
+      "aggregate": {
+        "mean_pass_rate": 1.0,
+        "stddev_pass_rate": 0.0,
+        "total_passed": 36,
+        "total_assertions": 36,
+        "mean_tokens": 41420,
+        "mean_duration_seconds": 349.0
+      }
+    },
+    {
+      "name": "without_skill",
+      "label": "Without Skill (Baseline)",
+      "evals": [
+        {
+          "eval_name": "jrpg-amano-style",
+          "pass_rate": 0.417,
+          "passed": 5,
+          "total": 12,
+          "tokens": 36134,
+          "duration_seconds": 406.6,
+          "assertions": [
+            {"text": "source_diversity", "passed": true},
+            {"text": "source_tiering", "passed": false},
+            {"text": "structured_source_list", "passed": true},
+            {"text": "download_commands", "passed": false},
+            {"text": "curation_guidance", "passed": false},
+            {"text": "processing_commands", "passed": false},
+            {"text": "captioning_commands", "passed": false},
+            {"text": "caption_hygiene", "passed": false},
+            {"text": "caption_format", "passed": false},
+            {"text": "dataset_report", "passed": true},
+            {"text": "training_handoff", "passed": true},
+            {"text": "gap_analysis", "passed": true}
+          ]
+        },
+        {
+          "eval_name": "vintage-keyboards",
+          "pass_rate": 0.417,
+          "passed": 5,
+          "total": 12,
+          "tokens": 28494,
+          "duration_seconds": 278.9,
+          "assertions": [
+            {"text": "source_diversity", "passed": true},
+            {"text": "source_tiering", "passed": false},
+            {"text": "structured_source_list", "passed": true},
+            {"text": "download_commands", "passed": false},
+            {"text": "curation_guidance", "passed": false},
+            {"text": "processing_commands", "passed": false},
+            {"text": "captioning_commands", "passed": false},
+            {"text": "caption_hygiene", "passed": false},
+            {"text": "caption_format", "passed": false},
+            {"text": "dataset_report", "passed": true},
+            {"text": "training_handoff", "passed": true},
+            {"text": "gap_analysis", "passed": true}
+          ]
+        },
+        {
+          "eval_name": "cyberpunk-anime",
+          "pass_rate": 0.417,
+          "passed": 5,
+          "total": 12,
+          "tokens": 34376,
+          "duration_seconds": 403.3,
+          "assertions": [
+            {"text": "source_diversity", "passed": true},
+            {"text": "source_tiering", "passed": false},
+            {"text": "structured_source_list", "passed": true},
+            {"text": "download_commands", "passed": false},
+            {"text": "curation_guidance", "passed": false},
+            {"text": "processing_commands", "passed": false},
+            {"text": "captioning_commands", "passed": false},
+            {"text": "caption_hygiene", "passed": false},
+            {"text": "caption_format", "passed": false},
+            {"text": "dataset_report", "passed": true},
+            {"text": "training_handoff", "passed": true},
+            {"text": "gap_analysis", "passed": true}
+          ]
+        }
+      ],
+      "aggregate": {
+        "mean_pass_rate": 0.417,
+        "stddev_pass_rate": 0.0,
+        "total_passed": 15,
+        "total_assertions": 36,
+        "mean_tokens": 33001,
+        "mean_duration_seconds": 362.9
+      }
+    }
+  ],
+  "delta": {
+    "pass_rate_improvement": 0.583,
+    "description": "Skill improves pass rate from 42% to 100% across 12 full-pipeline assertions (up from 8 in iteration 2). The 7 new skill-specific assertions (download_commands, curation_guidance, processing_commands, captioning_commands, caption_hygiene, caption_format, source_tiering) are fully discriminating — baseline passes 0/21 across all evals. The 5 general assertions (source_diversity, structured_source_list, dataset_report, training_handoff, gap_analysis) are non-discriminating — baseline passes all 15/15."
+  },
+  "analyst_notes": [
+    "PERFECT DISCRIMINATION: 7 assertions fail 100% of baselines and pass 100% of with_skill — these test skill-specific tooling and conventions that Claude cannot infer without the skill",
+    "NON-DISCRIMINATING (5): source_diversity, structured_source_list, dataset_report, training_handoff, gap_analysis — baseline passes all. These test general LLM competence, not skill value",
+    "The 7 discriminating assertions break into 3 categories: (1) Script usage — download_commands, processing_commands, captioning_commands test correct invocation of bundled scripts; (2) Conventions — source_tiering, curation_guidance, caption_format test skill-specific workflows; (3) Domain knowledge — caption_hygiene tests the critical insight that style words must be stripped from captions",
+    "Progressive disclosure refactor (570→415 lines) had NO negative impact: with_skill maintains 100% pass rate on a harder assertion set (12 vs 8 in iteration 2)",
+    "Baseline is remarkably consistent: 5/12 across ALL 3 evals (identical pass/fail pattern), suggesting the skill/no-skill boundary is well-defined",
+    "Token usage: with_skill averages ~41K tokens vs baseline ~33K tokens (+25%) — the extra tokens go toward reading skill files and reference docs, but the quality improvement is dramatic",
+    "Duration: with_skill averages ~349s vs baseline ~363s — skill-guided runs are actually slightly FASTER despite more tokens, likely because the structured pipeline reduces wasted exploration"
+  ]
+}

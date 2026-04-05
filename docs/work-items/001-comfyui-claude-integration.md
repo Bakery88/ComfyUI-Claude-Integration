@@ -149,6 +149,109 @@ ComfyUI-Claude-Integration/
 - CLAUDE.md checks freshness at session start
 - Configurable thresholds: models 3 months, nodes 2 months, inventory 1 hour
 
+### Phase 4: Advanced Skills (adapted from ComfyUI-Expert)
+
+Additional skills ported from ComfyUI-Expert's broader skill set. These cover the advanced image workflows that the core 5 skills don't address directly.
+
+#### 4.1 comfyui-upscale
+- Dedicated upscaling skill extracted from Expert's character-gen pipeline
+- Tile-based upscaling for large images (Ultimate SD Upscale pattern)
+- Model-based upscaling (4x-UltraSharp, 4x-Foolhardy-Remacri, SUPIR)
+- Latent upscaling (hires fix pattern: generate small, upscale, re-denoise)
+- VRAM-aware: tile size selection based on available memory
+- Decision tree: when to use model upscale vs. latent upscale vs. SUPIR
+
+#### 4.2 comfyui-controlnet
+- Dedicated ControlNet skill extracted from Expert's character-gen pipeline
+- Supported control types: Canny, Depth, OpenPose, Tile, Lineart, Scribble
+- Architecture-specific guidance: SD 1.5, SDXL, and FLUX ControlNet variants
+- Multi-ControlNet stacking (combining pose + depth, etc.)
+- Preprocessor node selection (Canny edge detector, DWPose, MiDaS depth, etc.)
+- Strength and start/end step tuning per control type
+
+#### 4.3 comfyui-face-id
+- Identity preservation skill adapted from Expert's character-gen
+- Methods ranked by quality: InfiniteYou > FLUX Kontext > PuLID Flux 2 > IP-Adapter FaceID > InstantID > ReActor
+- Face detail restoration: FaceDetailer, CodeFormer, GFPGAN
+- Consistent character generation across multiple images
+- Reference image requirements and preparation
+- VRAM requirements per method (some need 24GB+)
+
+#### 4.4 comfyui-lora-training
+- End-to-end LoRA training guide adapted from Expert
+- Dataset preparation: 10-30 images, captioning strategy, trigger words
+- FLUX LoRA training: AI-Toolkit, rank 16, 1500 steps, 4e-4 lr (24GB or 9GB with NF4)
+- SDXL LoRA training: Kohya_ss, rank 32, 10 epochs
+- Evaluation protocol for overfitting detection
+- Post-training integration into ComfyUI workflows (strength 0.7-0.9)
+- Decision tree: when to train LoRA vs. use zero-shot methods (IP-Adapter, InstantID)
+
+#### 4.5 comfyui-prompt-interview
+- Interactive prompt discovery for vague/exploratory requests
+- Guided 4-7 question conversational flow
+- Branching paths by creation type: portrait, scene, product, abstract, concept art
+- Outputs: positive/negative prompts + settings table + pipeline recommendation
+- Complements prompt-engineer (direct refinement) with interview (guided discovery)
+
+#### 4.6 comfyui-inpaint
+- Dedicated inpainting and outpainting skill
+- Mask creation guidance (manual mask, SAM auto-mask, text-guided mask)
+- Architecture-specific inpainting: FLUX inpaint models, SDXL inpainting, SD 1.5 inpainting
+- Denoise strength tuning (low for small edits, high for full replacement)
+- Outpainting / image extension workflows
+- Iterative refinement: inpaint → evaluate → re-inpaint cycle
+
+#### 4.7 comfyui-research
+- Self-updating knowledge base monitor for the ComfyUI ecosystem
+- Monitors key sources for new models, nodes, techniques, and best practices:
+  - **GitHub repos**: ComfyUI core, comfyui-mcp, popular custom node repos (ComfyUI-Manager, etc.)
+  - **HuggingFace**: Trending models, newly released checkpoints/LoRAs
+  - **Community channels**: Notable tutorial creators, workflow-sharing communities
+- Scan procedure:
+  1. Check monitored sources for updates since last scan
+  2. Extract relevant knowledge (new model releases, node updates, technique discoveries)
+  3. Update foundation files: `model-landscape.md`, `skill-registry.md` (with user confirmation)
+  4. Generate staleness report for all tracked resources
+- Integrates with staleness tracking: flags model-landscape.md entries older than 3 months
+- Outputs structured update summaries: what's new, what's deprecated, what needs attention
+- User-triggered (not automatic) — runs when explicitly asked or when staleness warnings fire
+- Can recommend model upgrades (e.g., "FLUX.2-dev is now available, replaces FLUX.1-dev")
+- Updates `state/research-log.json` with scan history and findings
+
+#### Dependency Updates
+
+```
+comfyui-inventory (foundation)
+    │
+    ├── comfyui-prompt-engineer
+    ├── comfyui-prompt-interview (new — feeds into prompt-engineer)
+    │
+    ├── comfyui-workflow-builder
+    │   ├── comfyui-upscale (new — specialized workflow pattern)
+    │   ├── comfyui-controlnet (new — specialized workflow pattern)
+    │   ├── comfyui-face-id (new — specialized workflow pattern)
+    │   └── comfyui-inpaint (new — specialized workflow pattern)
+    │
+    ├── comfyui-lora-training (new — independent, references inventory for model info)
+    │
+    └── comfyui-generation (orchestrates all above)
+
+comfyui-troubleshooter (independent)
+comfyui-research (independent — updates foundation files, triggers staleness checks)
+```
+
+#### Routing Table Additions
+
+| User Intent | Skill | Pre-Check |
+|---|---|---|
+| "Upscale this image" / "Make it higher resolution" | `comfyui-upscale` | Inventory |
+| "Use ControlNet" / "Match this pose" / "Follow this outline" | `comfyui-controlnet` | Inventory |
+| "Keep the same face" / "Use this person's face" | `comfyui-face-id` | Inventory |
+| "Train a LoRA" / "Fine-tune on these images" | `comfyui-lora-training` | Inventory |
+| "I want to make something but I'm not sure what" | `comfyui-prompt-interview` | Inventory |
+| "Fix this part of the image" / "Extend the image" | `comfyui-inpaint` | Inventory |
+| "What's new in ComfyUI?" / "Any model updates?" | `comfyui-research` | — |
+
 ## What We Take from Each Source
 
 ### From shawnrushefsky/comfyui-mcp (use as-is)
@@ -176,6 +279,9 @@ ComfyUI-Claude-Integration/
 - Expert's PowerShell scripts (platform-specific, replaced by MCP tools)
 - Expert's OpenClaw compatibility layer (unnecessary)
 - Expert's video/voice/YouTube skills (out of scope unless needed later)
+- Expert's `comfyui-api` skill (covered by MCP tools + generation skill)
+- Expert's `project-manager` skill (video-production-oriented)
+- Expert's `comfyui-research` skill (adapted in Phase 4 as comfyui-research — ecosystem knowledge monitor)
 - shawnrushefsky's SVG/font tools (unlikely to need)
 - shawnrushefsky's `recommend_workflow` (routing table is more flexible)
 

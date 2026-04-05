@@ -1,0 +1,15 @@
+{
+  "eval_id": 3,
+  "eval_name": "cyberpunk-anime",
+  "prompt": "Gather reference images for training a LoRA on cyberpunk anime style, like Ghost in the Shell and Akira. I'll be training on SDXL",
+  "assertions": [
+    {"name": "source_diversity", "description": "Identifies 3+ different source types"},
+    {"name": "structured_source_list", "description": "sources.json with url/type/description fields"},
+    {"name": "training_aligned_plan", "description": "Specifies trigger word, style captioning mode, 1024px resolution, 20-30 images"},
+    {"name": "caption_format", "description": "Captions use '{trigger} style, {description}' format"},
+    {"name": "actionable_handoff", "description": "Mentions training next steps or lora-training skill"},
+    {"name": "source_tiering", "description": "Sources are classified into tiers (A/B/C) by quality/relevance"},
+    {"name": "gap_analysis", "description": "Plan identifies dataset gaps, biases, or suggests iteration to fill holes"},
+    {"name": "caption_hygiene", "description": "Captions avoid style-describing words like 'anime', 'cyberpunk style', 'cel-shaded'"}
+  ]
+}

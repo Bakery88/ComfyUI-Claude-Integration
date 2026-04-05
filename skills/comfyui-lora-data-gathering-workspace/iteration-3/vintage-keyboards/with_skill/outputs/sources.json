@@ -1,0 +1,120 @@
+{
+  "project_name": "vintage-keyboards",
+  "subject": "Vintage mechanical keyboards with beige cases and colorful keycaps",
+  "created": "2026-04-05T12:00:00Z",
+  "sources": [
+    {
+      "url": "https://deskthority.net/wiki/IBM_Model_M",
+      "type": "gallery",
+      "tier": "A",
+      "description": "Deskthority wiki page for IBM Model M -- multiple high-res photos showing top-down, profile, and detail views of the most iconic vintage keyboard. Neutral backgrounds, consistent lighting.",
+      "estimated_usable_images": 6
+    },
+    {
+      "url": "https://deskthority.net/wiki/IBM_Model_F",
+      "type": "gallery",
+      "tier": "A",
+      "description": "Deskthority wiki page for IBM Model F XT and AT variants. Earlier, heavier design with capacitive buckling spring. Multiple angle shots showing darker beige case and unique keycap profiles.",
+      "estimated_usable_images": 5
+    },
+    {
+      "url": "https://deskthority.net/wiki/Cherry_G80-3000",
+      "type": "gallery",
+      "tier": "A",
+      "description": "Deskthority wiki page for Cherry G80-3000 series. Classic German keyboard with colorful dye-sublimated PBT keycaps on beige case. Shows the quintessential European vintage keyboard aesthetic.",
+      "estimated_usable_images": 4
+    },
+    {
+      "url": "https://deskthority.net/wiki/Apple_Extended_Keyboard_II",
+      "type": "gallery",
+      "tier": "A",
+      "description": "Apple Extended Keyboard II with Alps SKCM switches. Distinctive Apple design language in cream/beige. Good for adding non-IBM variety to the dataset.",
+      "estimated_usable_images": 3
+    },
+    {
+      "url": "https://www.reddit.com/r/MechanicalKeyboards/search/?q=flair%3AVintage&sort=top&t=all",
+      "type": "gallery",
+      "tier": "A",
+      "description": "Reddit r/MechanicalKeyboards vintage flair posts sorted by top of all time. High engagement posts tend to have professional-quality photos. Diverse range of boards, angles, and desk setups.",
+      "estimated_usable_images": 15
+    },
+    {
+      "url": "https://geekhack.org/index.php?board=62.0",
+      "type": "gallery",
+      "tier": "A",
+      "description": "Geekhack Keyboards sub-forum with vintage keyboard appreciation threads. Multi-image posts with detailed collection photography dating back years.",
+      "estimated_usable_images": 10
+    },
+    {
+      "url": "https://www.clickykeyboards.com/product-category/keyboard-gallery/",
+      "type": "gallery",
+      "tier": "B",
+      "description": "ClickyKeyboards vintage IBM specialist. Product photos of restored Model M and Model F keyboards in clean condition. White backgrounds, consistent angles across listings.",
+      "estimated_usable_images": 10
+    },
+    {
+      "url": "https://drop.com/featured/gmk-keycaps",
+      "type": "gallery",
+      "tier": "B",
+      "description": "Drop.com GMK keycap set product pages (GMK 9009, GMK Retro, GMK Classic Retro). Professional studio photography of retro-themed keycaps on modern boards. Excellent lighting and composition.",
+      "estimated_usable_images": 8
+    },
+    {
+      "url": "https://novelkeys.com/collections/keycaps",
+      "type": "gallery",
+      "tier": "B",
+      "description": "NovelKeys keycap collections including Cherry-profile retro sets. Product photography with styled desk setups showing the vintage aesthetic on clean backgrounds.",
+      "estimated_usable_images": 5
+    },
+    {
+      "url": "https://www.flickr.com/search/?text=vintage%20mechanical%20keyboard",
+      "type": "gallery",
+      "tier": "B",
+      "description": "Flickr search results for vintage mechanical keyboards. Artistic photography with creative lighting and compositions. Needs more filtering but adds photographic diversity.",
+      "estimated_usable_images": 6
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=example_chyrosran22_model_m_review",
+      "type": "video",
+      "tier": "C",
+      "description": "Chyrosran22 IBM Model M review video (1080p). Detailed close-ups of keycaps, switches, case details, and typing demonstrations. Good for extracting detail shots not found in static photos.",
+      "estimated_usable_images": 5
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=example_chyrosran22_cherry_g80",
+      "type": "video",
+      "tier": "C",
+      "description": "Chyrosran22 Cherry G80 with dye-sub keycaps review. Shows European vintage keyboards with colorful legends in detail. 1080p quality.",
+      "estimated_usable_images": 5
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=example_taekeyboards_vintage_collection",
+      "type": "video",
+      "tier": "C",
+      "description": "TaeKeyboards vintage keyboard collection tour. Showcases multiple boards in sequence -- good for extracting a variety of different keyboards from one source.",
+      "estimated_usable_images": 5
+    },
+    {
+      "url": "https://www.ebay.com/sch/i.html?_nkw=vintage+mechanical+keyboard+IBM+Cherry",
+      "type": "gallery",
+      "tier": "C",
+      "description": "eBay vintage keyboard listings. Varied quality but sometimes the only source for rarer boards. Possible seller watermarks -- flag during curation.",
+      "estimated_usable_images": 5
+    },
+    {
+      "url": "https://www.pinterest.com/search/pins/?q=vintage%20mechanical%20keyboard%20beige",
+      "type": "gallery",
+      "tier": "C",
+      "description": "Pinterest boards for vintage mechanical keyboard aesthetics. Curated collections, mixed resolution. Many reposts from Reddit/Geekhack that dedup will catch.",
+      "estimated_usable_images": 5
+    }
+  ],
+  "tier_summary": {
+    "A": 6,
+    "B": 4,
+    "C": 5
+  },
+  "total_estimated_usable": 97,
+  "target_after_curation": 28,
+  "notes": "Tier A sources (Deskthority, Reddit, Geekhack) form the backbone. Tier B adds professional photography and lighting variety. Tier C video sources supplement with close-up detail shots. Expect significant filtering -- many images will be duplicates across sources or below quality threshold."
+}
